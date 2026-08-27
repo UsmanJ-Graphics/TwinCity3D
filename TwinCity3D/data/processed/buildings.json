@@ -1,0 +1,6343 @@
+{
+  "data_source": "sample_fallback",
+  "buildings": [
+    {
+      "id": "b001",
+      "polygon": [
+        [
+          -637.0,
+          -38.0
+        ],
+        [
+          -603.0,
+          -38.0
+        ],
+        [
+          -603.0,
+          -18.0
+        ],
+        [
+          -637.0,
+          -18.0
+        ]
+      ],
+      "height": 10.0,
+      "height_source": "osm_height_tag",
+      "centroid": [
+        -620.0,
+        -28.0
+      ],
+      "zone_id": 4,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b002",
+      "polygon": [
+        [
+          -620.0,
+          19.0
+        ],
+        [
+          -590.0,
+          19.0
+        ],
+        [
+          -590.0,
+          41.0
+        ],
+        [
+          -620.0,
+          41.0
+        ]
+      ],
+      "height": 8.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -605.0,
+        30.0
+      ],
+      "zone_id": 8,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b003",
+      "polygon": [
+        [
+          -577.0,
+          -38.0
+        ],
+        [
+          -543.0,
+          -38.0
+        ],
+        [
+          -543.0,
+          -18.0
+        ],
+        [
+          -577.0,
+          -18.0
+        ]
+      ],
+      "height": 12.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -560.0,
+        -28.0
+      ],
+      "zone_id": 4,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b004",
+      "polygon": [
+        [
+          -560.0,
+          19.0
+        ],
+        [
+          -530.0,
+          19.0
+        ],
+        [
+          -530.0,
+          41.0
+        ],
+        [
+          -560.0,
+          41.0
+        ]
+      ],
+      "height": 10.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -545.0,
+        30.0
+      ],
+      "zone_id": 8,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b005",
+      "polygon": [
+        [
+          -517.0,
+          -38.0
+        ],
+        [
+          -483.0,
+          -38.0
+        ],
+        [
+          -483.0,
+          -18.0
+        ],
+        [
+          -517.0,
+          -18.0
+        ]
+      ],
+      "height": 14.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -500.0,
+        -28.0
+      ],
+      "zone_id": 4,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b006",
+      "polygon": [
+        [
+          -500.0,
+          19.0
+        ],
+        [
+          -470.0,
+          19.0
+        ],
+        [
+          -470.0,
+          41.0
+        ],
+        [
+          -500.0,
+          41.0
+        ]
+      ],
+      "height": 12.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -485.0,
+        30.0
+      ],
+      "zone_id": 8,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b007",
+      "polygon": [
+        [
+          -457.0,
+          -38.0
+        ],
+        [
+          -423.0,
+          -38.0
+        ],
+        [
+          -423.0,
+          -18.0
+        ],
+        [
+          -457.0,
+          -18.0
+        ]
+      ],
+      "height": 16.0,
+      "height_source": "osm_height_tag",
+      "centroid": [
+        -440.0,
+        -28.0
+      ],
+      "zone_id": 4,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b008",
+      "polygon": [
+        [
+          -440.0,
+          19.0
+        ],
+        [
+          -410.0,
+          19.0
+        ],
+        [
+          -410.0,
+          41.0
+        ],
+        [
+          -440.0,
+          41.0
+        ]
+      ],
+      "height": 14.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -425.0,
+        30.0
+      ],
+      "zone_id": 8,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b009",
+      "polygon": [
+        [
+          -397.0,
+          -38.0
+        ],
+        [
+          -363.0,
+          -38.0
+        ],
+        [
+          -363.0,
+          -18.0
+        ],
+        [
+          -397.0,
+          -18.0
+        ]
+      ],
+      "height": 10.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -380.0,
+        -28.0
+      ],
+      "zone_id": 4,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b010",
+      "polygon": [
+        [
+          -380.0,
+          19.0
+        ],
+        [
+          -350.0,
+          19.0
+        ],
+        [
+          -350.0,
+          41.0
+        ],
+        [
+          -380.0,
+          41.0
+        ]
+      ],
+      "height": 8.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -365.0,
+        30.0
+      ],
+      "zone_id": 8,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b011",
+      "polygon": [
+        [
+          -337.0,
+          -38.0
+        ],
+        [
+          -303.0,
+          -38.0
+        ],
+        [
+          -303.0,
+          -18.0
+        ],
+        [
+          -337.0,
+          -18.0
+        ]
+      ],
+      "height": 12.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -320.0,
+        -28.0
+      ],
+      "zone_id": 5,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b012",
+      "polygon": [
+        [
+          -320.0,
+          19.0
+        ],
+        [
+          -290.0,
+          19.0
+        ],
+        [
+          -290.0,
+          41.0
+        ],
+        [
+          -320.0,
+          41.0
+        ]
+      ],
+      "height": 10.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -305.0,
+        30.0
+      ],
+      "zone_id": 9,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b013",
+      "polygon": [
+        [
+          -277.0,
+          -38.0
+        ],
+        [
+          -243.0,
+          -38.0
+        ],
+        [
+          -243.0,
+          -18.0
+        ],
+        [
+          -277.0,
+          -18.0
+        ]
+      ],
+      "height": 14.0,
+      "height_source": "osm_height_tag",
+      "centroid": [
+        -260.0,
+        -28.0
+      ],
+      "zone_id": 5,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b014",
+      "polygon": [
+        [
+          -260.0,
+          19.0
+        ],
+        [
+          -230.0,
+          19.0
+        ],
+        [
+          -230.0,
+          41.0
+        ],
+        [
+          -260.0,
+          41.0
+        ]
+      ],
+      "height": 12.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -245.0,
+        30.0
+      ],
+      "zone_id": 9,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b015",
+      "polygon": [
+        [
+          -217.0,
+          -38.0
+        ],
+        [
+          -183.0,
+          -38.0
+        ],
+        [
+          -183.0,
+          -18.0
+        ],
+        [
+          -217.0,
+          -18.0
+        ]
+      ],
+      "height": 16.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -200.0,
+        -28.0
+      ],
+      "zone_id": 5,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b016",
+      "polygon": [
+        [
+          -200.0,
+          19.0
+        ],
+        [
+          -170.0,
+          19.0
+        ],
+        [
+          -170.0,
+          41.0
+        ],
+        [
+          -200.0,
+          41.0
+        ]
+      ],
+      "height": 14.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -185.0,
+        30.0
+      ],
+      "zone_id": 9,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b017",
+      "polygon": [
+        [
+          -157.0,
+          -38.0
+        ],
+        [
+          -123.0,
+          -38.0
+        ],
+        [
+          -123.0,
+          -18.0
+        ],
+        [
+          -157.0,
+          -18.0
+        ]
+      ],
+      "height": 10.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -140.0,
+        -28.0
+      ],
+      "zone_id": 5,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b018",
+      "polygon": [
+        [
+          -140.0,
+          19.0
+        ],
+        [
+          -110.0,
+          19.0
+        ],
+        [
+          -110.0,
+          41.0
+        ],
+        [
+          -140.0,
+          41.0
+        ]
+      ],
+      "height": 8.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -125.0,
+        30.0
+      ],
+      "zone_id": 9,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b019",
+      "polygon": [
+        [
+          -97.0,
+          -38.0
+        ],
+        [
+          -63.0,
+          -38.0
+        ],
+        [
+          -63.0,
+          -18.0
+        ],
+        [
+          -97.0,
+          -18.0
+        ]
+      ],
+      "height": 12.0,
+      "height_source": "osm_height_tag",
+      "centroid": [
+        -80.0,
+        -28.0
+      ],
+      "zone_id": 5,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b020",
+      "polygon": [
+        [
+          -80.0,
+          19.0
+        ],
+        [
+          -50.0,
+          19.0
+        ],
+        [
+          -50.0,
+          41.0
+        ],
+        [
+          -80.0,
+          41.0
+        ]
+      ],
+      "height": 10.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -65.0,
+        30.0
+      ],
+      "zone_id": 9,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b021",
+      "polygon": [
+        [
+          -37.0,
+          -38.0
+        ],
+        [
+          -3.0,
+          -38.0
+        ],
+        [
+          -3.0,
+          -18.0
+        ],
+        [
+          -37.0,
+          -18.0
+        ]
+      ],
+      "height": 14.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -20.0,
+        -28.0
+      ],
+      "zone_id": 5,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b022",
+      "polygon": [
+        [
+          -20.0,
+          19.0
+        ],
+        [
+          10.0,
+          19.0
+        ],
+        [
+          10.0,
+          41.0
+        ],
+        [
+          -20.0,
+          41.0
+        ]
+      ],
+      "height": 12.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        -5.0,
+        30.0
+      ],
+      "zone_id": 9,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b023",
+      "polygon": [
+        [
+          23.0,
+          -38.0
+        ],
+        [
+          57.0,
+          -38.0
+        ],
+        [
+          57.0,
+          -18.0
+        ],
+        [
+          23.0,
+          -18.0
+        ]
+      ],
+      "height": 16.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        40.0,
+        -28.0
+      ],
+      "zone_id": 6,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b024",
+      "polygon": [
+        [
+          40.0,
+          19.0
+        ],
+        [
+          70.0,
+          19.0
+        ],
+        [
+          70.0,
+          41.0
+        ],
+        [
+          40.0,
+          41.0
+        ]
+      ],
+      "height": 14.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        55.0,
+        30.0
+      ],
+      "zone_id": 10,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b025",
+      "polygon": [
+        [
+          83.0,
+          -38.0
+        ],
+        [
+          117.0,
+          -38.0
+        ],
+        [
+          117.0,
+          -18.0
+        ],
+        [
+          83.0,
+          -18.0
+        ]
+      ],
+      "height": 10.0,
+      "height_source": "osm_height_tag",
+      "centroid": [
+        100.0,
+        -28.0
+      ],
+      "zone_id": 6,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b026",
+      "polygon": [
+        [
+          100.0,
+          19.0
+        ],
+        [
+          130.0,
+          19.0
+        ],
+        [
+          130.0,
+          41.0
+        ],
+        [
+          100.0,
+          41.0
+        ]
+      ],
+      "height": 8.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        115.0,
+        30.0
+      ],
+      "zone_id": 10,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b027",
+      "polygon": [
+        [
+          143.0,
+          -38.0
+        ],
+        [
+          177.0,
+          -38.0
+        ],
+        [
+          177.0,
+          -18.0
+        ],
+        [
+          143.0,
+          -18.0
+        ]
+      ],
+      "height": 12.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        160.0,
+        -28.0
+      ],
+      "zone_id": 6,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b028",
+      "polygon": [
+        [
+          160.0,
+          19.0
+        ],
+        [
+          190.0,
+          19.0
+        ],
+        [
+          190.0,
+          41.0
+        ],
+        [
+          160.0,
+          41.0
+        ]
+      ],
+      "height": 10.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        175.0,
+        30.0
+      ],
+      "zone_id": 10,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b029",
+      "polygon": [
+        [
+          203.0,
+          -38.0
+        ],
+        [
+          237.0,
+          -38.0
+        ],
+        [
+          237.0,
+          -18.0
+        ],
+        [
+          203.0,
+          -18.0
+        ]
+      ],
+      "height": 14.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        220.0,
+        -28.0
+      ],
+      "zone_id": 6,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b030",
+      "polygon": [
+        [
+          220.0,
+          19.0
+        ],
+        [
+          250.0,
+          19.0
+        ],
+        [
+          250.0,
+          41.0
+        ],
+        [
+          220.0,
+          41.0
+        ]
+      ],
+      "height": 12.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        235.0,
+        30.0
+      ],
+      "zone_id": 10,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b031",
+      "polygon": [
+        [
+          263.0,
+          -38.0
+        ],
+        [
+          297.0,
+          -38.0
+        ],
+        [
+          297.0,
+          -18.0
+        ],
+        [
+          263.0,
+          -18.0
+        ]
+      ],
+      "height": 16.0,
+      "height_source": "osm_height_tag",
+      "centroid": [
+        280.0,
+        -28.0
+      ],
+      "zone_id": 6,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b032",
+      "polygon": [
+        [
+          280.0,
+          19.0
+        ],
+        [
+          310.0,
+          19.0
+        ],
+        [
+          310.0,
+          41.0
+        ],
+        [
+          280.0,
+          41.0
+        ]
+      ],
+      "height": 14.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        295.0,
+        30.0
+      ],
+      "zone_id": 10,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b033",
+      "polygon": [
+        [
+          323.0,
+          -38.0
+        ],
+        [
+          357.0,
+          -38.0
+        ],
+        [
+          357.0,
+          -18.0
+        ],
+        [
+          323.0,
+          -18.0
+        ]
+      ],
+      "height": 10.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        340.0,
+        -28.0
+      ],
+      "zone_id": 6,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b034",
+      "polygon": [
+        [
+          340.0,
+          19.0
+        ],
+        [
+          370.0,
+          19.0
+        ],
+        [
+          370.0,
+          41.0
+        ],
+        [
+          340.0,
+          41.0
+        ]
+      ],
+      "height": 8.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        355.0,
+        30.0
+      ],
+      "zone_id": 11,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b035",
+      "polygon": [
+        [
+          383.0,
+          -38.0
+        ],
+        [
+          417.0,
+          -38.0
+        ],
+        [
+          417.0,
+          -18.0
+        ],
+        [
+          383.0,
+          -18.0
+        ]
+      ],
+      "height": 12.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        400.0,
+        -28.0
+      ],
+      "zone_id": 7,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b036",
+      "polygon": [
+        [
+          400.0,
+          19.0
+        ],
+        [
+          430.0,
+          19.0
+        ],
+        [
+          430.0,
+          41.0
+        ],
+        [
+          400.0,
+          41.0
+        ]
+      ],
+      "height": 10.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        415.0,
+        30.0
+      ],
+      "zone_id": 11,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b037",
+      "polygon": [
+        [
+          443.0,
+          -38.0
+        ],
+        [
+          477.0,
+          -38.0
+        ],
+        [
+          477.0,
+          -18.0
+        ],
+        [
+          443.0,
+          -18.0
+        ]
+      ],
+      "height": 14.0,
+      "height_source": "osm_height_tag",
+      "centroid": [
+        460.0,
+        -28.0
+      ],
+      "zone_id": 7,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b038",
+      "polygon": [
+        [
+          460.0,
+          19.0
+        ],
+        [
+          490.0,
+          19.0
+        ],
+        [
+          490.0,
+          41.0
+        ],
+        [
+          460.0,
+          41.0
+        ]
+      ],
+      "height": 12.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        475.0,
+        30.0
+      ],
+      "zone_id": 11,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b039",
+      "polygon": [
+        [
+          503.0,
+          -38.0
+        ],
+        [
+          537.0,
+          -38.0
+        ],
+        [
+          537.0,
+          -18.0
+        ],
+        [
+          503.0,
+          -18.0
+        ]
+      ],
+      "height": 16.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        520.0,
+        -28.0
+      ],
+      "zone_id": 7,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b040",
+      "polygon": [
+        [
+          520.0,
+          19.0
+        ],
+        [
+          550.0,
+          19.0
+        ],
+        [
+          550.0,
+          41.0
+        ],
+        [
+          520.0,
+          41.0
+        ]
+      ],
+      "height": 14.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        535.0,
+        30.0
+      ],
+      "zone_id": 11,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b041",
+      "polygon": [
+        [
+          563.0,
+          -38.0
+        ],
+        [
+          597.0,
+          -38.0
+        ],
+        [
+          597.0,
+          -18.0
+        ],
+        [
+          563.0,
+          -18.0
+        ]
+      ],
+      "height": 10.0,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        580.0,
+        -28.0
+      ],
+      "zone_id": 7,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b042",
+      "polygon": [
+        [
+          580.0,
+          19.0
+        ],
+        [
+          610.0,
+          19.0
+        ],
+        [
+          610.0,
+          41.0
+        ],
+        [
+          580.0,
+          41.0
+        ]
+      ],
+      "height": 8.5,
+      "height_source": "estimated_from_levels",
+      "centroid": [
+        595.0,
+        30.0
+      ],
+      "zone_id": 11,
+      "building_type": "retail",
+      "sample_data": true
+    },
+    {
+      "id": "b043",
+      "polygon": [
+        [
+          -360,
+          -70
+        ],
+        [
+          -300,
+          -70
+        ],
+        [
+          -300,
+          -95
+        ],
+        [
+          -260,
+          -95
+        ],
+        [
+          -260,
+          -50
+        ],
+        [
+          -360,
+          -50
+        ]
+      ],
+      "height": 14.0,
+      "height_source": "osm_height_tag",
+      "centroid": [
+        -306.6666666666667,
+        -71.66666666666667
+      ],
+      "zone_id": 5,
+      "building_type": "commercial",
+      "sample_data": true
+    },
+    {
+      "id": "b044",
+      "polygon": [
+        [
+          -591.0,
+          161.0
+        ],
+        [
+          -569.0,
+          161.0
+        ],
+        [
+          -569.0,
+          179.0
+        ],
+        [
+          -591.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        170.0
+      ],
+      "zone_id": 8,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b045",
+      "polygon": [
+        [
+          -501.0,
+          161.0
+        ],
+        [
+          -479.0,
+          161.0
+        ],
+        [
+          -479.0,
+          179.0
+        ],
+        [
+          -501.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        170.0
+      ],
+      "zone_id": 8,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b046",
+      "polygon": [
+        [
+          -411.0,
+          161.0
+        ],
+        [
+          -389.0,
+          161.0
+        ],
+        [
+          -389.0,
+          179.0
+        ],
+        [
+          -411.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        170.0
+      ],
+      "zone_id": 8,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b047",
+      "polygon": [
+        [
+          -321.0,
+          161.0
+        ],
+        [
+          -299.0,
+          161.0
+        ],
+        [
+          -299.0,
+          179.0
+        ],
+        [
+          -321.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        170.0
+      ],
+      "zone_id": 9,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b048",
+      "polygon": [
+        [
+          -231.0,
+          161.0
+        ],
+        [
+          -209.0,
+          161.0
+        ],
+        [
+          -209.0,
+          179.0
+        ],
+        [
+          -231.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        170.0
+      ],
+      "zone_id": 9,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b049",
+      "polygon": [
+        [
+          -141.0,
+          161.0
+        ],
+        [
+          -119.0,
+          161.0
+        ],
+        [
+          -119.0,
+          179.0
+        ],
+        [
+          -141.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        170.0
+      ],
+      "zone_id": 9,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b050",
+      "polygon": [
+        [
+          -51.0,
+          161.0
+        ],
+        [
+          -29.0,
+          161.0
+        ],
+        [
+          -29.0,
+          179.0
+        ],
+        [
+          -51.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        170.0
+      ],
+      "zone_id": 9,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b051",
+      "polygon": [
+        [
+          39.0,
+          161.0
+        ],
+        [
+          61.0,
+          161.0
+        ],
+        [
+          61.0,
+          179.0
+        ],
+        [
+          39.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        170.0
+      ],
+      "zone_id": 10,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b052",
+      "polygon": [
+        [
+          129.0,
+          161.0
+        ],
+        [
+          151.0,
+          161.0
+        ],
+        [
+          151.0,
+          179.0
+        ],
+        [
+          129.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        170.0
+      ],
+      "zone_id": 10,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b053",
+      "polygon": [
+        [
+          219.0,
+          161.0
+        ],
+        [
+          241.0,
+          161.0
+        ],
+        [
+          241.0,
+          179.0
+        ],
+        [
+          219.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        170.0
+      ],
+      "zone_id": 10,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b054",
+      "polygon": [
+        [
+          309.0,
+          161.0
+        ],
+        [
+          331.0,
+          161.0
+        ],
+        [
+          331.0,
+          179.0
+        ],
+        [
+          309.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        170.0
+      ],
+      "zone_id": 10,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b055",
+      "polygon": [
+        [
+          399.0,
+          161.0
+        ],
+        [
+          421.0,
+          161.0
+        ],
+        [
+          421.0,
+          179.0
+        ],
+        [
+          399.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        170.0
+      ],
+      "zone_id": 11,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b056",
+      "polygon": [
+        [
+          489.0,
+          161.0
+        ],
+        [
+          511.0,
+          161.0
+        ],
+        [
+          511.0,
+          179.0
+        ],
+        [
+          489.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        170.0
+      ],
+      "zone_id": 11,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b057",
+      "polygon": [
+        [
+          579.0,
+          161.0
+        ],
+        [
+          601.0,
+          161.0
+        ],
+        [
+          601.0,
+          179.0
+        ],
+        [
+          579.0,
+          179.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        170.0
+      ],
+      "zone_id": 11,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b058",
+      "polygon": [
+        [
+          -591.0,
+          251.0
+        ],
+        [
+          -569.0,
+          251.0
+        ],
+        [
+          -569.0,
+          269.0
+        ],
+        [
+          -591.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        260.0
+      ],
+      "zone_id": 8,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b059",
+      "polygon": [
+        [
+          -501.0,
+          251.0
+        ],
+        [
+          -479.0,
+          251.0
+        ],
+        [
+          -479.0,
+          269.0
+        ],
+        [
+          -501.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        260.0
+      ],
+      "zone_id": 8,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b060",
+      "polygon": [
+        [
+          -411.0,
+          251.0
+        ],
+        [
+          -389.0,
+          251.0
+        ],
+        [
+          -389.0,
+          269.0
+        ],
+        [
+          -411.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        260.0
+      ],
+      "zone_id": 8,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b061",
+      "polygon": [
+        [
+          -321.0,
+          251.0
+        ],
+        [
+          -299.0,
+          251.0
+        ],
+        [
+          -299.0,
+          269.0
+        ],
+        [
+          -321.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        260.0
+      ],
+      "zone_id": 9,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b062",
+      "polygon": [
+        [
+          -231.0,
+          251.0
+        ],
+        [
+          -209.0,
+          251.0
+        ],
+        [
+          -209.0,
+          269.0
+        ],
+        [
+          -231.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        260.0
+      ],
+      "zone_id": 9,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b063",
+      "polygon": [
+        [
+          -141.0,
+          251.0
+        ],
+        [
+          -119.0,
+          251.0
+        ],
+        [
+          -119.0,
+          269.0
+        ],
+        [
+          -141.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        260.0
+      ],
+      "zone_id": 9,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b064",
+      "polygon": [
+        [
+          -51.0,
+          251.0
+        ],
+        [
+          -29.0,
+          251.0
+        ],
+        [
+          -29.0,
+          269.0
+        ],
+        [
+          -51.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        260.0
+      ],
+      "zone_id": 9,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b065",
+      "polygon": [
+        [
+          39.0,
+          251.0
+        ],
+        [
+          61.0,
+          251.0
+        ],
+        [
+          61.0,
+          269.0
+        ],
+        [
+          39.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        260.0
+      ],
+      "zone_id": 10,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b066",
+      "polygon": [
+        [
+          129.0,
+          251.0
+        ],
+        [
+          151.0,
+          251.0
+        ],
+        [
+          151.0,
+          269.0
+        ],
+        [
+          129.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        260.0
+      ],
+      "zone_id": 10,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b067",
+      "polygon": [
+        [
+          219.0,
+          251.0
+        ],
+        [
+          241.0,
+          251.0
+        ],
+        [
+          241.0,
+          269.0
+        ],
+        [
+          219.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        260.0
+      ],
+      "zone_id": 10,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b068",
+      "polygon": [
+        [
+          309.0,
+          251.0
+        ],
+        [
+          331.0,
+          251.0
+        ],
+        [
+          331.0,
+          269.0
+        ],
+        [
+          309.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        260.0
+      ],
+      "zone_id": 10,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b069",
+      "polygon": [
+        [
+          399.0,
+          251.0
+        ],
+        [
+          421.0,
+          251.0
+        ],
+        [
+          421.0,
+          269.0
+        ],
+        [
+          399.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        260.0
+      ],
+      "zone_id": 11,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b070",
+      "polygon": [
+        [
+          489.0,
+          251.0
+        ],
+        [
+          511.0,
+          251.0
+        ],
+        [
+          511.0,
+          269.0
+        ],
+        [
+          489.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        260.0
+      ],
+      "zone_id": 11,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b071",
+      "polygon": [
+        [
+          579.0,
+          251.0
+        ],
+        [
+          601.0,
+          251.0
+        ],
+        [
+          601.0,
+          269.0
+        ],
+        [
+          579.0,
+          269.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        260.0
+      ],
+      "zone_id": 11,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b072",
+      "polygon": [
+        [
+          -591.0,
+          341.0
+        ],
+        [
+          -569.0,
+          341.0
+        ],
+        [
+          -569.0,
+          359.0
+        ],
+        [
+          -591.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        350.0
+      ],
+      "zone_id": 12,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b073",
+      "polygon": [
+        [
+          -501.0,
+          341.0
+        ],
+        [
+          -479.0,
+          341.0
+        ],
+        [
+          -479.0,
+          359.0
+        ],
+        [
+          -501.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        350.0
+      ],
+      "zone_id": 12,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b074",
+      "polygon": [
+        [
+          -411.0,
+          341.0
+        ],
+        [
+          -389.0,
+          341.0
+        ],
+        [
+          -389.0,
+          359.0
+        ],
+        [
+          -411.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        350.0
+      ],
+      "zone_id": 12,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b075",
+      "polygon": [
+        [
+          -321.0,
+          341.0
+        ],
+        [
+          -299.0,
+          341.0
+        ],
+        [
+          -299.0,
+          359.0
+        ],
+        [
+          -321.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        350.0
+      ],
+      "zone_id": 13,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b076",
+      "polygon": [
+        [
+          -231.0,
+          341.0
+        ],
+        [
+          -209.0,
+          341.0
+        ],
+        [
+          -209.0,
+          359.0
+        ],
+        [
+          -231.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        350.0
+      ],
+      "zone_id": 13,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b077",
+      "polygon": [
+        [
+          -141.0,
+          341.0
+        ],
+        [
+          -119.0,
+          341.0
+        ],
+        [
+          -119.0,
+          359.0
+        ],
+        [
+          -141.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        350.0
+      ],
+      "zone_id": 13,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b078",
+      "polygon": [
+        [
+          -51.0,
+          341.0
+        ],
+        [
+          -29.0,
+          341.0
+        ],
+        [
+          -29.0,
+          359.0
+        ],
+        [
+          -51.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        350.0
+      ],
+      "zone_id": 13,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b079",
+      "polygon": [
+        [
+          39.0,
+          341.0
+        ],
+        [
+          61.0,
+          341.0
+        ],
+        [
+          61.0,
+          359.0
+        ],
+        [
+          39.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        350.0
+      ],
+      "zone_id": 14,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b080",
+      "polygon": [
+        [
+          129.0,
+          341.0
+        ],
+        [
+          151.0,
+          341.0
+        ],
+        [
+          151.0,
+          359.0
+        ],
+        [
+          129.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        350.0
+      ],
+      "zone_id": 14,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b081",
+      "polygon": [
+        [
+          219.0,
+          341.0
+        ],
+        [
+          241.0,
+          341.0
+        ],
+        [
+          241.0,
+          359.0
+        ],
+        [
+          219.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        350.0
+      ],
+      "zone_id": 14,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b082",
+      "polygon": [
+        [
+          309.0,
+          341.0
+        ],
+        [
+          331.0,
+          341.0
+        ],
+        [
+          331.0,
+          359.0
+        ],
+        [
+          309.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        350.0
+      ],
+      "zone_id": 14,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b083",
+      "polygon": [
+        [
+          399.0,
+          341.0
+        ],
+        [
+          421.0,
+          341.0
+        ],
+        [
+          421.0,
+          359.0
+        ],
+        [
+          399.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        350.0
+      ],
+      "zone_id": 15,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b084",
+      "polygon": [
+        [
+          489.0,
+          341.0
+        ],
+        [
+          511.0,
+          341.0
+        ],
+        [
+          511.0,
+          359.0
+        ],
+        [
+          489.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        350.0
+      ],
+      "zone_id": 15,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b085",
+      "polygon": [
+        [
+          579.0,
+          341.0
+        ],
+        [
+          601.0,
+          341.0
+        ],
+        [
+          601.0,
+          359.0
+        ],
+        [
+          579.0,
+          359.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        350.0
+      ],
+      "zone_id": 15,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b086",
+      "polygon": [
+        [
+          -588.0,
+          433.0
+        ],
+        [
+          -572.0,
+          433.0
+        ],
+        [
+          -572.0,
+          447.0
+        ],
+        [
+          -588.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        440.0
+      ],
+      "zone_id": 12,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b087",
+      "polygon": [
+        [
+          -498.0,
+          433.0
+        ],
+        [
+          -482.0,
+          433.0
+        ],
+        [
+          -482.0,
+          447.0
+        ],
+        [
+          -498.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        440.0
+      ],
+      "zone_id": 12,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b088",
+      "polygon": [
+        [
+          -408.0,
+          433.0
+        ],
+        [
+          -392.0,
+          433.0
+        ],
+        [
+          -392.0,
+          447.0
+        ],
+        [
+          -408.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        440.0
+      ],
+      "zone_id": 12,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b089",
+      "polygon": [
+        [
+          -318.0,
+          433.0
+        ],
+        [
+          -302.0,
+          433.0
+        ],
+        [
+          -302.0,
+          447.0
+        ],
+        [
+          -318.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        440.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b090",
+      "polygon": [
+        [
+          -228.0,
+          433.0
+        ],
+        [
+          -212.0,
+          433.0
+        ],
+        [
+          -212.0,
+          447.0
+        ],
+        [
+          -228.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        440.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b091",
+      "polygon": [
+        [
+          -138.0,
+          433.0
+        ],
+        [
+          -122.0,
+          433.0
+        ],
+        [
+          -122.0,
+          447.0
+        ],
+        [
+          -138.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        440.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b092",
+      "polygon": [
+        [
+          -48.0,
+          433.0
+        ],
+        [
+          -32.0,
+          433.0
+        ],
+        [
+          -32.0,
+          447.0
+        ],
+        [
+          -48.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        440.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b093",
+      "polygon": [
+        [
+          42.0,
+          433.0
+        ],
+        [
+          58.0,
+          433.0
+        ],
+        [
+          58.0,
+          447.0
+        ],
+        [
+          42.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        440.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b094",
+      "polygon": [
+        [
+          132.0,
+          433.0
+        ],
+        [
+          148.0,
+          433.0
+        ],
+        [
+          148.0,
+          447.0
+        ],
+        [
+          132.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        440.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b095",
+      "polygon": [
+        [
+          222.0,
+          433.0
+        ],
+        [
+          238.0,
+          433.0
+        ],
+        [
+          238.0,
+          447.0
+        ],
+        [
+          222.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        440.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b096",
+      "polygon": [
+        [
+          312.0,
+          433.0
+        ],
+        [
+          328.0,
+          433.0
+        ],
+        [
+          328.0,
+          447.0
+        ],
+        [
+          312.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        440.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b097",
+      "polygon": [
+        [
+          402.0,
+          433.0
+        ],
+        [
+          418.0,
+          433.0
+        ],
+        [
+          418.0,
+          447.0
+        ],
+        [
+          402.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        440.0
+      ],
+      "zone_id": 15,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b098",
+      "polygon": [
+        [
+          492.0,
+          433.0
+        ],
+        [
+          508.0,
+          433.0
+        ],
+        [
+          508.0,
+          447.0
+        ],
+        [
+          492.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        440.0
+      ],
+      "zone_id": 15,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b099",
+      "polygon": [
+        [
+          582.0,
+          433.0
+        ],
+        [
+          598.0,
+          433.0
+        ],
+        [
+          598.0,
+          447.0
+        ],
+        [
+          582.0,
+          447.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        440.0
+      ],
+      "zone_id": 15,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b100",
+      "polygon": [
+        [
+          -588.0,
+          513.0
+        ],
+        [
+          -572.0,
+          513.0
+        ],
+        [
+          -572.0,
+          527.0
+        ],
+        [
+          -588.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        520.0
+      ],
+      "zone_id": 12,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b101",
+      "polygon": [
+        [
+          -498.0,
+          513.0
+        ],
+        [
+          -482.0,
+          513.0
+        ],
+        [
+          -482.0,
+          527.0
+        ],
+        [
+          -498.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        520.0
+      ],
+      "zone_id": 12,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b102",
+      "polygon": [
+        [
+          -408.0,
+          513.0
+        ],
+        [
+          -392.0,
+          513.0
+        ],
+        [
+          -392.0,
+          527.0
+        ],
+        [
+          -408.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        520.0
+      ],
+      "zone_id": 12,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b103",
+      "polygon": [
+        [
+          -318.0,
+          513.0
+        ],
+        [
+          -302.0,
+          513.0
+        ],
+        [
+          -302.0,
+          527.0
+        ],
+        [
+          -318.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        520.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b104",
+      "polygon": [
+        [
+          -228.0,
+          513.0
+        ],
+        [
+          -212.0,
+          513.0
+        ],
+        [
+          -212.0,
+          527.0
+        ],
+        [
+          -228.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        520.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b105",
+      "polygon": [
+        [
+          -138.0,
+          513.0
+        ],
+        [
+          -122.0,
+          513.0
+        ],
+        [
+          -122.0,
+          527.0
+        ],
+        [
+          -138.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        520.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b106",
+      "polygon": [
+        [
+          -48.0,
+          513.0
+        ],
+        [
+          -32.0,
+          513.0
+        ],
+        [
+          -32.0,
+          527.0
+        ],
+        [
+          -48.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        520.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b107",
+      "polygon": [
+        [
+          42.0,
+          513.0
+        ],
+        [
+          58.0,
+          513.0
+        ],
+        [
+          58.0,
+          527.0
+        ],
+        [
+          42.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        520.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b108",
+      "polygon": [
+        [
+          132.0,
+          513.0
+        ],
+        [
+          148.0,
+          513.0
+        ],
+        [
+          148.0,
+          527.0
+        ],
+        [
+          132.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        520.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b109",
+      "polygon": [
+        [
+          222.0,
+          513.0
+        ],
+        [
+          238.0,
+          513.0
+        ],
+        [
+          238.0,
+          527.0
+        ],
+        [
+          222.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        520.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b110",
+      "polygon": [
+        [
+          312.0,
+          513.0
+        ],
+        [
+          328.0,
+          513.0
+        ],
+        [
+          328.0,
+          527.0
+        ],
+        [
+          312.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        520.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b111",
+      "polygon": [
+        [
+          402.0,
+          513.0
+        ],
+        [
+          418.0,
+          513.0
+        ],
+        [
+          418.0,
+          527.0
+        ],
+        [
+          402.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        520.0
+      ],
+      "zone_id": 15,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b112",
+      "polygon": [
+        [
+          492.0,
+          513.0
+        ],
+        [
+          508.0,
+          513.0
+        ],
+        [
+          508.0,
+          527.0
+        ],
+        [
+          492.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        520.0
+      ],
+      "zone_id": 15,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b113",
+      "polygon": [
+        [
+          582.0,
+          513.0
+        ],
+        [
+          598.0,
+          513.0
+        ],
+        [
+          598.0,
+          527.0
+        ],
+        [
+          582.0,
+          527.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        520.0
+      ],
+      "zone_id": 15,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b114",
+      "polygon": [
+        [
+          -588.0,
+          593.0
+        ],
+        [
+          -572.0,
+          593.0
+        ],
+        [
+          -572.0,
+          607.0
+        ],
+        [
+          -588.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        600.0
+      ],
+      "zone_id": 12,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b115",
+      "polygon": [
+        [
+          -498.0,
+          593.0
+        ],
+        [
+          -482.0,
+          593.0
+        ],
+        [
+          -482.0,
+          607.0
+        ],
+        [
+          -498.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        600.0
+      ],
+      "zone_id": 12,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b116",
+      "polygon": [
+        [
+          -408.0,
+          593.0
+        ],
+        [
+          -392.0,
+          593.0
+        ],
+        [
+          -392.0,
+          607.0
+        ],
+        [
+          -408.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        600.0
+      ],
+      "zone_id": 12,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b117",
+      "polygon": [
+        [
+          -318.0,
+          593.0
+        ],
+        [
+          -302.0,
+          593.0
+        ],
+        [
+          -302.0,
+          607.0
+        ],
+        [
+          -318.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        600.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b118",
+      "polygon": [
+        [
+          -228.0,
+          593.0
+        ],
+        [
+          -212.0,
+          593.0
+        ],
+        [
+          -212.0,
+          607.0
+        ],
+        [
+          -228.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        600.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b119",
+      "polygon": [
+        [
+          -138.0,
+          593.0
+        ],
+        [
+          -122.0,
+          593.0
+        ],
+        [
+          -122.0,
+          607.0
+        ],
+        [
+          -138.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        600.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b120",
+      "polygon": [
+        [
+          -48.0,
+          593.0
+        ],
+        [
+          -32.0,
+          593.0
+        ],
+        [
+          -32.0,
+          607.0
+        ],
+        [
+          -48.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        600.0
+      ],
+      "zone_id": 13,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b121",
+      "polygon": [
+        [
+          42.0,
+          593.0
+        ],
+        [
+          58.0,
+          593.0
+        ],
+        [
+          58.0,
+          607.0
+        ],
+        [
+          42.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        600.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b122",
+      "polygon": [
+        [
+          132.0,
+          593.0
+        ],
+        [
+          148.0,
+          593.0
+        ],
+        [
+          148.0,
+          607.0
+        ],
+        [
+          132.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        600.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b123",
+      "polygon": [
+        [
+          222.0,
+          593.0
+        ],
+        [
+          238.0,
+          593.0
+        ],
+        [
+          238.0,
+          607.0
+        ],
+        [
+          222.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        600.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b124",
+      "polygon": [
+        [
+          312.0,
+          593.0
+        ],
+        [
+          328.0,
+          593.0
+        ],
+        [
+          328.0,
+          607.0
+        ],
+        [
+          312.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        600.0
+      ],
+      "zone_id": 14,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b125",
+      "polygon": [
+        [
+          402.0,
+          593.0
+        ],
+        [
+          418.0,
+          593.0
+        ],
+        [
+          418.0,
+          607.0
+        ],
+        [
+          402.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        600.0
+      ],
+      "zone_id": 15,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b126",
+      "polygon": [
+        [
+          492.0,
+          593.0
+        ],
+        [
+          508.0,
+          593.0
+        ],
+        [
+          508.0,
+          607.0
+        ],
+        [
+          492.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        600.0
+      ],
+      "zone_id": 15,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b127",
+      "polygon": [
+        [
+          582.0,
+          593.0
+        ],
+        [
+          598.0,
+          593.0
+        ],
+        [
+          598.0,
+          607.0
+        ],
+        [
+          582.0,
+          607.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        600.0
+      ],
+      "zone_id": 15,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b128",
+      "polygon": [
+        [
+          -591.0,
+          -179.0
+        ],
+        [
+          -569.0,
+          -179.0
+        ],
+        [
+          -569.0,
+          -161.0
+        ],
+        [
+          -591.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        -170.0
+      ],
+      "zone_id": 4,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b129",
+      "polygon": [
+        [
+          -501.0,
+          -179.0
+        ],
+        [
+          -479.0,
+          -179.0
+        ],
+        [
+          -479.0,
+          -161.0
+        ],
+        [
+          -501.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        -170.0
+      ],
+      "zone_id": 4,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b130",
+      "polygon": [
+        [
+          -411.0,
+          -179.0
+        ],
+        [
+          -389.0,
+          -179.0
+        ],
+        [
+          -389.0,
+          -161.0
+        ],
+        [
+          -411.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        -170.0
+      ],
+      "zone_id": 4,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b131",
+      "polygon": [
+        [
+          -321.0,
+          -179.0
+        ],
+        [
+          -299.0,
+          -179.0
+        ],
+        [
+          -299.0,
+          -161.0
+        ],
+        [
+          -321.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        -170.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b132",
+      "polygon": [
+        [
+          -231.0,
+          -179.0
+        ],
+        [
+          -209.0,
+          -179.0
+        ],
+        [
+          -209.0,
+          -161.0
+        ],
+        [
+          -231.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        -170.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b133",
+      "polygon": [
+        [
+          -141.0,
+          -179.0
+        ],
+        [
+          -119.0,
+          -179.0
+        ],
+        [
+          -119.0,
+          -161.0
+        ],
+        [
+          -141.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        -170.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b134",
+      "polygon": [
+        [
+          -51.0,
+          -179.0
+        ],
+        [
+          -29.0,
+          -179.0
+        ],
+        [
+          -29.0,
+          -161.0
+        ],
+        [
+          -51.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        -170.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b135",
+      "polygon": [
+        [
+          39.0,
+          -179.0
+        ],
+        [
+          61.0,
+          -179.0
+        ],
+        [
+          61.0,
+          -161.0
+        ],
+        [
+          39.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        -170.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b136",
+      "polygon": [
+        [
+          129.0,
+          -179.0
+        ],
+        [
+          151.0,
+          -179.0
+        ],
+        [
+          151.0,
+          -161.0
+        ],
+        [
+          129.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        -170.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b137",
+      "polygon": [
+        [
+          219.0,
+          -179.0
+        ],
+        [
+          241.0,
+          -179.0
+        ],
+        [
+          241.0,
+          -161.0
+        ],
+        [
+          219.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        -170.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b138",
+      "polygon": [
+        [
+          309.0,
+          -179.0
+        ],
+        [
+          331.0,
+          -179.0
+        ],
+        [
+          331.0,
+          -161.0
+        ],
+        [
+          309.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        -170.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b139",
+      "polygon": [
+        [
+          399.0,
+          -179.0
+        ],
+        [
+          421.0,
+          -179.0
+        ],
+        [
+          421.0,
+          -161.0
+        ],
+        [
+          399.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        -170.0
+      ],
+      "zone_id": 7,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b140",
+      "polygon": [
+        [
+          489.0,
+          -179.0
+        ],
+        [
+          511.0,
+          -179.0
+        ],
+        [
+          511.0,
+          -161.0
+        ],
+        [
+          489.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        -170.0
+      ],
+      "zone_id": 7,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b141",
+      "polygon": [
+        [
+          579.0,
+          -179.0
+        ],
+        [
+          601.0,
+          -179.0
+        ],
+        [
+          601.0,
+          -161.0
+        ],
+        [
+          579.0,
+          -161.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        -170.0
+      ],
+      "zone_id": 7,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b142",
+      "polygon": [
+        [
+          -591.0,
+          -269.0
+        ],
+        [
+          -569.0,
+          -269.0
+        ],
+        [
+          -569.0,
+          -251.0
+        ],
+        [
+          -591.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        -260.0
+      ],
+      "zone_id": 4,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b143",
+      "polygon": [
+        [
+          -501.0,
+          -269.0
+        ],
+        [
+          -479.0,
+          -269.0
+        ],
+        [
+          -479.0,
+          -251.0
+        ],
+        [
+          -501.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        -260.0
+      ],
+      "zone_id": 4,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b144",
+      "polygon": [
+        [
+          -411.0,
+          -269.0
+        ],
+        [
+          -389.0,
+          -269.0
+        ],
+        [
+          -389.0,
+          -251.0
+        ],
+        [
+          -411.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        -260.0
+      ],
+      "zone_id": 4,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b145",
+      "polygon": [
+        [
+          -321.0,
+          -269.0
+        ],
+        [
+          -299.0,
+          -269.0
+        ],
+        [
+          -299.0,
+          -251.0
+        ],
+        [
+          -321.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        -260.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b146",
+      "polygon": [
+        [
+          -231.0,
+          -269.0
+        ],
+        [
+          -209.0,
+          -269.0
+        ],
+        [
+          -209.0,
+          -251.0
+        ],
+        [
+          -231.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        -260.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b147",
+      "polygon": [
+        [
+          -141.0,
+          -269.0
+        ],
+        [
+          -119.0,
+          -269.0
+        ],
+        [
+          -119.0,
+          -251.0
+        ],
+        [
+          -141.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        -260.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b148",
+      "polygon": [
+        [
+          -51.0,
+          -269.0
+        ],
+        [
+          -29.0,
+          -269.0
+        ],
+        [
+          -29.0,
+          -251.0
+        ],
+        [
+          -51.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        -260.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b149",
+      "polygon": [
+        [
+          39.0,
+          -269.0
+        ],
+        [
+          61.0,
+          -269.0
+        ],
+        [
+          61.0,
+          -251.0
+        ],
+        [
+          39.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        -260.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b150",
+      "polygon": [
+        [
+          129.0,
+          -269.0
+        ],
+        [
+          151.0,
+          -269.0
+        ],
+        [
+          151.0,
+          -251.0
+        ],
+        [
+          129.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        -260.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b151",
+      "polygon": [
+        [
+          219.0,
+          -269.0
+        ],
+        [
+          241.0,
+          -269.0
+        ],
+        [
+          241.0,
+          -251.0
+        ],
+        [
+          219.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        -260.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b152",
+      "polygon": [
+        [
+          309.0,
+          -269.0
+        ],
+        [
+          331.0,
+          -269.0
+        ],
+        [
+          331.0,
+          -251.0
+        ],
+        [
+          309.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        -260.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b153",
+      "polygon": [
+        [
+          399.0,
+          -269.0
+        ],
+        [
+          421.0,
+          -269.0
+        ],
+        [
+          421.0,
+          -251.0
+        ],
+        [
+          399.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        -260.0
+      ],
+      "zone_id": 7,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b154",
+      "polygon": [
+        [
+          489.0,
+          -269.0
+        ],
+        [
+          511.0,
+          -269.0
+        ],
+        [
+          511.0,
+          -251.0
+        ],
+        [
+          489.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        -260.0
+      ],
+      "zone_id": 7,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b155",
+      "polygon": [
+        [
+          579.0,
+          -269.0
+        ],
+        [
+          601.0,
+          -269.0
+        ],
+        [
+          601.0,
+          -251.0
+        ],
+        [
+          579.0,
+          -251.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        -260.0
+      ],
+      "zone_id": 7,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b156",
+      "polygon": [
+        [
+          -591.0,
+          -359.0
+        ],
+        [
+          -569.0,
+          -359.0
+        ],
+        [
+          -569.0,
+          -341.0
+        ],
+        [
+          -591.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        -350.0
+      ],
+      "zone_id": 4,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b157",
+      "polygon": [
+        [
+          -501.0,
+          -359.0
+        ],
+        [
+          -479.0,
+          -359.0
+        ],
+        [
+          -479.0,
+          -341.0
+        ],
+        [
+          -501.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        -350.0
+      ],
+      "zone_id": 4,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b158",
+      "polygon": [
+        [
+          -411.0,
+          -359.0
+        ],
+        [
+          -389.0,
+          -359.0
+        ],
+        [
+          -389.0,
+          -341.0
+        ],
+        [
+          -411.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        -350.0
+      ],
+      "zone_id": 4,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b159",
+      "polygon": [
+        [
+          -321.0,
+          -359.0
+        ],
+        [
+          -299.0,
+          -359.0
+        ],
+        [
+          -299.0,
+          -341.0
+        ],
+        [
+          -321.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        -350.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b160",
+      "polygon": [
+        [
+          -231.0,
+          -359.0
+        ],
+        [
+          -209.0,
+          -359.0
+        ],
+        [
+          -209.0,
+          -341.0
+        ],
+        [
+          -231.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        -350.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b161",
+      "polygon": [
+        [
+          -141.0,
+          -359.0
+        ],
+        [
+          -119.0,
+          -359.0
+        ],
+        [
+          -119.0,
+          -341.0
+        ],
+        [
+          -141.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        -350.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b162",
+      "polygon": [
+        [
+          -51.0,
+          -359.0
+        ],
+        [
+          -29.0,
+          -359.0
+        ],
+        [
+          -29.0,
+          -341.0
+        ],
+        [
+          -51.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        -350.0
+      ],
+      "zone_id": 5,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b163",
+      "polygon": [
+        [
+          39.0,
+          -359.0
+        ],
+        [
+          61.0,
+          -359.0
+        ],
+        [
+          61.0,
+          -341.0
+        ],
+        [
+          39.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        -350.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b164",
+      "polygon": [
+        [
+          129.0,
+          -359.0
+        ],
+        [
+          151.0,
+          -359.0
+        ],
+        [
+          151.0,
+          -341.0
+        ],
+        [
+          129.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        -350.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b165",
+      "polygon": [
+        [
+          219.0,
+          -359.0
+        ],
+        [
+          241.0,
+          -359.0
+        ],
+        [
+          241.0,
+          -341.0
+        ],
+        [
+          219.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        -350.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b166",
+      "polygon": [
+        [
+          309.0,
+          -359.0
+        ],
+        [
+          331.0,
+          -359.0
+        ],
+        [
+          331.0,
+          -341.0
+        ],
+        [
+          309.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        -350.0
+      ],
+      "zone_id": 6,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b167",
+      "polygon": [
+        [
+          399.0,
+          -359.0
+        ],
+        [
+          421.0,
+          -359.0
+        ],
+        [
+          421.0,
+          -341.0
+        ],
+        [
+          399.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        -350.0
+      ],
+      "zone_id": 7,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b168",
+      "polygon": [
+        [
+          489.0,
+          -359.0
+        ],
+        [
+          511.0,
+          -359.0
+        ],
+        [
+          511.0,
+          -341.0
+        ],
+        [
+          489.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        -350.0
+      ],
+      "zone_id": 7,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b169",
+      "polygon": [
+        [
+          579.0,
+          -359.0
+        ],
+        [
+          601.0,
+          -359.0
+        ],
+        [
+          601.0,
+          -341.0
+        ],
+        [
+          579.0,
+          -341.0
+        ]
+      ],
+      "height": 9.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        -350.0
+      ],
+      "zone_id": 7,
+      "building_type": "apartments",
+      "sample_data": true
+    },
+    {
+      "id": "b170",
+      "polygon": [
+        [
+          -588.0,
+          -447.0
+        ],
+        [
+          -572.0,
+          -447.0
+        ],
+        [
+          -572.0,
+          -433.0
+        ],
+        [
+          -588.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        -440.0
+      ],
+      "zone_id": 0,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b171",
+      "polygon": [
+        [
+          -498.0,
+          -447.0
+        ],
+        [
+          -482.0,
+          -447.0
+        ],
+        [
+          -482.0,
+          -433.0
+        ],
+        [
+          -498.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        -440.0
+      ],
+      "zone_id": 0,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b172",
+      "polygon": [
+        [
+          -408.0,
+          -447.0
+        ],
+        [
+          -392.0,
+          -447.0
+        ],
+        [
+          -392.0,
+          -433.0
+        ],
+        [
+          -408.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        -440.0
+      ],
+      "zone_id": 0,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b173",
+      "polygon": [
+        [
+          -318.0,
+          -447.0
+        ],
+        [
+          -302.0,
+          -447.0
+        ],
+        [
+          -302.0,
+          -433.0
+        ],
+        [
+          -318.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        -440.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b174",
+      "polygon": [
+        [
+          -228.0,
+          -447.0
+        ],
+        [
+          -212.0,
+          -447.0
+        ],
+        [
+          -212.0,
+          -433.0
+        ],
+        [
+          -228.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        -440.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b175",
+      "polygon": [
+        [
+          -138.0,
+          -447.0
+        ],
+        [
+          -122.0,
+          -447.0
+        ],
+        [
+          -122.0,
+          -433.0
+        ],
+        [
+          -138.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        -440.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b176",
+      "polygon": [
+        [
+          -48.0,
+          -447.0
+        ],
+        [
+          -32.0,
+          -447.0
+        ],
+        [
+          -32.0,
+          -433.0
+        ],
+        [
+          -48.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        -440.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b177",
+      "polygon": [
+        [
+          42.0,
+          -447.0
+        ],
+        [
+          58.0,
+          -447.0
+        ],
+        [
+          58.0,
+          -433.0
+        ],
+        [
+          42.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        -440.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b178",
+      "polygon": [
+        [
+          132.0,
+          -447.0
+        ],
+        [
+          148.0,
+          -447.0
+        ],
+        [
+          148.0,
+          -433.0
+        ],
+        [
+          132.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        -440.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b179",
+      "polygon": [
+        [
+          222.0,
+          -447.0
+        ],
+        [
+          238.0,
+          -447.0
+        ],
+        [
+          238.0,
+          -433.0
+        ],
+        [
+          222.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        -440.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b180",
+      "polygon": [
+        [
+          312.0,
+          -447.0
+        ],
+        [
+          328.0,
+          -447.0
+        ],
+        [
+          328.0,
+          -433.0
+        ],
+        [
+          312.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        -440.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b181",
+      "polygon": [
+        [
+          402.0,
+          -447.0
+        ],
+        [
+          418.0,
+          -447.0
+        ],
+        [
+          418.0,
+          -433.0
+        ],
+        [
+          402.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        -440.0
+      ],
+      "zone_id": 3,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b182",
+      "polygon": [
+        [
+          492.0,
+          -447.0
+        ],
+        [
+          508.0,
+          -447.0
+        ],
+        [
+          508.0,
+          -433.0
+        ],
+        [
+          492.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        -440.0
+      ],
+      "zone_id": 3,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b183",
+      "polygon": [
+        [
+          582.0,
+          -447.0
+        ],
+        [
+          598.0,
+          -447.0
+        ],
+        [
+          598.0,
+          -433.0
+        ],
+        [
+          582.0,
+          -433.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        -440.0
+      ],
+      "zone_id": 3,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b184",
+      "polygon": [
+        [
+          -588.0,
+          -527.0
+        ],
+        [
+          -572.0,
+          -527.0
+        ],
+        [
+          -572.0,
+          -513.0
+        ],
+        [
+          -588.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        -520.0
+      ],
+      "zone_id": 0,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b185",
+      "polygon": [
+        [
+          -498.0,
+          -527.0
+        ],
+        [
+          -482.0,
+          -527.0
+        ],
+        [
+          -482.0,
+          -513.0
+        ],
+        [
+          -498.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        -520.0
+      ],
+      "zone_id": 0,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b186",
+      "polygon": [
+        [
+          -408.0,
+          -527.0
+        ],
+        [
+          -392.0,
+          -527.0
+        ],
+        [
+          -392.0,
+          -513.0
+        ],
+        [
+          -408.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        -520.0
+      ],
+      "zone_id": 0,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b187",
+      "polygon": [
+        [
+          -318.0,
+          -527.0
+        ],
+        [
+          -302.0,
+          -527.0
+        ],
+        [
+          -302.0,
+          -513.0
+        ],
+        [
+          -318.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        -520.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b188",
+      "polygon": [
+        [
+          -228.0,
+          -527.0
+        ],
+        [
+          -212.0,
+          -527.0
+        ],
+        [
+          -212.0,
+          -513.0
+        ],
+        [
+          -228.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        -520.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b189",
+      "polygon": [
+        [
+          -138.0,
+          -527.0
+        ],
+        [
+          -122.0,
+          -527.0
+        ],
+        [
+          -122.0,
+          -513.0
+        ],
+        [
+          -138.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        -520.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b190",
+      "polygon": [
+        [
+          -48.0,
+          -527.0
+        ],
+        [
+          -32.0,
+          -527.0
+        ],
+        [
+          -32.0,
+          -513.0
+        ],
+        [
+          -48.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        -520.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b191",
+      "polygon": [
+        [
+          42.0,
+          -527.0
+        ],
+        [
+          58.0,
+          -527.0
+        ],
+        [
+          58.0,
+          -513.0
+        ],
+        [
+          42.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        -520.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b192",
+      "polygon": [
+        [
+          132.0,
+          -527.0
+        ],
+        [
+          148.0,
+          -527.0
+        ],
+        [
+          148.0,
+          -513.0
+        ],
+        [
+          132.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        -520.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b193",
+      "polygon": [
+        [
+          222.0,
+          -527.0
+        ],
+        [
+          238.0,
+          -527.0
+        ],
+        [
+          238.0,
+          -513.0
+        ],
+        [
+          222.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        -520.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b194",
+      "polygon": [
+        [
+          312.0,
+          -527.0
+        ],
+        [
+          328.0,
+          -527.0
+        ],
+        [
+          328.0,
+          -513.0
+        ],
+        [
+          312.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        -520.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b195",
+      "polygon": [
+        [
+          402.0,
+          -527.0
+        ],
+        [
+          418.0,
+          -527.0
+        ],
+        [
+          418.0,
+          -513.0
+        ],
+        [
+          402.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        -520.0
+      ],
+      "zone_id": 3,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b196",
+      "polygon": [
+        [
+          492.0,
+          -527.0
+        ],
+        [
+          508.0,
+          -527.0
+        ],
+        [
+          508.0,
+          -513.0
+        ],
+        [
+          492.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        -520.0
+      ],
+      "zone_id": 3,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b197",
+      "polygon": [
+        [
+          582.0,
+          -527.0
+        ],
+        [
+          598.0,
+          -527.0
+        ],
+        [
+          598.0,
+          -513.0
+        ],
+        [
+          582.0,
+          -513.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        -520.0
+      ],
+      "zone_id": 3,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b198",
+      "polygon": [
+        [
+          -588.0,
+          -607.0
+        ],
+        [
+          -572.0,
+          -607.0
+        ],
+        [
+          -572.0,
+          -593.0
+        ],
+        [
+          -588.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -580.0,
+        -600.0
+      ],
+      "zone_id": 0,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b199",
+      "polygon": [
+        [
+          -498.0,
+          -607.0
+        ],
+        [
+          -482.0,
+          -607.0
+        ],
+        [
+          -482.0,
+          -593.0
+        ],
+        [
+          -498.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -490.0,
+        -600.0
+      ],
+      "zone_id": 0,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b200",
+      "polygon": [
+        [
+          -408.0,
+          -607.0
+        ],
+        [
+          -392.0,
+          -607.0
+        ],
+        [
+          -392.0,
+          -593.0
+        ],
+        [
+          -408.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -400.0,
+        -600.0
+      ],
+      "zone_id": 0,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b201",
+      "polygon": [
+        [
+          -318.0,
+          -607.0
+        ],
+        [
+          -302.0,
+          -607.0
+        ],
+        [
+          -302.0,
+          -593.0
+        ],
+        [
+          -318.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -310.0,
+        -600.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b202",
+      "polygon": [
+        [
+          -228.0,
+          -607.0
+        ],
+        [
+          -212.0,
+          -607.0
+        ],
+        [
+          -212.0,
+          -593.0
+        ],
+        [
+          -228.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -220.0,
+        -600.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b203",
+      "polygon": [
+        [
+          -138.0,
+          -607.0
+        ],
+        [
+          -122.0,
+          -607.0
+        ],
+        [
+          -122.0,
+          -593.0
+        ],
+        [
+          -138.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -130.0,
+        -600.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b204",
+      "polygon": [
+        [
+          -48.0,
+          -607.0
+        ],
+        [
+          -32.0,
+          -607.0
+        ],
+        [
+          -32.0,
+          -593.0
+        ],
+        [
+          -48.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        -40.0,
+        -600.0
+      ],
+      "zone_id": 1,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b205",
+      "polygon": [
+        [
+          42.0,
+          -607.0
+        ],
+        [
+          58.0,
+          -607.0
+        ],
+        [
+          58.0,
+          -593.0
+        ],
+        [
+          42.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        50.0,
+        -600.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b206",
+      "polygon": [
+        [
+          132.0,
+          -607.0
+        ],
+        [
+          148.0,
+          -607.0
+        ],
+        [
+          148.0,
+          -593.0
+        ],
+        [
+          132.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        140.0,
+        -600.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b207",
+      "polygon": [
+        [
+          222.0,
+          -607.0
+        ],
+        [
+          238.0,
+          -607.0
+        ],
+        [
+          238.0,
+          -593.0
+        ],
+        [
+          222.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        230.0,
+        -600.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b208",
+      "polygon": [
+        [
+          312.0,
+          -607.0
+        ],
+        [
+          328.0,
+          -607.0
+        ],
+        [
+          328.0,
+          -593.0
+        ],
+        [
+          312.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        320.0,
+        -600.0
+      ],
+      "zone_id": 2,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b209",
+      "polygon": [
+        [
+          402.0,
+          -607.0
+        ],
+        [
+          418.0,
+          -607.0
+        ],
+        [
+          418.0,
+          -593.0
+        ],
+        [
+          402.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        410.0,
+        -600.0
+      ],
+      "zone_id": 3,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b210",
+      "polygon": [
+        [
+          492.0,
+          -607.0
+        ],
+        [
+          508.0,
+          -607.0
+        ],
+        [
+          508.0,
+          -593.0
+        ],
+        [
+          492.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        500.0,
+        -600.0
+      ],
+      "zone_id": 3,
+      "building_type": "house",
+      "sample_data": true
+    },
+    {
+      "id": "b211",
+      "polygon": [
+        [
+          582.0,
+          -607.0
+        ],
+        [
+          598.0,
+          -607.0
+        ],
+        [
+          598.0,
+          -593.0
+        ],
+        [
+          582.0,
+          -593.0
+        ]
+      ],
+      "height": 4.0,
+      "height_source": "estimated_default",
+      "centroid": [
+        590.0,
+        -600.0
+      ],
+      "zone_id": 3,
+      "building_type": "house",
+      "sample_data": true
+    }
+  ]
+}

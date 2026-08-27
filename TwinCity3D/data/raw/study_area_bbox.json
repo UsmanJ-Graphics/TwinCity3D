@@ -1,0 +1,10 @@
+{
+  "name": "Gulberg III — MM Alam Road / Main Boulevard Corridor",
+  "city": "Lahore",
+  "country": "Pakistan",
+  "latitude_min": 31.5115,
+  "latitude_max": 31.5245,
+  "longitude_min": 74.3430,
+  "longitude_max": 74.3575,
+  "notes": "Bounding box as defined in Phase 1 (phase1_study_area.md). All Phase 2 GIS data is clipped to this box before conversion to local Cartesian coordinates."
+}

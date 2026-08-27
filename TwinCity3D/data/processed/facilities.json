@@ -1,0 +1,27 @@
+{
+  "data_source": "sample_fallback",
+  "facilities": [
+    {
+      "id": "f001",
+      "name": "Sample Community School",
+      "facility_type": "school",
+      "position": [
+        -300.0,
+        300.0
+      ],
+      "zone_id": 9,
+      "sample_data": true
+    },
+    {
+      "id": "f002",
+      "name": "Sample District Hospital",
+      "facility_type": "hospital",
+      "position": [
+        350.0,
+        -300.0
+      ],
+      "zone_id": 7,
+      "sample_data": true
+    }
+  ]
+}

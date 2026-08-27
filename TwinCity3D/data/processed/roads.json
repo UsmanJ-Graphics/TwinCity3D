@@ -1,0 +1,229 @@
+{
+  "data_source": "sample_fallback",
+  "roads": [
+    {
+      "id": "r001",
+      "polyline": [
+        [
+          -680.0,
+          0.0
+        ],
+        [
+          680.0,
+          0.0
+        ]
+      ],
+      "width": 14.0,
+      "road_type": "primary",
+      "sample_data": true
+    },
+    {
+      "id": "r002",
+      "polyline": [
+        [
+          -600.0,
+          -680.0
+        ],
+        [
+          -600.0,
+          680.0
+        ]
+      ],
+      "width": 9.0,
+      "road_type": "secondary",
+      "sample_data": true
+    },
+    {
+      "id": "r003",
+      "polyline": [
+        [
+          -400.0,
+          -680.0
+        ],
+        [
+          -400.0,
+          680.0
+        ]
+      ],
+      "width": 9.0,
+      "road_type": "secondary",
+      "sample_data": true
+    },
+    {
+      "id": "r004",
+      "polyline": [
+        [
+          -200.0,
+          -680.0
+        ],
+        [
+          -200.0,
+          680.0
+        ]
+      ],
+      "width": 9.0,
+      "road_type": "secondary",
+      "sample_data": true
+    },
+    {
+      "id": "r005",
+      "polyline": [
+        [
+          0.0,
+          -680.0
+        ],
+        [
+          0.0,
+          680.0
+        ]
+      ],
+      "width": 9.0,
+      "road_type": "secondary",
+      "sample_data": true
+    },
+    {
+      "id": "r006",
+      "polyline": [
+        [
+          200.0,
+          -680.0
+        ],
+        [
+          200.0,
+          680.0
+        ]
+      ],
+      "width": 9.0,
+      "road_type": "secondary",
+      "sample_data": true
+    },
+    {
+      "id": "r007",
+      "polyline": [
+        [
+          400.0,
+          -680.0
+        ],
+        [
+          400.0,
+          680.0
+        ]
+      ],
+      "width": 9.0,
+      "road_type": "secondary",
+      "sample_data": true
+    },
+    {
+      "id": "r008",
+      "polyline": [
+        [
+          600.0,
+          -680.0
+        ],
+        [
+          600.0,
+          680.0
+        ]
+      ],
+      "width": 9.0,
+      "road_type": "secondary",
+      "sample_data": true
+    },
+    {
+      "id": "r009",
+      "polyline": [
+        [
+          -680.0,
+          170.0
+        ],
+        [
+          680.0,
+          170.0
+        ]
+      ],
+      "width": 7.0,
+      "road_type": "residential",
+      "sample_data": true
+    },
+    {
+      "id": "r010",
+      "polyline": [
+        [
+          -680.0,
+          350.0
+        ],
+        [
+          680.0,
+          350.0
+        ]
+      ],
+      "width": 7.0,
+      "road_type": "residential",
+      "sample_data": true
+    },
+    {
+      "id": "r011",
+      "polyline": [
+        [
+          -680.0,
+          520.0
+        ],
+        [
+          680.0,
+          520.0
+        ]
+      ],
+      "width": 7.0,
+      "road_type": "residential",
+      "sample_data": true
+    },
+    {
+      "id": "r012",
+      "polyline": [
+        [
+          -680.0,
+          -170.0
+        ],
+        [
+          680.0,
+          -170.0
+        ]
+      ],
+      "width": 7.0,
+      "road_type": "residential",
+      "sample_data": true
+    },
+    {
+      "id": "r013",
+      "polyline": [
+        [
+          -680.0,
+          -350.0
+        ],
+        [
+          680.0,
+          -350.0
+        ]
+      ],
+      "width": 7.0,
+      "road_type": "residential",
+      "sample_data": true
+    },
+    {
+      "id": "r014",
+      "polyline": [
+        [
+          -680.0,
+          -520.0
+        ],
+        [
+          680.0,
+          -520.0
+        ]
+      ],
+      "width": 7.0,
+      "road_type": "residential",
+      "sample_data": true
+    }
+  ]
+}

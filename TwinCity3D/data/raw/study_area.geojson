@@ -1,0 +1,40 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Gulberg III \u2014 MM Alam Road / Main Boulevard Corridor",
+        "city": "Lahore",
+        "source": "Phase 1 study area definition"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              74.343,
+              31.5115
+            ],
+            [
+              74.3575,
+              31.5115
+            ],
+            [
+              74.3575,
+              31.5245
+            ],
+            [
+              74.343,
+              31.5245
+            ],
+            [
+              74.343,
+              31.5115
+            ]
+          ]
+        ]
+      }
+    }
+  ]
+}
