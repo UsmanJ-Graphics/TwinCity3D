@@ -16,10 +16,12 @@ namespace twin {
     // directly into rendering code."
     //
     // Field provenance (updated as later phases land):
-    //   buildingDensity, greenCoverage  -> computed now, from Phase 3 geometry
-    //   temperature                    -> placeholder until Phase 5/6
-    //   population                     -> placeholder until Phase 7
-    //   heatRisk, exposure, priority   -> placeholder until Phase 8/11
+    //   buildingDensity, greenCoverage           -> computed now, from Phase 3 geometry
+    //   exposedSurfaceRatio, environmentalHeatBurden -> computed now, Phase 6 (derived, not placeholders)
+    //   temperature                              -> placeholder until Phase 5/6
+    //   population, populationDensity            -> computed now, Phase 7 (estimated model or
+    //                                                WorldPop-total-rescaled; see population.json)
+    //   heatRisk, exposure, priority              -> placeholder until Phase 8/11
     struct Zone {
         int id{ -1 };
 
@@ -28,11 +30,31 @@ namespace twin {
 
         // --- Population ---
         int population{ 0 };              // placeholder = 0 until Phase 7 (WorldPop aggregation)
+        float populationDensity{ 0.0f };  // persons per km^2; placeholder = 0 until Phase 7
         bool populationIsPlaceholder{ true };
 
         // --- Environment (0..1 fractions unless noted) ---
         float greenCoverage{ 0.0f };      // real: green-area footprint area / zone area
         float buildingDensity{ 0.0f };    // real: building footprint area / zone area
+
+        // Phase 6: cheap proxy for "everything that's neither a building roof
+        // nor vegetation" (bare ground, pavement, parking, unclassified OSM
+        // gaps) — 1 - buildingDensity - greenCoverage, clamped. Not a real
+        // land-cover classification (that would need satellite/Python
+        // preprocessing, which the master spec explicitly says to avoid doing
+        // in C++); it's a bookkeeping remainder used only to weight heat burden.
+        float exposedSurfaceRatio{ 0.0f };
+
+        // Phase 6: 0..1 composite of buildingDensity, green deficit (1 -
+        // greenCoverage), and exposedSurfaceRatio. This is what lets Phase 6's
+        // ApplyWeather() spread the single area-wide weather reading across
+        // zones instead of giving every zone an identical number — a hot,
+        // paved, green-poor zone reads a bit warmer than a leafy one even
+        // though both use the same station data. Purely a relative weighting
+        // signal, not a measured temperature; feeds into Phase 8's
+        // GreenDeficitScore/BuildingDensityScore too.
+        float environmentalHeatBurden{ 0.0f };
+
         float temperature{ 0.0f };        // degrees C; placeholder until Phase 5/6
         bool temperatureIsPlaceholder{ true };
 

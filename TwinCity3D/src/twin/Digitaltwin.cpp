@@ -4,10 +4,27 @@
 
 #include <algorithm>
 #include <cmath>
+#include <numeric>
 
 namespace twin {
 
     using gis::PolygonSignedArea;
+
+    namespace {
+        // Phase 6 heat-burden weights. Kept as named constants (not magic
+        // numbers) so they're easy to retune before Phase 8's heat-risk model
+        // reuses the same idea with its own weights — see master spec's
+        // "Keep the weights configurable" rule under Phase 8.
+        constexpr float kWeightBuildingDensity = 0.5f;
+        constexpr float kWeightGreenDeficit = 0.3f;
+        constexpr float kWeightExposedSurface = 0.2f;
+
+        // Total degrees C of spread applied across the full burden range
+        // (i.e. a zone at burden 1.0 vs. a zone at burden 0.0, relative to the
+        // study-area average, differ by up to this many degrees). Deliberately
+        // small — this is a visualization aid, not a claimed measurement.
+        constexpr float kHeatBurdenTemperatureSwingC = 3.0f;
+    }
 
     void DigitalTwin::Build(const gis::GISDataset& dataset) {
         m_zones.clear();
@@ -74,6 +91,31 @@ namespace twin {
         LogInfo("DigitalTwin::Build: " + std::to_string(m_zones.size()) +
             " zones built with building density / green coverage from Phase 3 geometry "
             "(temperature/population/heatRisk still placeholders)");
+
+        ComputeEnvironmentalLayer();
+    }
+
+    void DigitalTwin::ComputeEnvironmentalLayer() {
+        for (auto& zone : m_zones) {
+            float greenDeficit = 1.0f - zone.greenCoverage;
+            zone.exposedSurfaceRatio = std::clamp(
+                1.0f - zone.buildingDensity - zone.greenCoverage, 0.0f, 1.0f);
+
+            zone.environmentalHeatBurden = std::clamp(
+                kWeightBuildingDensity * zone.buildingDensity +
+                kWeightGreenDeficit * greenDeficit +
+                kWeightExposedSurface * zone.exposedSurfaceRatio,
+                0.0f, 1.0f);
+        }
+
+        float avgBurden = std::accumulate(m_zones.begin(), m_zones.end(), 0.0f,
+            [](float sum, const Zone& z) { return sum + z.environmentalHeatBurden; }) /
+            static_cast<float>(m_zones.size());
+
+        LogInfo("DigitalTwin::ComputeEnvironmentalLayer: environmental heat burden computed "
+            "on " + std::to_string(m_zones.size()) + " zones (study-area average burden=" +
+            std::to_string(avgBurden) + ") — exposedSurfaceRatio/environmentalHeatBurden are "
+            "derived from real Phase 3 geometry, not placeholders");
     }
 
     void DigitalTwin::ApplyWeather(const WeatherData& weather) {
@@ -83,15 +125,68 @@ namespace twin {
             return;
         }
 
-        for (auto& zone : m_zones) {
-            zone.temperature = weather.currentTemperature;
-            zone.temperatureIsPlaceholder = false;
+        if (m_zones.empty()) {
+            LogWarn("DigitalTwin::ApplyWeather: no zones to apply weather to");
+            return;
         }
 
-        LogInfo("DigitalTwin::ApplyWeather: set temperature=" +
-            std::to_string(weather.currentTemperature) + "C on " +
-            std::to_string(m_zones.size()) + " zones [" + weather.dataSource + "]" +
-            (weather.IsLive() ? "" : " (NOT live — sample/fallback reading)"));
+        float avgBurden = std::accumulate(m_zones.begin(), m_zones.end(), 0.0f,
+            [](float sum, const Zone& z) { return sum + z.environmentalHeatBurden; }) /
+            static_cast<float>(m_zones.size());
+
+        float minTemp = 0.0f, maxTemp = 0.0f;
+        for (size_t i = 0; i < m_zones.size(); ++i) {
+            auto& zone = m_zones[i];
+            // Phase 6: spread the single station reading across zones using
+            // relative heat burden. A zone exactly at the average burden gets
+            // the unmodified reading; hotter-burden zones read warmer,
+            // greener/lower-burden zones read cooler. Still one weather
+            // source — this is a modelled offset, not a second sensor.
+            float offset = (zone.environmentalHeatBurden - avgBurden) * kHeatBurdenTemperatureSwingC;
+            zone.temperature = weather.currentTemperature + offset;
+            zone.temperatureIsPlaceholder = false;
+
+            if (i == 0) { minTemp = maxTemp = zone.temperature; }
+            else {
+                minTemp = std::min(minTemp, zone.temperature);
+                maxTemp = std::max(maxTemp, zone.temperature);
+            }
+        }
+
+        LogInfo("DigitalTwin::ApplyWeather: base=" + std::to_string(weather.currentTemperature) +
+            "C spread across " + std::to_string(m_zones.size()) + " zones via Phase 6 heat-burden "
+            "offset [" + weather.dataSource + "] -> range " + std::to_string(minTemp) + "C to " +
+            std::to_string(maxTemp) + "C" + (weather.IsLive() ? "" : " (NOT live — sample/fallback reading)") +
+            " — MODELLED SPREAD, not per-zone sensor data");
+    }
+
+    void DigitalTwin::ApplyPopulation(const PopulationData& population) {
+        if (!population.valid) {
+            LogWarn("DigitalTwin::ApplyPopulation: population data is not valid — "
+                "leaving zone population as placeholders");
+            return;
+        }
+
+        int matched = 0;
+        for (const auto& sample : population.zones) {
+            Zone* zone = FindZone(sample.zoneId);
+            if (!zone) continue;
+            zone->population = sample.population;
+            zone->populationDensity = sample.populationDensityPerKm2;
+            zone->populationIsPlaceholder = false;
+            ++matched;
+        }
+
+        int unmatched = static_cast<int>(population.zones.size()) - matched;
+        if (unmatched > 0) {
+            LogWarn("DigitalTwin::ApplyPopulation: " + std::to_string(unmatched) +
+                " population.json entries referenced zone ids not present in this dataset");
+        }
+
+        LogInfo("DigitalTwin::ApplyPopulation: set population on " + std::to_string(matched) +
+            "/" + std::to_string(m_zones.size()) + " zones [" + population.dataSource + "]" +
+            (population.IsLive() ? "" : " (estimated — not a direct live measurement)") +
+            ", study-area total=" + std::to_string(population.totalPopulation));
     }
 
     Zone* DigitalTwin::FindZone(int zoneId) {

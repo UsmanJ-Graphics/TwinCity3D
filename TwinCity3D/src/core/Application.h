@@ -12,6 +12,7 @@
 #include "../twin/CityMeshBuilder.h"
 #include "../twin/DigitalTwin.h"
 #include "../twin/WeatherData.h"
+#include "../twin/PopulationData.h"
 
 namespace twin {
 
@@ -42,6 +43,9 @@ namespace twin {
         void LoadWeather();            // Phase 5, Step 3: loads weather.json, applies it to the digital twin
         void LogPhase5WeatherSummary(); // temporary Phase 5 diagnostic; superseded by the dashboard's current-temperature display (Phase 15)
 
+        void LoadPopulation();            // Phase 7: loads population.json, applies it to the digital twin
+        void LogPhase7PopulationSummary(); // temporary Phase 7 diagnostic; superseded by the dashboard's population-exposure display (Phase 15)
+
         static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
         static void CursorPosCallback(GLFWwindow* window, double xpos, double ypos);
         static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
@@ -63,6 +67,7 @@ namespace twin {
         bool m_hasCityData{ false };
 
         WeatherData m_weather;  // Phase 5, Step 3
+        PopulationData m_population;  // Phase 7
 
         bool m_firstMouse{ true };
         float m_lastMouseX{ 0.0f };

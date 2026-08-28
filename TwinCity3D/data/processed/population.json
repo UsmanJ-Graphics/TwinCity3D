@@ -1,0 +1,92 @@
+{
+  "data_source": "estimated_model",
+  "method": "building_floor_area_occupancy_model",
+  "zones": [
+    {
+      "zone_id": 0,
+      "population": 101,
+      "population_density_per_km2": 824.5
+    },
+    {
+      "zone_id": 1,
+      "population": 134,
+      "population_density_per_km2": 1093.9
+    },
+    {
+      "zone_id": 2,
+      "population": 134,
+      "population_density_per_km2": 1093.9
+    },
+    {
+      "zone_id": 3,
+      "population": 101,
+      "population_density_per_km2": 824.5
+    },
+    {
+      "zone_id": 4,
+      "population": 855,
+      "population_density_per_km2": 6979.6
+    },
+    {
+      "zone_id": 5,
+      "population": 1140,
+      "population_density_per_km2": 9306.1
+    },
+    {
+      "zone_id": 6,
+      "population": 1140,
+      "population_density_per_km2": 9306.1
+    },
+    {
+      "zone_id": 7,
+      "population": 855,
+      "population_density_per_km2": 6979.6
+    },
+    {
+      "zone_id": 8,
+      "population": 570,
+      "population_density_per_km2": 4653.1
+    },
+    {
+      "zone_id": 9,
+      "population": 760,
+      "population_density_per_km2": 6204.1
+    },
+    {
+      "zone_id": 10,
+      "population": 760,
+      "population_density_per_km2": 6204.1
+    },
+    {
+      "zone_id": 11,
+      "population": 570,
+      "population_density_per_km2": 4653.1
+    },
+    {
+      "zone_id": 12,
+      "population": 386,
+      "population_density_per_km2": 3151.0
+    },
+    {
+      "zone_id": 13,
+      "population": 515,
+      "population_density_per_km2": 4204.1
+    },
+    {
+      "zone_id": 14,
+      "population": 515,
+      "population_density_per_km2": 4204.1
+    },
+    {
+      "zone_id": 15,
+      "population": 386,
+      "population_density_per_km2": 3151.0
+    }
+  ],
+  "_meta": {
+    "generated_at_utc": "2026-08-28T00:22:40Z",
+    "total_population": 8922,
+    "unassigned_buildings": 0,
+    "notes": "Population is a MODELLED ESTIMATE derived from building footprint area, estimated floor count (height / 3m), and per-building-type occupancy assumptions -- NOT a census or a direct WorldPop pixel read. When a live WorldPop total is available, only the study-area TOTAL is real; the split across zones is still estimated. See docs/data_sources.md."
+  }
+}

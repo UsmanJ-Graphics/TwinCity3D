@@ -3,6 +3,7 @@
 
 #include "../gis/GISLoader.h"
 #include "../twin/WeatherLoader.h"
+#include "../twin/PopulationLoader.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -60,8 +61,9 @@ namespace twin {
 
         LoadCityData();
         LoadWeather();
+        LoadPopulation();
 
-        LogInfo("Phase 0-5 initialization complete: window + camera + 3D city model + weather ready");
+        LogInfo("Phase 0-7 initialization complete: window + camera + 3D city model + weather + population ready");
         return true;
     }
 
@@ -98,7 +100,10 @@ namespace twin {
             std::string line = "Zone " + std::to_string(z.id) +
                 ": buildingDensity=" + std::to_string(z.buildingDensity) +
                 " greenCoverage=" + std::to_string(z.greenCoverage) +
+                " exposedSurfaceRatio=" + std::to_string(z.exposedSurfaceRatio) +
+                " heatBurden=" + std::to_string(z.environmentalHeatBurden) +
                 " population=" + (z.populationIsPlaceholder ? "(placeholder)" : std::to_string(z.population)) +
+                " populationDensity=" + (z.populationIsPlaceholder ? "(placeholder)" : std::to_string(z.populationDensity) + "/km2") +
                 " temperature=" + (z.temperatureIsPlaceholder ? "(placeholder)" : std::to_string(z.temperature)) +
                 " heatRisk=" + (z.riskIsPlaceholder ? "(placeholder)" : std::to_string(z.heatRisk));
             LogInfo(line);
@@ -146,6 +151,48 @@ namespace twin {
             if (!zone.temperatureIsPlaceholder) ++cleared;
         }
         LogInfo("Phase 5 summary: temperature placeholder cleared on " +
+            std::to_string(cleared) + "/" +
+            std::to_string(m_digitalTwin.Zones().size()) + " zones");
+    }
+
+    void Application::LoadPopulation() {
+        // Relative to the working directory, same convention as LoadCityData()/LoadWeather().
+        const std::string populationPath = "data/processed/population.json";
+
+        bool ok = PopulationLoader::Load(populationPath, m_population);
+        if (!ok) {
+            LogWarn("No usable population data at '" + populationPath + "'. Run "
+                "python/estimate_population.py to generate it. Zone population remains "
+                "placeholders until this is fixed.");
+        }
+
+        // Same pattern as LoadWeather(): always call ApplyPopulation(), even
+        // on failure — it checks m_population.valid itself and is a no-op
+        // when false, keeping the "clear placeholders when data is good"
+        // logic in DigitalTwin rather than duplicating the check here too.
+        m_digitalTwin.ApplyPopulation(m_population);
+        LogPhase7PopulationSummary();
+    }
+
+    void Application::LogPhase7PopulationSummary() {
+        // Console-only diagnostic for Phase 7, same role LogPhase5WeatherSummary()
+        // plays for Phase 5 — superseded once the dashboard (Phase 15) shows
+        // high-risk population exposure on screen.
+        if (!m_population.valid) {
+            LogWarn("Phase 7 summary: no population data loaded.");
+            return;
+        }
+
+        LogInfo("Phase 7 summary: source=" + m_population.dataSource +
+            (m_population.IsLive() ? "" : " (estimated — not a measured/census figure)") +
+            ", method=" + m_population.method +
+            ", study-area total population=" + std::to_string(m_population.totalPopulation));
+
+        int cleared = 0;
+        for (const auto& zone : m_digitalTwin.Zones()) {
+            if (!zone.populationIsPlaceholder) ++cleared;
+        }
+        LogInfo("Phase 7 summary: population placeholder cleared on " +
             std::to_string(cleared) + "/" +
             std::to_string(m_digitalTwin.Zones().size()) + " zones");
     }
