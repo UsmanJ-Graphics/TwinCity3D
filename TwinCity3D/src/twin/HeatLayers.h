@@ -12,6 +12,7 @@ namespace twin {
     enum class DataLayer {
         HeatRisk,
         Population,
+        PopulationExposure,
         GreenCoverage,
         BuildingDensity,
         Temperature,

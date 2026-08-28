@@ -18,6 +18,7 @@ namespace twin {
         constexpr LayerEntry kEntries[] = {
             { DataLayer::HeatRisk,        "Heat Risk" },
             { DataLayer::Population,      "Population" },
+            { DataLayer::PopulationExposure, "Population Exposure" },
             { DataLayer::GreenCoverage,   "Green Coverage" },
             { DataLayer::BuildingDensity, "Building Density" },
             { DataLayer::Temperature,     "Temperature" },
@@ -59,7 +60,7 @@ namespace twin {
         }
 
         ImGui::Spacing();
-        ImGui::TextDisabled("Keys [1-6] or [L] also switch layers.");
+        ImGui::TextDisabled("Keys [1-7] or [L] also switch layers.");
 
         ImGui::End();
         return clicked;

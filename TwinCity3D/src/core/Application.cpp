@@ -231,6 +231,7 @@ namespace twin {
         // model. Safe to call again later (e.g. after Phase 12's heatwave
         // scenario adjusts zone.temperature) to rescore under a new scenario.
         m_digitalTwin.ComputeHeatRisk();
+        m_digitalTwin.ComputePopulationExposure();
         LogPhase8HeatRiskSummary();
     }
 
@@ -364,8 +365,8 @@ namespace twin {
         LogInfo("  " + info.lowLabel + "  ->  " + info.highLabel +
             " (blue -> green -> yellow -> orange -> red)");
         LogInfo("  Gray buildings/green areas = no real data for that zone yet (placeholder)");
-        LogInfo("  Keys: [1] Heat Risk  [2] Population  [3] Green Coverage  "
-            "[4] Building Density  [5] Temperature  [6] Flood Risk  [L] cycle");
+        LogInfo("  Keys: [1] Heat Risk  [2] Population  [3] Population Exposure  "
+            "[4] Green Coverage  [5] Building Density  [6] Temperature  [7] Flood Risk  [L] cycle");
         LogInfo("-------------------------------------------------");
     }
 
@@ -711,10 +712,11 @@ namespace twin {
         switch (key) {
         case GLFW_KEY_1: app->SetActiveLayer(DataLayer::HeatRisk); break;
         case GLFW_KEY_2: app->SetActiveLayer(DataLayer::Population); break;
-        case GLFW_KEY_3: app->SetActiveLayer(DataLayer::GreenCoverage); break;
-        case GLFW_KEY_4: app->SetActiveLayer(DataLayer::BuildingDensity); break;
-        case GLFW_KEY_5: app->SetActiveLayer(DataLayer::Temperature); break;
-        case GLFW_KEY_6: app->SetActiveLayer(DataLayer::FloodRisk); break;
+        case GLFW_KEY_3: app->SetActiveLayer(DataLayer::PopulationExposure); break;
+        case GLFW_KEY_4: app->SetActiveLayer(DataLayer::GreenCoverage); break;
+        case GLFW_KEY_5: app->SetActiveLayer(DataLayer::BuildingDensity); break;
+        case GLFW_KEY_6: app->SetActiveLayer(DataLayer::Temperature); break;
+        case GLFW_KEY_7: app->SetActiveLayer(DataLayer::FloodRisk); break;
         case GLFW_KEY_L: app->SetActiveLayer(NextDataLayer(app->m_activeLayer)); break;
 
         // Phase 12: camera-mode hotkeys. All four route through

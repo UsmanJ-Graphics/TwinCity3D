@@ -79,6 +79,15 @@ namespace twin {
                                               // on top of heat risk, never fabricated independently)
         int priorityRank{ -1 };               // 1 = highest priority among scored zones; -1 = unranked
 
+        // --- Population exposure (Phase 17) ---
+        // Heat-risk-weighted resident counts are modelled decision-support
+        // indicators, not observed incident or evacuation counts.
+        int heatExposedPopulation{ 0 };
+        int highRiskPopulation{ 0 };
+        int extremeRiskPopulation{ 0 };
+        float heatExposureScore{ 0.0f };       // relative 0..1 within study area
+        bool populationExposureIsPlaceholder{ true };
+
         // Phase 16: geometry/rainfall-derived prototype visualization only;
         // never a hydrological model or a flood forecast.
         float floodRisk{ 0.0f };              // 0..100

@@ -74,6 +74,10 @@ namespace twin {
                                 "-- / 100  (needs temperature + population)");
         } else {
             ImGui::Text("%.0f / 100  (%s)", zone.heatRisk, zone.riskClass.c_str());
+            if (!zone.populationExposureIsPlaceholder) {
+                ImGui::Text("Exposed population: %d", zone.heatExposedPopulation);
+                ImGui::TextDisabled("Risk-weighted modelled estimate");
+            }
         }
 
         ImGui::Spacing();

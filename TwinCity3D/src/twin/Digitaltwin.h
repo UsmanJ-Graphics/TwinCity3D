@@ -77,6 +77,10 @@ namespace twin {
         // to recompute risk under a new scenario.
         void ComputeHeatRisk(const HeatRiskWeights& weights = HeatRiskWeights{});
 
+        // Phase 17: converts risk and resident population into transparent,
+        // heat-risk-weighted population-exposure indicators after risk scoring.
+        void ComputePopulationExposure();
+
         // Phase 11: computes priority (0..100) and priorityRank on every
         // zone that already has a real heat-risk score. This does NOT
         // recompute heat risk — it's a further explainable combination of

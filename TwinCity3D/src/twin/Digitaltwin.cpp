@@ -242,6 +242,36 @@ namespace twin {
             "— PROTOTYPE DECISION-SUPPORT SCORE, see HeatRiskModel");
     }
 
+    void DigitalTwin::ComputePopulationExposure() {
+        int maxExposed = 0;
+        for (auto& zone : m_zones) {
+            if (zone.riskIsPlaceholder || zone.populationIsPlaceholder) {
+                zone.populationExposureIsPlaceholder = true;
+                continue;
+            }
+            zone.heatExposedPopulation = static_cast<int>(std::lround(
+                static_cast<float>(zone.population) * std::clamp(zone.heatRisk / 100.0f, 0.0f, 1.0f)));
+            zone.highRiskPopulation = zone.heatRisk >= 70.0f ? zone.population : 0;
+            zone.extremeRiskPopulation = zone.heatRisk >= 85.0f ? zone.population : 0;
+            zone.populationExposureIsPlaceholder = false;
+            maxExposed = std::max(maxExposed, zone.heatExposedPopulation);
+        }
+
+        int totalExposed = 0, highRisk = 0, extremeRisk = 0;
+        for (auto& zone : m_zones) {
+            if (zone.populationExposureIsPlaceholder) continue;
+            zone.heatExposureScore = maxExposed > 0
+                ? static_cast<float>(zone.heatExposedPopulation) / static_cast<float>(maxExposed)
+                : 0.0f;
+            totalExposed += zone.heatExposedPopulation;
+            highRisk += zone.highRiskPopulation;
+            extremeRisk += zone.extremeRiskPopulation;
+        }
+        LogInfo("DigitalTwin::ComputePopulationExposure: heat-exposed=" + std::to_string(totalExposed) +
+            ", high-risk=" + std::to_string(highRisk) + ", extreme-risk=" + std::to_string(extremeRisk) +
+            " — MODELLED POPULATION EXPOSURE, not observed impact counts");
+    }
+
     void DigitalTwin::ComputePriority(const PriorityWeights& weights) {
         if (m_zones.empty()) {
             LogWarn("DigitalTwin::ComputePriority: no zones to rank");

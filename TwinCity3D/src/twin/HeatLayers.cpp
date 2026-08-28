@@ -8,7 +8,8 @@ namespace twin {
     DataLayer NextDataLayer(DataLayer current) {
         switch (current) {
             case DataLayer::HeatRisk:        return DataLayer::Population;
-            case DataLayer::Population:      return DataLayer::GreenCoverage;
+            case DataLayer::Population:      return DataLayer::PopulationExposure;
+            case DataLayer::PopulationExposure:return DataLayer::GreenCoverage;
             case DataLayer::GreenCoverage:   return DataLayer::BuildingDensity;
             case DataLayer::BuildingDensity: return DataLayer::Temperature;
             case DataLayer::Temperature:     return DataLayer::FloodRisk;
@@ -24,6 +25,8 @@ namespace twin {
             case DataLayer::Population:
                 return { "Population Density", "relative, this study area only",
                          "Fewest residents", "Most residents" };
+            case DataLayer::PopulationExposure:
+                return { "Population Exposure", "risk-weighted residents, relative", "Lower exposure", "Higher exposure" };
             case DataLayer::GreenCoverage:
                 return { "Green Coverage", "% of zone area", "No vegetation", "Fully vegetated" };
             case DataLayer::BuildingDensity:
@@ -56,6 +59,10 @@ namespace twin {
                 if (range <= 0.0f) return 0.5f;
                 return std::clamp((zone.populationDensity - minPopDensity) / range, 0.0f, 1.0f);
             }
+
+            case DataLayer::PopulationExposure:
+                if (zone.populationExposureIsPlaceholder) return kNoDataSentinel;
+                return std::clamp(zone.heatExposureScore, 0.0f, 1.0f);
 
             case DataLayer::GreenCoverage:
                 // Always geometry-derived (Phase 3), never a placeholder.

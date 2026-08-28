@@ -8,6 +8,7 @@ namespace twin {
     namespace {
         struct ScenarioMetrics {
             int criticalZones{ 0 };
+            int exposedPopulation{ 0 };
             int highRiskPopulation{ 0 };
             int extremeRiskPopulation{ 0 };
             int floodAffectedPopulation{ 0 };
@@ -17,6 +18,8 @@ namespace twin {
             ScenarioMetrics result;
             for (const Zone& zone : zones) {
                 if (zone.riskIsPlaceholder || zone.populationIsPlaceholder) continue;
+                if (!zone.populationExposureIsPlaceholder)
+                    result.exposedPopulation += zone.heatExposedPopulation;
                 if (zone.heatRisk >= 70.0f) {
                     ++result.criticalZones;
                     result.highRiskPopulation += zone.population;
@@ -100,9 +103,11 @@ namespace twin {
         ImGui::Text("Scenario: %.1f C", scenarioTemperature);
         ImGui::Text("Critical zones: %d", metrics.criticalZones);
         ImGui::SameLine();
-        ImGui::Text("High-risk population: %d", metrics.highRiskPopulation);
+        ImGui::Text("Exposed population: %d", metrics.exposedPopulation);
         ImGui::SameLine();
-        ImGui::Text("Extreme: %d", metrics.extremeRiskPopulation);
+        ImGui::Text("High-risk: %d", metrics.highRiskPopulation);
+        ImGui::SameLine();
+        ImGui::Text("Extreme-risk: %d", metrics.extremeRiskPopulation);
         ImGui::TextDisabled("Scores update immediately. Prototype modelled scenario estimate.");
         if (state.floodEnabled) {
             ImGui::Text("Rainfall: %.0f mm (current %.1f mm)", state.rainfallScenarioMm, baselineRainfallMm);
