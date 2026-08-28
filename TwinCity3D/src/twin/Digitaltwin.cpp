@@ -76,6 +76,24 @@ namespace twin {
             "(temperature/population/heatRisk still placeholders)");
     }
 
+    void DigitalTwin::ApplyWeather(const WeatherData& weather) {
+        if (!weather.valid) {
+            LogWarn("DigitalTwin::ApplyWeather: weather data is not valid — "
+                "leaving zone temperatures as placeholders");
+            return;
+        }
+
+        for (auto& zone : m_zones) {
+            zone.temperature = weather.currentTemperature;
+            zone.temperatureIsPlaceholder = false;
+        }
+
+        LogInfo("DigitalTwin::ApplyWeather: set temperature=" +
+            std::to_string(weather.currentTemperature) + "C on " +
+            std::to_string(m_zones.size()) + " zones [" + weather.dataSource + "]" +
+            (weather.IsLive() ? "" : " (NOT live — sample/fallback reading)"));
+    }
+
     Zone* DigitalTwin::FindZone(int zoneId) {
         auto it = std::find_if(m_zones.begin(), m_zones.end(),
             [zoneId](const Zone& z) { return z.id == zoneId; });

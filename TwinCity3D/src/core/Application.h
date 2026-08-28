@@ -11,6 +11,7 @@
 #include "../gis/GISTypes.h"
 #include "../twin/CityMeshBuilder.h"
 #include "../twin/DigitalTwin.h"
+#include "../twin/WeatherData.h"
 
 namespace twin {
 
@@ -38,6 +39,9 @@ namespace twin {
         void LoadCityData();
         void LogPhase4ZoneSummary();  // temporary Phase 4 diagnostic; superseded by the Zone Inspector UI (Phase 10)
 
+        void LoadWeather();            // Phase 5, Step 3: loads weather.json, applies it to the digital twin
+        void LogPhase5WeatherSummary(); // temporary Phase 5 diagnostic; superseded by the dashboard's current-temperature display (Phase 15)
+
         static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
         static void CursorPosCallback(GLFWwindow* window, double xpos, double ypos);
         static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);
@@ -57,6 +61,8 @@ namespace twin {
         CityMeshes m_city;
         DigitalTwin m_digitalTwin;
         bool m_hasCityData{ false };
+
+        WeatherData m_weather;  // Phase 5, Step 3
 
         bool m_firstMouse{ true };
         float m_lastMouseX{ 0.0f };

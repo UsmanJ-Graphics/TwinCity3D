@@ -155,6 +155,7 @@
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\twin\CityMeshBuilder.cpp" />
     <ClCompile Include="src\twin\Digitaltwin.cpp" />
+    <ClCompile Include="src\twin\WeatherLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\core\Application.h" />
@@ -169,6 +170,8 @@
     <ClInclude Include="src\gis\Triangulate.h" />
     <ClInclude Include="src\twin\CityMeshBuilder.h" />
     <ClInclude Include="src\twin\Digitaltwin.h" />
+    <ClInclude Include="src\twin\WeatherData.h" />
+    <ClInclude Include="src\twin\WeatherLoader.h" />
     <ClInclude Include="src\twin\Zone.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

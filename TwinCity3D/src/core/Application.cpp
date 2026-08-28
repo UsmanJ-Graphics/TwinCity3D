@@ -2,6 +2,7 @@
 #include "Log.h"
 
 #include "../gis/GISLoader.h"
+#include "../twin/WeatherLoader.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -58,8 +59,9 @@ namespace twin {
         m_groundGrid = MakeGroundGrid(900.0f, 60);
 
         LoadCityData();
+        LoadWeather();
 
-        LogInfo("Phase 0-3 initialization complete: window + camera + 3D city model ready");
+        LogInfo("Phase 0-5 initialization complete: window + camera + 3D city model + weather ready");
         return true;
     }
 
@@ -102,6 +104,50 @@ namespace twin {
             LogInfo(line);
         }
         LogInfo("----------------------------------");
+    }
+
+    void Application::LoadWeather() {
+        // Relative to the working directory, same convention as LoadCityData().
+        const std::string weatherPath = "data/processed/weather.json";
+
+        bool ok = WeatherLoader::Load(weatherPath, m_weather);
+        if (!ok) {
+            LogWarn("No usable weather data at '" + weatherPath + "'. Run "
+                "python/fetch_weather.py to generate it. Zone temperatures remain "
+                "placeholders until this is fixed.");
+        }
+
+        // Always call this, even on failure: ApplyWeather() checks
+        // m_weather.valid itself and is a no-op when it's false, so this
+        // just keeps the "clear placeholders when data is good" logic in one
+        // place (DigitalTwin) rather than duplicating the check here too.
+        m_digitalTwin.ApplyWeather(m_weather);
+        LogPhase5WeatherSummary();
+    }
+
+    void Application::LogPhase5WeatherSummary() {
+        // Console-only diagnostic for Phase 5, same role LogPhase4ZoneSummary()
+        // plays for Phase 4 — superseded once the dashboard (Phase 15) shows
+        // current temperature on screen.
+        if (!m_weather.valid) {
+            LogWarn("Phase 5 summary: no weather data loaded.");
+            return;
+        }
+
+        LogInfo("Phase 5 summary: current=" + std::to_string(m_weather.currentTemperature) +
+            "C (feels like " + std::to_string(m_weather.apparentTemperature) + "C), " +
+            "humidity=" + std::to_string(m_weather.humidity) + "%, " +
+            "wind=" + std::to_string(m_weather.windSpeed) + "km/h, " +
+            "source=" + m_weather.dataSource +
+            (m_weather.IsLive() ? "" : " (NOT live)"));
+
+        int cleared = 0;
+        for (const auto& zone : m_digitalTwin.Zones()) {
+            if (!zone.temperatureIsPlaceholder) ++cleared;
+        }
+        LogInfo("Phase 5 summary: temperature placeholder cleared on " +
+            std::to_string(cleared) + "/" +
+            std::to_string(m_digitalTwin.Zones().size()) + " zones");
     }
 
     void Application::Run() {
