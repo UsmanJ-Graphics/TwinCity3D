@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
 Phase 7 — Population exposure data.
 
@@ -36,11 +36,14 @@ preprocess_osm.py does for building heights.
 
 import json
 import os
+import ssl
 import sys
 import urllib.error
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
+
+import certifi
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROCESSED_DIR = os.path.join(REPO_ROOT, "data", "processed")
@@ -121,7 +124,8 @@ def try_fetch_worldpop_total(bbox):
         query = "&".join(f"{k}={urllib.parse.quote(v, safe='')}" for k, v in params.items())
         url = f"{WORLDPOP_URL}?{query}"
         req = urllib.request.Request(url, headers={"User-Agent": "LahoreDigitalTwin/0.1"})
-        with urllib.request.urlopen(req, timeout=WORLDPOP_TIMEOUT_SEC) as resp:
+        ssl_context = ssl.create_default_context(cafile=certifi.where())
+        with urllib.request.urlopen(req, timeout=WORLDPOP_TIMEOUT_SEC, context=ssl_context) as resp:
             if resp.status != 200:
                 raise RuntimeError(f"HTTP {resp.status}")
             payload = json.loads(resp.read().decode("utf-8"))
@@ -155,10 +159,17 @@ def main():
         sys.exit(1)
 
     zone_ids = [z["id"] for z in zones]
-    zone_area_m2 = {
-        z["id"]: max(0.0, (z["max_x"] - z["min_x"]) * (z["max_z"] - z["min_z"]))
-        for z in zones
-    }
+    zone_area_m2 = {}
+    for z in zones:
+        if "max_x" in z:
+            area = max(0.0, (z["max_x"] - z["min_x"]) * (z["max_z"] - z["min_z"]))
+        elif "bounds_local" in z:
+            b = z["bounds_local"]
+            area = max(0.0, (b["x_max"] - b["x_min"]) * (b["z_max"] - b["z_min"]))
+        else:
+            area = 0.0
+        zone_area_m2[z["id"]] = area
+
     heuristic_population = {zid: 0.0 for zid in zone_ids}
 
     unassigned = 0

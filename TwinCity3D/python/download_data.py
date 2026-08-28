@@ -21,10 +21,13 @@ regardless of which source was used.
 """
 
 import json
+import ssl
 import sys
 import urllib.request
 import urllib.error
 from pathlib import Path
+
+import certifi
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 BBOX_PATH = REPO_ROOT / "data" / "raw" / "study_area_bbox.json"
@@ -57,8 +60,17 @@ def build_overpass_query(bbox: dict) -> str:
 
 def fetch_live(bbox: dict) -> dict | None:
     query = build_overpass_query(bbox)
-    data = query.encode("utf-8")
-    req = urllib.request.Request(OVERPASS_URL, data=data, method="POST")
+    data = f"data={urllib.parse.quote(query)}".encode("utf-8")
+    req = urllib.request.Request(
+        OVERPASS_URL,
+        data=data,
+        method="POST",
+        headers={
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "application/json",
+            "User-Agent": "LahoreUrbanHeatDigitalTwin/1.0 (hackathon prototype; contact: your-email@example.com)",
+        },
+    )
     try:
         with urllib.request.urlopen(req, timeout=OVERPASS_TIMEOUT_SEC) as resp:
             raw = json.loads(resp.read().decode("utf-8"))

@@ -16,10 +16,13 @@ Live-first, fallback-second: same pattern as Phase 2's OSM ingestion.
 import json
 import math
 import os
+import ssl
 import sys
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
+
+import certifi
 
 STUDY_AREA_LAT = 31.5180
 STUDY_AREA_LON = 74.3503
@@ -71,7 +74,8 @@ def fetch_live():
     """Attempt a live Open-Meteo request. Returns a dict on success,
     raises on any failure (caller decides how to fall back)."""
     req = urllib.request.Request(OPEN_METEO_URL, headers={"User-Agent": "LahoreDigitalTwin/0.1"})
-    with urllib.request.urlopen(req, timeout=8) as resp:
+    ssl_context = ssl.create_default_context(cafile=certifi.where())
+    with urllib.request.urlopen(req, timeout=8, context=ssl_context) as resp:
         if resp.status != 200:
             raise RuntimeError(f"HTTP {resp.status}")
         payload = json.loads(resp.read().decode("utf-8"))

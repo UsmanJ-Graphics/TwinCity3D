@@ -1,27 +1,331 @@
 {
-  "data_source": "sample_fallback",
+  "data_source": "overpass_live",
+  "study_area": "Gulberg III / MM Alam Road corridor, Lahore",
+  "count": 27,
   "facilities": [
     {
-      "id": "f001",
-      "name": "Sample Community School",
-      "facility_type": "school",
+      "id": "fac_99021896",
+      "osm_id": 99021896,
+      "name": "Liberty Market",
+      "facility_type": "marketplace",
       "position": [
-        -300.0,
-        300.0
+        -473.2346056354616,
+        -747.2632655295777
       ],
-      "zone_id": 9,
-      "sample_data": true
+      "zone_id": 0,
+      "sample_data": false
     },
     {
-      "id": "f002",
-      "name": "Sample District Hospital",
+      "id": "fac_2872067742",
+      "osm_id": 2872067742,
+      "name": "\u0639\u0633\u06a9\u0631\u06cc \u0628\u06cc\u0646\u06a9",
+      "facility_type": "bank",
+      "position": [
+        -296.1460529851249,
+        625.6048962874218
+      ],
+      "zone_id": 13,
+      "sample_data": false
+    },
+    {
+      "id": "fac_3509028489",
+      "osm_id": 3509028489,
+      "name": "Bank Al-Falah",
+      "facility_type": "bank",
+      "position": [
+        -736.3649521195383,
+        -327.7581657777662
+      ],
+      "zone_id": 4,
+      "sample_data": false
+    },
+    {
+      "id": "fac_4281904891",
+      "osm_id": 4281904891,
+      "name": "Bridge accademy ",
+      "facility_type": "school",
+      "position": [
+        -470.89326785043863,
+        -499.2763401269242
+      ],
+      "zone_id": 0,
+      "sample_data": false
+    },
+    {
+      "id": "fac_4743178921",
+      "osm_id": 4743178921,
+      "name": "Corvit Lahore",
+      "facility_type": "school",
+      "position": [
+        -353.0964878594632,
+        -436.4400870801598
+      ],
+      "zone_id": 5,
+      "sample_data": false
+    },
+    {
+      "id": "fac_4746664924",
+      "osm_id": 4746664924,
+      "name": "Corvit Class Rooms",
+      "facility_type": "school",
+      "position": [
+        -246.90212669195384,
+        -351.33149022615225
+      ],
+      "zone_id": 5,
+      "sample_data": false
+    },
+    {
+      "id": "fac_4970685237",
+      "osm_id": 4970685237,
+      "name": "Deen Schooling System",
+      "facility_type": "school",
+      "position": [
+        -165.00269970967517,
+        -171.6960862318932
+      ],
+      "zone_id": 5,
+      "sample_data": false
+    },
+    {
+      "id": "fac_5251520116",
+      "osm_id": 5251520116,
+      "name": "Bank of Khyber",
+      "facility_type": "bank",
+      "position": [
+        92.58237307296054,
+        -722.0220171809938
+      ],
+      "zone_id": 2,
+      "sample_data": false
+    },
+    {
+      "id": "fac_5252199942",
+      "osm_id": 5252199942,
+      "name": "St. Marys High School Gulberg",
+      "facility_type": "school",
+      "position": [
+        334.1193289701172,
+        163.45654216723892
+      ],
+      "zone_id": 10,
+      "sample_data": false
+    },
+    {
+      "id": "fac_5252241552",
+      "osm_id": 5252241552,
+      "name": "\u06cc\u0648\u0646\u0627\u0626\u06cc\u0679\u0688 \u0628\u06cc\u0646\u06a9 \u0644\u0645\u06cc\u0679\u0688",
+      "facility_type": "bank",
+      "position": [
+        46.81727660606454,
+        512.6308508165605
+      ],
+      "zone_id": 14,
+      "sample_data": false
+    },
+    {
+      "id": "fac_5253494077",
+      "osm_id": 5253494077,
+      "name": "The Bank of Punjab",
+      "facility_type": "bank",
+      "position": [
+        -118.19490220474017,
+        556.7196392312169
+      ],
+      "zone_id": 13,
+      "sample_data": false
+    },
+    {
+      "id": "fac_5254181765",
+      "osm_id": 5254181765,
+      "name": "Hijaz Hospital Lahore",
       "facility_type": "hospital",
       "position": [
-        350.0,
-        -300.0
+        -412.6157589284219,
+        -298.83636535729585
       ],
-      "zone_id": 7,
-      "sample_data": true
+      "zone_id": 4,
+      "sample_data": false
+    },
+    {
+      "id": "fac_5259747062",
+      "osm_id": 5259747062,
+      "name": "Hospital Hudson Silva Lions Eye Hospital",
+      "facility_type": "hospital",
+      "position": [
+        -530.9244103372873,
+        548.7914409616454
+      ],
+      "zone_id": 12,
+      "sample_data": false
+    },
+    {
+      "id": "fac_10066722817",
+      "osm_id": 10066722817,
+      "name": "Al Burhan",
+      "facility_type": "school",
+      "position": [
+        264.855542746867,
+        -820.7631120417323
+      ],
+      "zone_id": 2,
+      "sample_data": false
+    },
+    {
+      "id": "fac_344143550",
+      "osm_id": 344143550,
+      "name": null,
+      "facility_type": "bank",
+      "position": [
+        -750.4452077721694,
+        -328.21851277384474
+      ],
+      "zone_id": 4,
+      "sample_data": false
+    },
+    {
+      "id": "fac_795117467",
+      "osm_id": 795117467,
+      "name": "\u06cc\u0648\u0646\u0627\u0626\u06cc\u0679\u0688 \u0628\u06cc\u0646\u06a9 \u0644\u0645\u06cc\u0679\u0688",
+      "facility_type": "bank",
+      "position": [
+        50.90592855486697,
+        517.1293033489978
+      ],
+      "zone_id": 14,
+      "sample_data": false
+    },
+    {
+      "id": "fac_795131235",
+      "osm_id": 795131235,
+      "name": "\u062c\u06d2 \u0627\u06cc\u0633 \u0628\u06cc\u0646\u06a9",
+      "facility_type": "bank",
+      "position": [
+        115.27533929903925,
+        167.6174563225498
+      ],
+      "zone_id": 10,
+      "sample_data": false
+    },
+    {
+      "id": "fac_799764071",
+      "osm_id": 799764071,
+      "name": "\u0627\u0644\u0634\u0648\u06a9\u0627\u062a \u0645\u06cc\u0688\u06cc\u06a9\u0644 \u0627\u06cc\u0646\u0688 \u06a9\u0688\u0646\u06cc \u0633\u06cc\u0646\u0679\u0631",
+      "facility_type": "clinic",
+      "position": [
+        -105.20582641702076,
+        -870.0558230231051
+      ],
+      "zone_id": 1,
+      "sample_data": false
+    },
+    {
+      "id": "fac_800327992",
+      "osm_id": 800327992,
+      "name": "First Women Bank",
+      "facility_type": "bank",
+      "position": [
+        -181.68970795686488,
+        -534.3627872802375
+      ],
+      "zone_id": 1,
+      "sample_data": false
+    },
+    {
+      "id": "fac_800376127",
+      "osm_id": 800376127,
+      "name": "\u062c\u06d2 \u0627\u06cc\u0633 \u0628\u06cc\u0646\u06a9",
+      "facility_type": "bank",
+      "position": [
+        -375.9278489517957,
+        -450.38837867838026
+      ],
+      "zone_id": 1,
+      "sample_data": false
+    },
+    {
+      "id": "fac_800530275",
+      "osm_id": 800530275,
+      "name": "\u062f\u0628\u0626\u06cc \u0627\u0633\u0644\u0627\u0645\u06cc \u0628\u06cc\u0646\u06a9",
+      "facility_type": "bank",
+      "position": [
+        -255.72053374307453,
+        311.67826743539155
+      ],
+      "zone_id": 9,
+      "sample_data": false
+    },
+    {
+      "id": "fac_800530279",
+      "osm_id": 800530279,
+      "name": "\u0627\u0644\u0627\u0626\u06cc\u0688 \u0628\u06cc\u0646\u06a9 \u0644\u0645\u06cc\u0679\u0688",
+      "facility_type": "bank",
+      "position": [
+        -208.0548776574439,
+        230.26467799402167
+      ],
+      "zone_id": 9,
+      "sample_data": false
+    },
+    {
+      "id": "fac_800534458",
+      "osm_id": 800534458,
+      "name": "Samba Bank",
+      "facility_type": "bank",
+      "position": [
+        -445.7243606138044,
+        -47.627010980433674
+      ],
+      "zone_id": 4,
+      "sample_data": false
+    },
+    {
+      "id": "fac_800536537",
+      "osm_id": 800536537,
+      "name": "\u0627\u0633\u0679\u06cc\u0646\u0688\u0631\u0688 \u0686\u0627\u0631\u0679\u0631\u0688",
+      "facility_type": "bank",
+      "position": [
+        -540.4129897823345,
+        -259.43011885372107
+      ],
+      "zone_id": 4,
+      "sample_data": false
+    },
+    {
+      "id": "fac_800536539",
+      "osm_id": 800536539,
+      "name": "Habib Metro Bank",
+      "facility_type": "bank",
+      "position": [
+        -548.352684231382,
+        -285.23944972726997
+      ],
+      "zone_id": 4,
+      "sample_data": false
+    },
+    {
+      "id": "fac_800536542",
+      "osm_id": 800536542,
+      "name": "\u0628\u064a\u0646\u06a9 \u0627\u0644\u062d\u0628\u064a\u0628",
+      "facility_type": "bank",
+      "position": [
+        -500.97993234627285,
+        -309.4932871269304
+      ],
+      "zone_id": 4,
+      "sample_data": false
+    },
+    {
+      "id": "fac_800536543",
+      "osm_id": 800536543,
+      "name": "\u0639\u0633\u06a9\u0631\u06cc \u0628\u06cc\u0646\u06a9",
+      "facility_type": "bank",
+      "position": [
+        -479.07162498165206,
+        -335.633237582335
+      ],
+      "zone_id": 4,
+      "sample_data": false
     }
   ]
 }

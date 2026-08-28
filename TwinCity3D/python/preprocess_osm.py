@@ -144,7 +144,7 @@ def process_buildings(elements, coord_sys, zone_id_for):
         buildings.append({
             "id": f"bldg_{el['id']}",
             "osm_id": el["id"],
-            "name": tags.get("name"),
+            "name": tags.get("name", ""),
             "building_type": tags.get("building", "yes"),
             "polygon": polygon_xz,          # [[x, z], ...] local meters
             "centroid": [cx, cz],
@@ -170,7 +170,7 @@ def process_roads(elements, coord_sys, zone_id_for):
         roads.append({
             "id": f"road_{el['id']}",
             "osm_id": el["id"],
-            "name": tags.get("name"),
+            "name": tags.get("name", ""),
             "road_type": tags["highway"],
             "polyline": polyline_xz,       # [[x, z], ...] local meters
             "zone_id": zone_id_for(cx, cz),
@@ -199,7 +199,7 @@ def process_green_areas(elements, coord_sys, zone_id_for):
         green_areas.append({
             "id": f"green_{el['id']}",
             "osm_id": el["id"],
-            "name": tags.get("name"),
+            "name": tags.get("name", ""),
             "green_type": green_type,
             "polygon": polygon_xz,
             "centroid": [cx, cz],
@@ -237,7 +237,7 @@ def process_facilities(elements, coord_sys, zone_id_for):
         facilities.append({
             "id": f"fac_{el['id']}",
             "osm_id": el["id"],
-            "name": tags.get("name"),
+            "name": tags.get("name", ""),
             "facility_type": amenity,
             "position": [x, z],
             "zone_id": zone_id_for(x, z),
@@ -261,22 +261,22 @@ def main():
 
     PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
-    def write(name, payload):
+    def write(name, key, payload):
         out = {
             "data_source": data_source,   # "overpass_live" | "sample_fallback"
             "study_area": raw.get("_meta", {}).get("note", None) if data_source == "sample_fallback" else "Gulberg III / MM Alam Road corridor, Lahore",
             "count": len(payload),
-            "items": payload,
+            key: payload,
         }
         path = PROCESSED_DIR / name
         with open(path, "w", encoding="utf-8") as f:
             json.dump(out, f, indent=2)
         print(f"[preprocess_osm] Wrote {path} ({len(payload)} items)")
 
-    write("buildings.json", buildings)
-    write("roads.json", roads)
-    write("green_areas.json", green_areas)
-    write("facilities.json", facilities)
+    write("buildings.json", "buildings", buildings)
+    write("roads.json", "roads", roads)
+    write("green_areas.json", "green_areas", green_areas)
+    write("facilities.json", "facilities", facilities)
 
     zones_path = PROCESSED_DIR / "zones.json"
     with open(zones_path, "w", encoding="utf-8") as f:
