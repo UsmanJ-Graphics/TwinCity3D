@@ -29,8 +29,11 @@ namespace twin {
     // and RebuildCityMeshForActiveLayer() re-bakes CityMeshes accordingly.
     // Phase 10 adds zone selection: a left mouse click is unprojected into a
     // ground-plane ray (Picking), resolved to a zone id, and drawn via the
-    // ImGui-based Inspector panel every frame. Scenario/decision-dashboard
-    // panels attach in later phases.
+    // ImGui-based Inspector panel every frame. Phase 11 adds priority
+    // ranking (ComputePriority(), delegated to DigitalTwin/PriorityModel)
+    // and the Top Priority Zones panel: clicking a ranked entry selects that
+    // zone and snaps the camera to it (FocusCameraOnZone()). Scenario/
+    // decision-dashboard panels attach in later phases.
     class Application {
     public:
         Application(int width, int height, const std::string& title)
@@ -55,6 +58,20 @@ namespace twin {
         void LogPhase7PopulationSummary(); // temporary Phase 7 diagnostic; superseded by the dashboard's population-exposure display (Phase 15)
         void ComputeHeatRisk();
         void LogPhase8HeatRiskSummary();
+
+        // Phase 11: ranks zones for government intervention, on top of
+        // Phase 8's heat risk. Called once in Init() right after
+        // ComputeHeatRisk() — see DigitalTwin::ComputePriority()/PriorityModel.
+        void ComputePriority();
+        void LogPhase11PrioritySummary();
+
+        // Phase 11: called when the user clicks an entry in the Top
+        // Priority Zones panel (Inspector::RenderTopPriorityPanel). Selects
+        // the zone (so the Inspector shows it next frame) and snaps the
+        // camera to look at it (Camera::FocusOn — a hard cut for now;
+        // Phase 12 owns smooth camera transitions). No-op if zoneId doesn't
+        // resolve to a real zone.
+        void FocusCameraOnZone(int zoneId);
 
         // Phase 9: rebuilds m_city with m_activeLayer's data baked into
         // buildings'/green areas' vertex colors, and logs the console

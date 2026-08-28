@@ -1,5 +1,6 @@
 #include "Inspector.h"
 
+#include <algorithm>
 #include <cstdio>
 #include <string>
 
@@ -77,14 +78,85 @@ namespace twin {
 
         ImGui::Spacing();
         ImGui::TextUnformatted("PRIORITY");
-        // Priority ranking is Phase 11 — until then this is honestly labeled
-        // as not-yet-computed rather than showing a stray 0, which would
-        // read as "this zone has zero priority" instead of "not ranked yet."
-        ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f), "Not yet ranked (Phase 11)");
+        if (zone.priorityIsPlaceholder) {
+            // Priority is built on top of heat risk (PriorityModel), so a
+            // zone that hasn't been risk-scored yet honestly says so here
+            // rather than showing a stray 0 — same rule Phase 8's
+            // riskIsPlaceholder branch above already follows.
+            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f),
+                                "-- / 100  (needs heat risk first)");
+        } else {
+            ImGui::Text("%.0f / 100   (rank #%d)", zone.priority, zone.priorityRank);
+
+            ImGui::Spacing();
+            ImGui::TextUnformatted("WHY THIS ZONE?");
+            ImGui::BulletText("Heat risk: %.0f / 100 (%s)", zone.heatRisk, zone.riskClass.c_str());
+            ImGui::BulletText("Green coverage: %.1f%% (low coverage raises risk)",
+                               zone.greenCoverage * 100.0f);
+            ImGui::BulletText("Building density: %.1f%%", zone.buildingDensity * 100.0f);
+            ImGui::BulletText("Population exposure: %.0f%% (relative to this study area)",
+                               zone.exposure * 100.0f);
+            ImGui::BulletText("Population affected: %d people", zone.population);
+        }
 
         ImGui::Spacing();
         ImGui::TextDisabled("Prototype decision-support score, not a validated");
         ImGui::TextDisabled("medical or scientific heat-risk measurement.");
+    }
+
+    int Inspector::RenderTopPriorityPanel(const std::vector<Zone>& zones, int maxEntries) {
+        ImGui::SetNextWindowSize(ImVec2(300.0f, 0.0f), ImGuiCond_FirstUseEver);
+        ImGui::SetNextWindowPos(ImVec2(20.0f, 340.0f), ImGuiCond_FirstUseEver);
+
+        int clickedZoneId = -1;
+
+        if (!ImGui::Begin("Top Priority Zones")) {
+            ImGui::End();
+            return clickedZoneId;
+        }
+
+        // Gather ranked zones. Ranking itself is DigitalTwin::ComputePriority()'s
+        // job (via PriorityModel) — this panel only sorts by the rank that's
+        // already been written onto each zone, it never scores anything.
+        std::vector<const Zone*> ranked;
+        for (const auto& z : zones) {
+            if (!z.priorityIsPlaceholder) ranked.push_back(&z);
+        }
+
+        if (ranked.empty()) {
+            ImGui::TextWrapped("No zones ranked yet — priority needs a real heat-risk "
+                                "score first (temperature + population data).");
+            ImGui::End();
+            return clickedZoneId;
+        }
+
+        std::sort(ranked.begin(), ranked.end(),
+                   [](const Zone* a, const Zone* b) { return a->priorityRank < b->priorityRank; });
+
+        int shown = 0;
+        for (const Zone* z : ranked) {
+            if (shown >= maxEntries) break;
+            ++shown;
+
+            char label[96];
+            std::snprintf(label, sizeof(label), "#%d   Zone %d   Priority %.0f",
+                           z->priorityRank, z->id, z->priority);
+
+            // A Selectable click is how this panel reports "the user picked
+            // this zone" back to Application — it doesn't select the zone
+            // itself (see header doc comment).
+            if (ImGui::Selectable(label)) {
+                clickedZoneId = z->id;
+            }
+            ImGui::SameLine(250.0f);
+            ImGui::TextColored(ImVec4(0.75f, 0.75f, 0.75f, 1.0f), "Pop %d", z->population);
+        }
+
+        ImGui::Spacing();
+        ImGui::TextDisabled("Click a zone to focus the camera and inspect it.");
+
+        ImGui::End();
+        return clickedZoneId;
     }
 
 }  // namespace twin

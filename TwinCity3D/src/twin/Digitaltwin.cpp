@@ -208,6 +208,25 @@ namespace twin {
             "— PROTOTYPE DECISION-SUPPORT SCORE, see HeatRiskModel");
     }
 
+    void DigitalTwin::ComputePriority(const PriorityWeights& weights) {
+        if (m_zones.empty()) {
+            LogWarn("DigitalTwin::ComputePriority: no zones to rank");
+            return;
+        }
+
+        PriorityModel::Compute(m_zones, weights);
+
+        int ranked = 0;
+        for (const auto& z : m_zones) {
+            if (!z.priorityIsPlaceholder) ++ranked;
+        }
+
+        LogInfo("DigitalTwin::ComputePriority: priority computed on " +
+            std::to_string(ranked) + "/" + std::to_string(m_zones.size()) +
+            " zones (remainder still lack a real heat-risk score) "
+            "— PROTOTYPE DECISION-SUPPORT PRIORITY, see PriorityModel");
+    }
+
     Zone* DigitalTwin::FindZone(int zoneId) {
         auto it = std::find_if(m_zones.begin(), m_zones.end(),
             [zoneId](const Zone& z) { return z.id == zoneId; });

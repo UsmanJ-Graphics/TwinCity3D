@@ -71,6 +71,7 @@ namespace twin {
         LoadWeather();
         LoadPopulation();
         ComputeHeatRisk();
+        ComputePriority();  // Phase 11: builds on ComputeHeatRisk(), must run after it
 
         // Phase 9: everything the color needs (heat risk, population,
         // green coverage, building density, temperature) is on the zones
@@ -79,8 +80,8 @@ namespace twin {
         // placeholder gray.
         RebuildCityMeshForActiveLayer();
 
-        LogInfo("Phase 0-9 initialization complete: window + camera + 3D city model + weather + "
-            "population + heat risk + data-driven layer visualization ready");
+        LogInfo("Phase 0-11 initialization complete: window + camera + 3D city model + weather + "
+            "population + heat risk + priority ranking + data-driven layer visualization ready");
         return true;
     }
 
@@ -246,6 +247,55 @@ namespace twin {
         LogInfo("----------------------------");
     }
 
+    void Application::ComputePriority() {
+        // Phase 11: no new external data — recombines heatRisk (Phase 8),
+        // environmentalHeatBurden (Phase 6), and population (Phase 7)
+        // already present on each zone into an explainable priority score +
+        // rank. See DigitalTwin::ComputePriority()/PriorityModel.
+        m_digitalTwin.ComputePriority();
+        LogPhase11PrioritySummary();
+    }
+
+    void Application::LogPhase11PrioritySummary() {
+        // Console-only diagnostic for Phase 11, same role LogPhase8HeatRiskSummary()
+        // plays for Phase 8 — superseded on-screen by Inspector's PRIORITY
+        // section and the Top Priority Zones panel, both added this phase.
+        LogInfo("---- Phase 11 priority ranking ----");
+        for (const auto& zone : m_digitalTwin.Zones()) {
+            if (zone.priorityIsPlaceholder) continue;
+            LogInfo("Zone " + std::to_string(zone.id) + ": priority=" +
+                std::to_string(zone.priority) + " rank=#" + std::to_string(zone.priorityRank) +
+                " (heatRisk=" + std::to_string(zone.heatRisk) +
+                ", population=" + std::to_string(zone.population) + ")");
+        }
+        LogInfo("Phase 11 summary: PROTOTYPE DECISION-SUPPORT PRIORITY, not a validated "
+            "government prioritization methodology");
+        LogInfo("------------------------------------");
+    }
+
+    void Application::FocusCameraOnZone(int zoneId) {
+        const Zone* zone = m_digitalTwin.FindZone(zoneId);
+        if (!zone) {
+            LogWarn("Application::FocusCameraOnZone: zone id=" + std::to_string(zoneId) +
+                " not found — ignoring");
+            return;
+        }
+
+        m_selectedZoneId = zoneId;
+
+        // Ground-level zone center. Camera.FocusOn() applies its own
+        // height/distance offset on top of this, so we only need the flat
+        // (x, z) target here.
+        glm::vec3 center(
+            (zone->minX + zone->maxX) * 0.5f,
+            0.0f,
+            (zone->minZ + zone->maxZ) * 0.5f);
+
+        m_camera.FocusOn(center);
+
+        LogInfo("Application::FocusCameraOnZone: focused on zone " + std::to_string(zoneId));
+    }
+
     void Application::RebuildCityMeshForActiveLayer() {
         if (!m_hasCityData) return;
 
@@ -387,6 +437,15 @@ namespace twin {
                 ? m_digitalTwin.FindZone(m_selectedZoneId)
                 : nullptr;
             Inspector::Render(selectedZone);
+
+            // Phase 11: Top Priority Zones panel. Clicking an entry selects
+            // that zone and snaps the camera to it — the Inspector above
+            // will show it starting next frame since m_selectedZoneId is
+            // already updated by the time this frame finishes.
+            int clickedPriorityZoneId = Inspector::RenderTopPriorityPanel(m_digitalTwin.Zones());
+            if (clickedPriorityZoneId >= 0) {
+                FocusCameraOnZone(clickedPriorityZoneId);
+            }
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

@@ -1,5 +1,6 @@
 #pragma once
 #include "../twin/Zone.h"
+#include <vector>
 
 namespace twin {
 
@@ -24,6 +25,20 @@ namespace twin {
         // which case a short "click a zone to inspect it" placeholder is
         // shown instead of empty/garbage fields.
         static void Render(const Zone* zone);
+
+        // Phase 11: draws the "TOP PRIORITY ZONES" panel — the highest-
+        // priority zones (per Zone::priorityRank, set by
+        // DigitalTwin::ComputePriority()), so a planner can jump straight to
+        // the areas needing intervention first instead of hunting through
+        // the 3D view. `zones` may include unranked zones (priorityIsPlaceholder
+        // == true); those are simply excluded from the list.
+        //
+        // Like Render(), this is pure presentation: it doesn't select a zone
+        // or move the camera itself. It returns the zone id the user clicked
+        // this frame (or -1 if nothing was clicked), and Application decides
+        // what "clicking a zone" means (select it + focus the camera),
+        // keeping Inspector's "given data, draw it" contract intact.
+        static int RenderTopPriorityPanel(const std::vector<Zone>& zones, int maxEntries = 5);
 
     private:
         // Renders the populated version of the panel for a non-null zone,

@@ -47,6 +47,8 @@ add_executable(LahoreDigitalTwin
     src/twin/WeatherLoader.cpp   # Phase 5, Step 2
     src/twin/PopulationLoader.cpp   # Phase 7 (was missing — Application.cpp already used it)
     src/twin/HeatRiskModel.cpp   # Phase 8 (new)
+    src/twin/PriorityModel.h     # Phase 11 (new)
+    src/twin/PriorityModel.cpp   # Phase 11 (new)
 
     # Dear ImGui (Phase 10) — core + GLFW/OpenGL3 backends
     ${IMGUI_DIR}/imgui.cpp

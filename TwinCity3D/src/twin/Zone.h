@@ -68,9 +68,16 @@ namespace twin {
         std::string riskClass;            // Phase 8 classification: "Low" | "Moderate" | "High" |
                                            // "Very High" | "Extreme" (see HeatRiskModel::Classify).
                                            // Empty until riskIsPlaceholder is cleared.
-        float priority{ 0.0f };           // 0..100; still a placeholder until Phase 11
-        bool riskIsPlaceholder{ true };   // covers heatRisk/exposure/riskClass; priority has its own
-                                           // Phase 11 rollout and stays 0 regardless of this flag
+        float priority{ 0.0f };           // 0..100; real since Phase 11 (see PriorityModel)
+        bool riskIsPlaceholder{ true };   // covers heatRisk/exposure/riskClass only — priority has
+                                           // its own flag below, since it can be computed/cleared on
+                                           // a different schedule (built on top of heat risk)
+
+        // --- Priority (Phase 11) ---
+        bool priorityIsPlaceholder{ true };  // false once PriorityModel scores this zone; requires
+                                              // riskIsPlaceholder == false first (priority is built
+                                              // on top of heat risk, never fabricated independently)
+        int priorityRank{ -1 };               // 1 = highest priority among scored zones; -1 = unranked
 
         float Width() const { return maxX - minX; }
         float Depth() const { return maxZ - minZ; }

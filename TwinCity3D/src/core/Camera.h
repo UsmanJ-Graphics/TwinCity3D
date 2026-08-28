@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -56,6 +57,31 @@ public:
         m_fovDegrees -= yOffset;
         if (m_fovDegrees < 10.0f) m_fovDegrees = 10.0f;
         if (m_fovDegrees > 90.0f) m_fovDegrees = 90.0f;
+    }
+
+    // Phase 11: repositions the camera to look at `targetPosition` (a
+    // ground-level point, typically a zone's center) from a fixed angled
+    // offset. Used by the Top Priority Zones panel so clicking an entry
+    // visibly shows "you're now looking at this zone", not just an
+    // Inspector panel update.
+    //
+    // Deliberately a HARD CUT, not an interpolated flight — smooth
+    // camera transitions between states are explicitly Phase 12 scope
+    // (master spec Phase 12: "Add smooth transitions between camera
+    // states"). This is the minimum viable "focus camera on the zone"
+    // Phase 11 needs; Phase 12 can animate m_position/m_yaw/m_pitch toward
+    // the values this computes instead of snapping them, without touching
+    // this method's contract.
+    void FocusOn(const glm::vec3& targetPosition,
+                 float viewDistance = 140.0f,
+                 float heightAboveTarget = 90.0f) {
+        glm::vec3 offset(0.0f, heightAboveTarget, viewDistance);
+        m_position = targetPosition + offset;
+
+        glm::vec3 dir = glm::normalize(targetPosition - m_position);
+        m_pitch = glm::degrees(asin(dir.y));
+        m_yaw = glm::degrees(atan2(dir.z, dir.x));
+        UpdateVectors();
     }
 
     glm::mat4 GetViewMatrix() const {

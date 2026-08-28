@@ -3,6 +3,7 @@
 #include "WeatherData.h"
 #include "PopulationData.h"
 #include "HeatRiskModel.h"
+#include "PriorityModel.h"
 #include "../gis/GISTypes.h"
 #include <vector>
 
@@ -18,9 +19,10 @@ namespace twin {
     // zone an identical value. Phase 7 adds ApplyPopulation(), which clears
     // the population placeholder from a modelled/WorldPop-derived estimate.
     // Phase 8 adds ComputeHeatRisk(), which combines all of the above into
-    // an explainable heat-risk score per zone. Phase 11 calls a further
-    // Update*() method on this same class to fill in priority — the zone
-    // list itself doesn't change shape again.
+    // an explainable heat-risk score per zone. Phase 11 adds
+    // ComputePriority(), which ranks zones for government intervention on
+    // top of that heat-risk score — the zone list itself doesn't change
+    // shape again.
     class DigitalTwin {
     public:
         // Builds one Zone per gis::ZoneBounds entry, computes the
@@ -64,6 +66,20 @@ namespace twin {
         // (e.g. after Phase 12's heatwave scenario changes zone.temperature)
         // to recompute risk under a new scenario.
         void ComputeHeatRisk(const HeatRiskWeights& weights = HeatRiskWeights{});
+
+        // Phase 11: computes priority (0..100) and priorityRank on every
+        // zone that already has a real heat-risk score. This does NOT
+        // recompute heat risk — it's a further explainable combination of
+        // heatRisk, environmentalHeatBurden, and population (both raw
+        // magnitude and density-relative exposure), delegated to
+        // PriorityModel so the ranking algorithm stays independently
+        // tunable/testable, mirroring how ComputeHeatRisk() delegates to
+        // HeatRiskModel. A zone whose heat risk is still a placeholder is
+        // left with priorityIsPlaceholder == true and no rank — priority
+        // can never be more complete than the score it's built on. Safe to
+        // call again after a later scenario (Phase 12+) recomputes heat
+        // risk under new conditions, to re-rank zones accordingly.
+        void ComputePriority(const PriorityWeights& weights = PriorityWeights{});
 
         const std::vector<Zone>& Zones() const { return m_zones; }
         std::vector<Zone>& Zones() { return m_zones; }

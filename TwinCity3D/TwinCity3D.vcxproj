@@ -167,6 +167,7 @@
     <ClCompile Include="src\twin\HeatLayers.cpp" />
     <ClCompile Include="src\twin\HeatRiskModel.cpp" />
     <ClCompile Include="src\twin\PopulationLoader.cpp" />
+    <ClCompile Include="src\twin\PriorityModel.cpp" />
     <ClCompile Include="src\twin\WeatherLoader.cpp" />
     <ClCompile Include="src\ui\Inspector.cpp" />
   </ItemGroup>
@@ -197,6 +198,7 @@
     <ClInclude Include="src\twin\HeatRiskModel.h" />
     <ClInclude Include="src\twin\PopulationData.h" />
     <ClInclude Include="src\twin\PopulationLoader.h" />
+    <ClInclude Include="src\twin\PriorityModel.h" />
     <ClInclude Include="src\twin\WeatherData.h" />
     <ClInclude Include="src\twin\WeatherLoader.h" />
     <ClInclude Include="src\twin\Zone.h" />
