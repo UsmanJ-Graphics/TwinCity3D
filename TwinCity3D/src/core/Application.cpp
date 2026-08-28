@@ -4,7 +4,9 @@
 #include "../gis/GISLoader.h"
 #include "../twin/WeatherLoader.h"
 #include "../twin/PopulationLoader.h"
-
+#include <iamgui/imgui.h>
+#include <iamgui/imgui_impl_glfw.h>
+#include <iamgui/imgui_impl_opengl3.h>
 #include <glm/gtc/matrix_transform.hpp>
 
 namespace twin {
@@ -37,6 +39,7 @@ namespace twin {
         glfwSetCursorPosCallback(m_window, CursorPosCallback);
         glfwSetScrollCallback(m_window, ScrollCallback);
         glfwSetKeyCallback(m_window, KeyCallback);
+        glfwSetMouseButtonCallback(m_window, MouseButtonCallback);  // Phase 10: zone picking
         glfwSetInputMode(m_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
         glewExperimental = GL_TRUE;
@@ -49,6 +52,11 @@ namespace twin {
 
         LogInfo(std::string("OpenGL context: ") + reinterpret_cast<const char*>(glGetString(GL_VERSION)));
         LogInfo(std::string("Renderer: ") + reinterpret_cast<const char*>(glGetString(GL_RENDERER)));
+
+        if (!InitImGui()) {
+            LogError("Failed to initialize ImGui (Phase 10 Zone Inspector)");
+            return false;
+        }
 
         m_renderer.Init();
 
@@ -64,8 +72,15 @@ namespace twin {
         LoadPopulation();
         ComputeHeatRisk();
 
-        LogInfo("Phase 0-8 initialization complete: window + camera + 3D city model + weather + "
-            "population + heat risk ready");
+        // Phase 9: everything the color needs (heat risk, population,
+        // green coverage, building density, temperature) is on the zones
+        // now, so recolor the city mesh with real data before the first
+        // frame renders instead of leaving it at LoadCityData()'s
+        // placeholder gray.
+        RebuildCityMeshForActiveLayer();
+
+        LogInfo("Phase 0-9 initialization complete: window + camera + 3D city model + weather + "
+            "population + heat risk + data-driven layer visualization ready");
         return true;
     }
 
@@ -231,6 +246,85 @@ namespace twin {
         LogInfo("----------------------------");
     }
 
+    void Application::RebuildCityMeshForActiveLayer() {
+        if (!m_hasCityData) return;
+
+        m_city = CityMeshBuilder::Build(m_gisDataset, m_digitalTwin.Zones(), m_activeLayer);
+        LogActiveLayerLegend();
+    }
+
+    void Application::SetActiveLayer(DataLayer layer) {
+        m_activeLayer = layer;
+        RebuildCityMeshForActiveLayer();
+    }
+
+    void Application::LogActiveLayerLegend() {
+        // Console-only "legend" for Phase 9 — same temporary-diagnostic role
+        // as LogPhase4/5/7/8*Summary(), superseded by a real on-screen
+        // legend once the dashboard/layer-toggle UI exists (Phase 15/16).
+        LayerInfo info = DescribeLayer(m_activeLayer);
+        LogInfo("---- Active layer: " + info.name + " (" + info.units + ") ----");
+        LogInfo("  " + info.lowLabel + "  ->  " + info.highLabel +
+            " (blue -> green -> yellow -> orange -> red)");
+        LogInfo("  Gray buildings/green areas = no real data for that zone yet (placeholder)");
+        LogInfo("  Keys: [1] Heat Risk  [2] Population  [3] Green Coverage  "
+            "[4] Building Density  [5] Temperature  [L] cycle");
+        LogInfo("-------------------------------------------------");
+    }
+
+    bool Application::InitImGui() {
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGui::StyleColorsDark();
+
+        if (!ImGui_ImplGlfw_InitForOpenGL(m_window, true)) return false;
+        if (!ImGui_ImplOpenGL3_Init("#version 330")) return false;
+        return true;
+    }
+
+    void Application::ShutdownImGui() {
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+    }
+
+    void Application::HandleZonePick() {
+        if (ImGui::GetIO().WantCaptureMouse) return;
+
+        int fbWidth, fbHeight;
+        glfwGetFramebufferSize(m_window, &fbWidth, &fbHeight);
+        if (fbWidth <= 0 || fbHeight <= 0) return;
+
+        double pickX, pickY;
+        if (m_mouseLookEnabled) {
+            // Cursor is captured/hidden for FPS-style look — there's no
+            // meaningful click position, so pick whatever the camera is
+            // actually aimed at (screen-center crosshair).
+            pickX = fbWidth / 2.0;
+            pickY = fbHeight / 2.0;
+        }
+        else {
+            // Cursor is free (TAB toggled it off) — pick whatever's actually
+            // under the visible pointer, like a normal UI click.
+            glfwGetCursorPos(m_window, &pickX, &pickY);
+        }
+
+        m_selectedZoneId = Picking::PickZoneId(
+            pickX, pickY, fbWidth, fbHeight, m_camera, m_digitalTwin.Zones());
+
+        LogInfo("Application::HandleZonePick: selected zone id=" +
+            std::to_string(m_selectedZoneId));
+    }
+
+    void Application::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
+        if (button != GLFW_MOUSE_BUTTON_LEFT || action != GLFW_PRESS) return;
+
+        auto* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+        if (!app) return;
+
+        app->HandleZonePick();
+    }
+
     void Application::Run() {
         float lastFrameTime = static_cast<float>(glfwGetTime());
 
@@ -246,6 +340,10 @@ namespace twin {
             glfwGetFramebufferSize(m_window, &fbWidth, &fbHeight);
             m_renderer.BeginFrame(fbWidth, fbHeight);
 
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
             float aspect = fbHeight > 0 ? static_cast<float>(fbWidth) / fbHeight : 1.0f;
             glm::mat4 view = m_camera.GetViewMatrix();
             glm::mat4 projection = m_camera.GetProjectionMatrix(aspect);
@@ -255,24 +353,43 @@ namespace twin {
             m_gridShader.SetMat4("uModel", model);
             m_gridShader.SetMat4("uView", view);
             m_gridShader.SetMat4("uProjection", projection);
+
+            m_gridShader.SetInt("uUseDataColor", 0);
             m_gridShader.SetVec4("uBaseColor", glm::vec4(0.35f, 0.55f, 0.35f, 1.0f));
             m_groundGrid.Draw();
 
             if (m_hasCityData) {
-                // Category colors only, for now — Phase 9 replaces the building
-                // color with a data-driven heat-risk palette per zone/building.
-                m_gridShader.SetVec4("uBaseColor", glm::vec4(0.78f, 0.74f, 0.66f, 1.0f));  // buildings: warm concrete
+                // Phase 9: buildings and green areas are colored by
+                // m_activeLayer — their vertex dataValue was baked in by
+                // RebuildCityMeshForActiveLayer() (see CityMeshBuilder /
+                // HeatLayers.h / basic.frag's DataRamp). uBaseColor's rgb is
+                // ignored in this mode; only its alpha is used, so it's set
+                // to opaque white here.
+                m_gridShader.SetInt("uUseDataColor", 1);
+                m_gridShader.SetVec4("uBaseColor", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
                 m_city.buildings.Draw();
+                m_city.greenAreas.Draw();
 
+                // Roads and facility markers keep their flat Phase 3
+                // category colors — neither belongs to a single zone the
+                // way a building or green area does.
+                m_gridShader.SetInt("uUseDataColor", 0);
                 m_gridShader.SetVec4("uBaseColor", glm::vec4(0.20f, 0.20f, 0.22f, 1.0f));  // roads: asphalt
                 m_city.roads.Draw();
-
-                m_gridShader.SetVec4("uBaseColor", glm::vec4(0.25f, 0.62f, 0.30f, 1.0f));  // green areas
-                m_city.greenAreas.Draw();
 
                 m_gridShader.SetVec4("uBaseColor", glm::vec4(0.85f, 0.35f, 0.15f, 1.0f));  // facility markers
                 m_city.facilities.Draw();
             }
+
+            // Phase 10: Zone Inspector panel, drawn over the 3D scene each
+            // frame from whichever zone the crosshair last selected.
+            const Zone* selectedZone = m_selectedZoneId >= 0
+                ? m_digitalTwin.FindZone(m_selectedZoneId)
+                : nullptr;
+            Inspector::Render(selectedZone);
+
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             glfwSwapBuffers(m_window);
         }
@@ -298,6 +415,7 @@ namespace twin {
 
     void Application::Shutdown() {
         if (m_window) {
+            ShutdownImGui();  // must run while the GL context is still current
             glfwDestroyWindow(m_window);
             m_window = nullptr;
             glfwTerminate();
@@ -333,8 +451,36 @@ namespace twin {
     }
 
     void Application::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-        // Reserved for discrete (non-held) key events, e.g. toggling UI panels
-        // in later phases. Continuous movement uses polling in ProcessInput.
+        // Phase 9: layer toggles. These are discrete (non-held) key events —
+        // continuous movement stays in ProcessInput()'s per-frame polling,
+        // same split this function's original comment already called for.
+        if (action != GLFW_PRESS) return;
+
+        auto* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
+        if (!app) return;
+
+        switch (key) {
+        case GLFW_KEY_1: app->SetActiveLayer(DataLayer::HeatRisk); break;
+        case GLFW_KEY_2: app->SetActiveLayer(DataLayer::Population); break;
+        case GLFW_KEY_3: app->SetActiveLayer(DataLayer::GreenCoverage); break;
+        case GLFW_KEY_4: app->SetActiveLayer(DataLayer::BuildingDensity); break;
+        case GLFW_KEY_5: app->SetActiveLayer(DataLayer::Temperature); break;
+        case GLFW_KEY_L: app->SetActiveLayer(NextDataLayer(app->m_activeLayer)); break;
+        case GLFW_KEY_TAB: {
+            app->m_mouseLookEnabled = !app->m_mouseLookEnabled;
+            glfwSetInputMode(window, GLFW_CURSOR,
+                app->m_mouseLookEnabled ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+            // Avoids a big camera snap the next time capture re-enables — otherwise
+            // ProcessMouseMovement uses the stale m_lastMouseX/Y from before the
+            // cursor was freed and jumped around the screen.
+            app->m_firstMouse = true;
+            LogInfo(std::string("Mouse capture ") +
+                (app->m_mouseLookEnabled ? "ON (camera look)" : "OFF (cursor free for UI)"));
+            break;
+        }
+        default: break;
+
+        }
     }
 
 }  // namespace twin

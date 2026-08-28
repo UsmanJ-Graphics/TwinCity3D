@@ -2,6 +2,8 @@
 #include "../gis/Triangulate.h"
 #include "../core/Log.h"
 
+#include <algorithm>
+
 namespace twin {
 
 using gis::Building;
@@ -37,17 +39,22 @@ glm::vec2 PolygonCentroid(const std::vector<glm::vec2>& poly) {
 
 void AppendQuad(std::vector<Vertex>& verts, std::vector<unsigned int>& indices,
                  const glm::vec3& a, const glm::vec3& b, const glm::vec3& c, const glm::vec3& d,
-                 const glm::vec3& normal) {
+                 const glm::vec3& normal, float dataValue) {
     unsigned int base = static_cast<unsigned int>(verts.size());
-    verts.push_back({a, normal, 0.0f});
-    verts.push_back({b, normal, 0.0f});
-    verts.push_back({c, normal, 0.0f});
-    verts.push_back({d, normal, 0.0f});
+    verts.push_back({a, normal, dataValue});
+    verts.push_back({b, normal, dataValue});
+    verts.push_back({c, normal, dataValue});
+    verts.push_back({d, normal, dataValue});
     indices.insert(indices.end(), {base, base + 1, base + 2, base, base + 2, base + 3});
 }
 
-void AppendBuildingGeometry(const Building& b, std::vector<Vertex>& verts, std::vector<unsigned int>& indices,
-                             int& skipped) {
+// `dataValue` is the building's zone value for the active layer (Phase 9),
+// already normalized to [0,1] or kNoDataSentinel — see CityMeshBuilder::Build.
+// Baked onto every vertex (roof + all walls) so the whole building renders
+// one solid data color; Phase 3's flat category color remains available via
+// uUseDataColor=0 in the shader for whoever wants it.
+void AppendBuildingGeometry(const Building& b, float dataValue, std::vector<Vertex>& verts,
+                             std::vector<unsigned int>& indices, int& skipped) {
     const auto& footprint = b.footprint;
     if (footprint.size() < 3) { ++skipped; return; }
 
@@ -60,7 +67,7 @@ void AppendBuildingGeometry(const Building& b, std::vector<Vertex>& verts, std::
     // Roof cap.
     unsigned int roofBase = static_cast<unsigned int>(verts.size());
     for (const auto& p : footprint) {
-        verts.push_back({glm::vec3(p.x, h, p.y), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f});
+        verts.push_back({glm::vec3(p.x, h, p.y), glm::vec3(0.0f, 1.0f, 0.0f), dataValue});
     }
     for (unsigned int idx : roofTris) indices.push_back(roofBase + idx);
 
@@ -75,10 +82,13 @@ void AppendBuildingGeometry(const Building& b, std::vector<Vertex>& verts, std::
         glm::vec3 Bv(p2.x, 0.0f, p2.y);
         glm::vec3 C(p2.x, h, p2.y);
         glm::vec3 D(p1.x, h, p1.y);
-        AppendQuad(verts, indices, A, Bv, C, D, normal);
+        AppendQuad(verts, indices, A, Bv, C, D, normal, dataValue);
     }
 }
 
+// Roads never carry zone data — a road segment doesn't belong to a single
+// zone the way a building does — so dataValue is always 0.0f here (unused,
+// since these vertices are only ever drawn with uUseDataColor=0).
 void AppendRoadGeometry(const Road& r, std::vector<Vertex>& verts, std::vector<unsigned int>& indices) {
     const float y = 0.05f;  // lift slightly above ground grid to avoid z-fighting
     const float halfWidth = r.width * 0.5f;
@@ -97,12 +107,14 @@ void AppendRoadGeometry(const Road& r, std::vector<Vertex>& verts, std::vector<u
         glm::vec3 Bv(p1.x + offset.x, y, p1.y + offset.y);
         glm::vec3 C(p2.x + offset.x, y, p2.y + offset.y);
         glm::vec3 D(p2.x - offset.x, y, p2.y - offset.y);
-        AppendQuad(verts, indices, A, Bv, C, D, up);
+        AppendQuad(verts, indices, A, Bv, C, D, up, 0.0f);
     }
 }
 
-void AppendGreenAreaGeometry(const GreenArea& g, std::vector<Vertex>& verts, std::vector<unsigned int>& indices,
-                              int& skipped) {
+// `dataValue`: same Phase 9 per-zone value as AppendBuildingGeometry, via
+// the green area's own zoneId.
+void AppendGreenAreaGeometry(const GreenArea& g, float dataValue, std::vector<Vertex>& verts,
+                              std::vector<unsigned int>& indices, int& skipped) {
     if (g.polygon.size() < 3) { ++skipped; return; }
     std::vector<unsigned int> tris = TriangulatePolygon(g.polygon);
     if (tris.empty()) { ++skipped; return; }
@@ -110,11 +122,13 @@ void AppendGreenAreaGeometry(const GreenArea& g, std::vector<Vertex>& verts, std
     const float y = 0.03f;
     unsigned int base = static_cast<unsigned int>(verts.size());
     for (const auto& p : g.polygon) {
-        verts.push_back({glm::vec3(p.x, y, p.y), glm::vec3(0.0f, 1.0f, 0.0f), 0.0f});
+        verts.push_back({glm::vec3(p.x, y, p.y), glm::vec3(0.0f, 1.0f, 0.0f), dataValue});
     }
     for (unsigned int idx : tris) indices.push_back(base + idx);
 }
 
+// Facility markers stay flat category color always (small, deliberately
+// distinct visual elements — see Run()) so dataValue is always 0.0f/unused.
 void AppendFacilityMarker(const Facility& f, std::vector<Vertex>& verts, std::vector<unsigned int>& indices) {
     const float halfWidth = 4.0f;
     const float baseY = 0.0f;
@@ -143,24 +157,64 @@ void AppendFacilityMarker(const Facility& f, std::vector<Vertex>& verts, std::ve
     });
 }
 
+// Linear search is fine at hackathon study-area scale (see the identical
+// pattern already used in DigitalTwin::Build's zoneIndex lambda).
+const Zone* FindZoneById(const std::vector<Zone>& zones, int zoneId) {
+    for (const auto& z : zones) {
+        if (z.id == zoneId) return &z;
+    }
+    return nullptr;
+}
+
 }  // namespace
 
 CityMeshes CityMeshBuilder::Build(const gis::GISDataset& dataset) {
+    return Build(dataset, {}, DataLayer::HeatRisk);
+}
+
+CityMeshes CityMeshBuilder::Build(const gis::GISDataset& dataset,
+                                   const std::vector<Zone>& zones,
+                                   DataLayer layer) {
     CityMeshes result;
+    result.activeLayer = layer;
+
+    // Phase 9: population density has no fixed universal ceiling (unlike
+    // heat risk's fixed 0-100 or temperature's fixed HeatRiskModel scale),
+    // so — mirroring HeatRiskModel::Compute()'s populationExposureScore —
+    // normalize it relative to the min/max among zones with real
+    // (non-placeholder) population in this study area, computed once here.
+    float minPopDensity = 0.0f, maxPopDensity = 0.0f;
+    bool firstPop = true;
+    for (const auto& z : zones) {
+        if (z.populationIsPlaceholder) continue;
+        if (firstPop) { minPopDensity = maxPopDensity = z.populationDensity; firstPop = false; }
+        else {
+            minPopDensity = std::min(minPopDensity, z.populationDensity);
+            maxPopDensity = std::max(maxPopDensity, z.populationDensity);
+        }
+    }
 
     std::vector<Vertex> buildingVerts, roadVerts, greenVerts, facilityVerts;
     std::vector<unsigned int> buildingIdx, roadIdx, greenIdx, facilityIdx;
 
     int skippedBuildings = 0;
     for (const auto& b : dataset.buildings) {
-        AppendBuildingGeometry(b, buildingVerts, buildingIdx, skippedBuildings);
+        float dataValue = kNoDataSentinel;
+        if (const Zone* z = FindZoneById(zones, b.zoneId)) {
+            dataValue = NormalizedLayerValue(*z, layer, minPopDensity, maxPopDensity);
+        }
+        AppendBuildingGeometry(b, dataValue, buildingVerts, buildingIdx, skippedBuildings);
     }
     for (const auto& r : dataset.roads) {
         AppendRoadGeometry(r, roadVerts, roadIdx);
     }
     int skippedGreen = 0;
     for (const auto& g : dataset.greenAreas) {
-        AppendGreenAreaGeometry(g, greenVerts, greenIdx, skippedGreen);
+        float dataValue = kNoDataSentinel;
+        if (const Zone* z = FindZoneById(zones, g.zoneId)) {
+            dataValue = NormalizedLayerValue(*z, layer, minPopDensity, maxPopDensity);
+        }
+        AppendGreenAreaGeometry(g, dataValue, greenVerts, greenIdx, skippedGreen);
     }
     for (const auto& f : dataset.facilities) {
         AppendFacilityMarker(f, facilityVerts, facilityIdx);
@@ -183,7 +237,9 @@ CityMeshes CityMeshBuilder::Build(const gis::GISDataset& dataset) {
             std::to_string(result.facilityCount) + " facilities" +
             (result.skippedBuildingCount > 0
                  ? (" (" + std::to_string(result.skippedBuildingCount) + " skipped: bad geometry)")
-                 : ""));
+                 : "") +
+            (zones.empty() ? " (no zone data yet — placeholder gray)"
+                            : (" — colored by " + DescribeLayer(layer).name)));
 
     return result;
 }

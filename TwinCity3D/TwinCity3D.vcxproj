@@ -119,6 +119,7 @@
       <PreprocessorDefinitions>GLEW_STATIC;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>D:\TwinCity3D\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,21 +150,41 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\iamgui\imgui.cpp" />
+    <ClCompile Include="..\include\iamgui\imgui_demo.cpp" />
+    <ClCompile Include="..\include\iamgui\imgui_draw.cpp" />
+    <ClCompile Include="..\include\iamgui\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\include\iamgui\imgui_impl_opengl3.cpp" />
+    <ClCompile Include="..\include\iamgui\imgui_tables.cpp" />
+    <ClCompile Include="..\include\iamgui\imgui_widgets.cpp" />
     <ClCompile Include="src\core\Application.cpp" />
+    <ClCompile Include="src\core\Picking.cpp" />
     <ClCompile Include="src\core\Shader.cpp" />
     <ClCompile Include="src\gis\GISLoader.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\twin\CityMeshBuilder.cpp" />
     <ClCompile Include="src\twin\Digitaltwin.cpp" />
+    <ClCompile Include="src\twin\HeatLayers.cpp" />
     <ClCompile Include="src\twin\HeatRiskModel.cpp" />
     <ClCompile Include="src\twin\PopulationLoader.cpp" />
     <ClCompile Include="src\twin\WeatherLoader.cpp" />
+    <ClCompile Include="src\ui\Inspector.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\include\iamgui\imconfig.h" />
+    <ClInclude Include="..\include\iamgui\imgui.h" />
+    <ClInclude Include="..\include\iamgui\imgui_impl_glfw.h" />
+    <ClInclude Include="..\include\iamgui\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\include\iamgui\imgui_impl_opengl3_loader.h" />
+    <ClInclude Include="..\include\iamgui\imgui_internal.h" />
+    <ClInclude Include="..\include\iamgui\imstb_rectpack.h" />
+    <ClInclude Include="..\include\iamgui\imstb_textedit.h" />
+    <ClInclude Include="..\include\iamgui\imstb_truetype.h" />
     <ClInclude Include="src\core\Application.h" />
     <ClInclude Include="src\core\Camera.h" />
     <ClInclude Include="src\core\Log.h" />
     <ClInclude Include="src\core\Mesh.h" />
+    <ClInclude Include="src\core\Picking.h" />
     <ClInclude Include="src\core\Renderer.h" />
     <ClInclude Include="src\core\Shader.h" />
     <ClInclude Include="src\core\Texture.h" />
@@ -172,12 +193,14 @@
     <ClInclude Include="src\gis\Triangulate.h" />
     <ClInclude Include="src\twin\CityMeshBuilder.h" />
     <ClInclude Include="src\twin\Digitaltwin.h" />
+    <ClInclude Include="src\twin\HeatLayers.h" />
     <ClInclude Include="src\twin\HeatRiskModel.h" />
     <ClInclude Include="src\twin\PopulationData.h" />
     <ClInclude Include="src\twin\PopulationLoader.h" />
     <ClInclude Include="src\twin\WeatherData.h" />
     <ClInclude Include="src\twin\WeatherLoader.h" />
     <ClInclude Include="src\twin\Zone.h" />
+    <ClInclude Include="src\ui\Inspector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
