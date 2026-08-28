@@ -93,11 +93,15 @@ namespace twin {
         float heatExposureScore{ 0.0f };       // relative 0..1 within study area
         bool populationExposureIsPlaceholder{ true };
 
-        // Phase 18: either raster-preprocessed environmental data or an
-        // explicitly labelled offline OSM land-cover proxy.
-        float vegetationIndex{ 0.0f };
-        float builtUpIndex{ 0.0f };
-        bool satelliteEnvironmentIsPlaceholder{ true };
+        // --- Satellite & environmental layer (Phase 18) ---
+        float vegetationIndex{ 0.0f };         // 0..1 proxy (higher = greener)
+        float builtUpIndex{ 0.0f };            // 0..1 proxy (higher = more paved/built)
+        bool satelliteIsPlaceholder{ true };
+
+        // --- Light Pollution & Bird/Ecological Impact (Phase 25) ---
+        float lightPollutionIndex{ 0.0f };       // 0..1 night light intensity proxy
+        float birdEcologicalDisturbance{ 0.0f }; // 0..100 composite ecological disturbance index
+        bool ecologicalIsPlaceholder{ true };
 
         // Phase 16: geometry/rainfall-derived prototype visualization only;
         // never a hydrological model or a flood forecast.

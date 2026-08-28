@@ -32,6 +32,8 @@ namespace twin {
             ImGui::Dummy(ImVec2(width, height));
         }
 
+
+
         // Color for risk scores 0..100
         ImVec4 RiskColor(float risk0to100) {
             if (risk0to100 <= 30.0f) return kAccentCyan;
@@ -181,6 +183,8 @@ namespace twin {
                 { DataLayer::FloodRisk,           "Flood Risk" },
                 { DataLayer::SatelliteEnvironment,"Satellite Env" },
                 { DataLayer::GreenPriority,       "Green Priority" },
+                { DataLayer::LightPollution,      "Light Pollution" },
+                { DataLayer::BirdEcologicalImpact,"Bird & Ecology" },
             };
 
             for (const auto& item : navItems) {
@@ -271,6 +275,16 @@ namespace twin {
                 ImGui::Text("Building Density:");
                 ImGui::SameLine(150.0f);
                 ImGui::Text("%.1f%%", selectedZone->buildingDensity * 100.0f);
+
+                ImGui::Text("Light Pollution:");
+                ImGui::SameLine(150.0f);
+                if (selectedZone->ecologicalIsPlaceholder) ImGui::TextDisabled("--");
+                else ImGui::Text("%.2f / 1.0", selectedZone->lightPollutionIndex);
+
+                ImGui::Text("Bird Disturbance:");
+                ImGui::SameLine(150.0f);
+                if (selectedZone->ecologicalIsPlaceholder) ImGui::TextDisabled("--");
+                else ImGui::Text("%.0f / 100", selectedZone->birdEcologicalDisturbance);
 
                 // What-If Comparison if active
                 if (selectedZone->baselineHeatRisk > 0.0f && std::fabs(selectedZone->heatRisk - selectedZone->baselineHeatRisk) >= 0.1f) {
@@ -467,7 +481,7 @@ namespace twin {
                     }
                 }
             } else {
-                // ANALYTICS & LEGEND VIEW
+                // PHASE 24: EXECUTIVE CHARTS & DATA VISUALIZATION
                 ImGui::Columns(4, "bottomMetricsColumns", true);
 
                 // Column 1: Legend
@@ -479,36 +493,82 @@ namespace twin {
                 ImGui::TextColored(kAccentRed, "86-100 EXTREME");
                 ImGui::NextColumn();
 
-                // Column 2: Risk Stats
+                // Column 2: Stacked Risk Distribution Bar Chart
                 ImGui::TextColored(kTextMuted, "RISK DISTRIBUTION");
-                int highRiskCount = 0, extremeRiskCount = 0;
+                int cLow = 0, cMod = 0, cHigh = 0, cVHigh = 0, cExt = 0;
                 for (const auto& z : zones) {
-                    if (z.heatRisk >= 70.0f) ++highRiskCount;
-                    if (z.heatRisk >= 85.0f) ++extremeRiskCount;
+                    if (z.heatRisk <= 30.0f) ++cLow;
+                    else if (z.heatRisk <= 50.0f) ++cMod;
+                    else if (z.heatRisk <= 70.0f) ++cHigh;
+                    else if (z.heatRisk <= 85.0f) ++cVHigh;
+                    else ++cExt;
                 }
-                ImGui::Text("Total Zones: %d", static_cast<int>(zones.size()));
-                ImGui::Text("High Risk Zones: %d", highRiskCount);
-                ImGui::Text("Extreme Risk: %d", extremeRiskCount);
+                int totalZ = static_cast<int>(zones.size());
+                float tF = totalZ > 0 ? static_cast<float>(totalZ) : 1.0f;
+
+                // Stacked horizontal bar chart
+                float barWidth = 140.0f, barHeight = 14.0f;
+                ImDrawList* dl = ImGui::GetWindowDrawList();
+                ImVec2 p = ImGui::GetCursorScreenPos();
+                float xOffset = p.x;
+
+                const struct { float count; ImVec4 col; } segments[] = {
+                    { cLow / tF, kAccentCyan },
+                    { cMod / tF, kAccentGreen },
+                    { cHigh / tF, kAccentYellow },
+                    { cVHigh / tF, kAccentOrange },
+                    { cExt / tF, kAccentRed }
+                };
+
+                for (const auto& seg : segments) {
+                    float segW = seg.count * barWidth;
+                    if (segW > 0.5f) {
+                        dl->AddRectFilled(ImVec2(xOffset, p.y), ImVec2(xOffset + segW, p.y + barHeight), ImGui::ColorConvertFloat4ToU32(seg.col));
+                        xOffset += segW;
+                    }
+                }
+                dl->AddRect(p, ImVec2(p.x + barWidth, p.y + barHeight), IM_COL32(80, 100, 120, 180), 3.0f);
+                ImGui::Dummy(ImVec2(barWidth, barHeight + 4.0f));
+
+                ImGui::Text("Low: %.0f%%  Mod: %.0f%%", (cLow / tF) * 100.0f, (cMod / tF) * 100.0f);
+                ImGui::TextColored(kAccentRed, "High/Extreme: %.0f%%", ((cHigh + cVHigh + cExt) / tF) * 100.0f);
                 ImGui::NextColumn();
 
-                // Column 3: Exposed Population
+                // Column 3: Exposed Population Breakdown & Sparkline
                 ImGui::TextColored(kTextMuted, "EXPOSED POPULATION");
-                int totalExposed = 0;
+                int totalExposed = 0, highRiskExposed = 0;
+                float popData[16] = { 0 };
+                int idx = 0;
                 for (const auto& z : zones) {
-                    if (!z.populationExposureIsPlaceholder) totalExposed += z.heatExposedPopulation;
+                    if (!z.populationExposureIsPlaceholder) {
+                        totalExposed += z.heatExposedPopulation;
+                        if (z.heatRisk >= 70.0f) highRiskExposed += z.population;
+                    }
+                    if (idx < 16) popData[idx++] = static_cast<float>(z.heatExposedPopulation);
                 }
-                ImGui::TextColored(kAccentYellow, "%d", totalExposed);
-                ImGui::TextDisabled("Risk-weighted headcount");
+
+                ImGui::TextColored(kAccentYellow, "%d residents", totalExposed);
+                ImGui::SetNextItemWidth(130.0f);
+                ImGui::PlotLines("##popSpark", popData, std::min(idx, 16), 0, nullptr, 0.0f, 30000.0f, ImVec2(130, 24));
+                ImGui::TextDisabled("High Risk Pop: %d", highRiskExposed);
                 ImGui::NextColumn();
 
-                // Column 4: Green Coverage
+                // Column 4: Green Coverage Sparkline & Target Bar
                 ImGui::TextColored(kTextMuted, "GREEN INFRASTRUCTURE");
                 float sumCoverage = 0.0f;
-                for (const auto& z : zones) sumCoverage += z.greenCoverage;
+                float greenData[16] = { 0 };
+                int gIdx = 0;
+                for (const auto& z : zones) {
+                    sumCoverage += z.greenCoverage;
+                    if (gIdx < 16) greenData[gIdx++] = z.greenCoverage * 100.0f;
+                }
                 float meanCov = zones.empty() ? 0.0f : (sumCoverage / zones.size());
+
                 ImGui::Text("Avg Cover: %.1f%%", meanCov * 100.0f);
-                ImGui::Text("Urban Target: 20.0%%");
-                DrawProgressBar(meanCov / 0.20f, 130.0f, 8.0f, kAccentGreen);
+                ImGui::SetNextItemWidth(130.0f);
+                ImGui::PlotLines("##greenSpark", greenData, std::min(gIdx, 16), 0, nullptr, 0.0f, 40.0f, ImVec2(130, 24));
+                DrawProgressBar(meanCov / 0.20f, 130.0f, 6.0f, kAccentGreen);
+                ImGui::TextDisabled("Target: 20.0%% (Deficit: %.1f%%)", std::max(0.0f, 20.0f - meanCov * 100.0f));
                 ImGui::Columns(1);
             }
         }
@@ -526,6 +586,30 @@ namespace twin {
             ImGui::TextDisabled("Last Updated: Real-time C++ Digital Twin Engine");
         }
         ImGui::End();
+
+        // Overlay: BEFORE / AFTER labels when comparative mode is active
+        if (scenarioState.beforeAfterEnabled) {
+            // Small label on the left (BEFORE)
+            ImGuiWindowFlags overlayFlags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoInputs |
+                ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+
+            ImGui::SetNextWindowPos(ImVec2(12.0f, topBarHeight + 8.0f), ImGuiCond_Always);
+            if (ImGui::Begin("##BeforeLabel", nullptr, overlayFlags)) {
+                ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.85f, 0.85f, 0.85f, 1.0f));
+                ImGui::Text("BEFORE");
+                ImGui::PopStyleColor();
+            }
+            ImGui::End();
+
+            // Small label on the right (AFTER)
+            ImGui::SetNextWindowPos(ImVec2(static_cast<float>(displayWidth) - 92.0f, topBarHeight + 8.0f), ImGuiCond_Always);
+            if (ImGui::Begin("##AfterLabel", nullptr, overlayFlags)) {
+                ImGui::PushStyleColor(ImGuiCol_Text, kAccentGreen);
+                ImGui::Text("AFTER");
+                ImGui::PopStyleColor();
+            }
+            ImGui::End();
+        }
 
         return result;
     }

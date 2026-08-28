@@ -16,6 +16,12 @@ namespace twin {
         float vegetationDeltaPct{ 0.0f }; // e.g. 0.05, 0.10, 0.15, 0.20 (+5%..+20%)
         float shadeDeltaPct{ 0.0f };      // e.g. 0.05, 0.10, 0.20 (+5%..+20%)
         bool applyToSelectedZoneOnly{ false };
+        // Phase 21: Before / After comparative mode
+        bool beforeAfterEnabled{ false };
+        // 0 = side-by-side, 1 = slider wipe
+        int beforeAfterMode{ 0 };
+        // slider position 0.0 (show baseline) .. 1.0 (show scenario)
+        float beforeAfterSlider{ 0.5f };
     };
 
     class ScenarioPanel {

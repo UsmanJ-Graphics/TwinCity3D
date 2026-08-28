@@ -120,6 +120,9 @@ namespace twin {
         // microclimate burden, heat risk, population exposure, and priority.
         void ApplyInterventionScenario(float vegDeltaPct, float shadeDeltaPct, int targetZoneId = -1);
 
+        // Phase 25: Light Pollution & Bird/Ecological Impact model
+        void ComputeEcologicalImpact();
+
         const std::vector<Zone>& Zones() const { return m_zones; }
         std::vector<Zone>& Zones() { return m_zones; }
 

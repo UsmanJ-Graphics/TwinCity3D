@@ -10,6 +10,7 @@
 #include <iamgui/imgui_impl_opengl3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <cmath>    // std::fabs, used by Phase 12's drag-vs-click threshold
+#include <algorithm>
 #include <optional> // Phase 13: LayersPanel::Render()'s return type
 
 namespace twin {
@@ -78,7 +79,11 @@ namespace twin {
         ComputeHeatRisk();
         ComputePriority();           // Phase 11: builds on ComputeHeatRisk(), must run after it
         ComputeGreenInfrastructure(); // Phase 19: WHERE-to-add-greenery layer, builds on heat risk
+        m_digitalTwin.ComputeEcologicalImpact(); // Phase 25: light pollution & bird ecological disturbance
         m_digitalTwin.SaveBaselineMetrics(); // Phase 20: save baseline heatRisk & greenCoverage before interventions
+
+        // Phase 21: build a baseline city mesh snapshot for comparative views
+        if (m_hasCityData) RebuildCityMeshForActiveLayer();
 
         // Phase 9: everything the color needs (heat risk, population,
         // green coverage, building density, temperature) is on the zones
@@ -388,6 +393,27 @@ namespace twin {
 
         m_city = CityMeshBuilder::Build(m_gisDataset, m_digitalTwin.Zones(), m_activeLayer);
         LogActiveLayerLegend();
+
+        // If a baseline snapshot exists (saved earlier via SaveBaselineMetrics),
+        // also build a baseline city mesh using those baseline zone fields so
+        // the renderer can draw comparative views without recomputing scores.
+        // The baseline mesh is only used when the UI toggles Before/After mode
+        // (Phase 21).
+        // Build baseline copy from zones, substituting baselineHeatRisk /
+        // baselineGreenCoverage / baselinePriority where present.
+        std::vector<Zone> baselineZones = m_digitalTwin.Zones();
+        bool haveBaseline = false;
+        for (auto& z : baselineZones) {
+            if (z.baselineHeatRisk > 0.0f) { z.heatRisk = z.baselineHeatRisk; haveBaseline = true; }
+            if (z.baselinePriority > 0.0f) { z.priority = z.baselinePriority; }
+            if (z.baselineGreenCoverage > 0.0f) { z.greenCoverage = z.baselineGreenCoverage; }
+        }
+        if (haveBaseline) {
+            m_cityBaseline = CityMeshBuilder::Build(m_gisDataset, baselineZones, m_activeLayer);
+        } else {
+            // Clear baseline mesh to avoid accidentally rendering stale data
+            m_cityBaseline = CityMeshes();
+        }
     }
 
     void Application::SetActiveLayer(DataLayer layer) {
@@ -480,13 +506,29 @@ namespace twin {
         // picks.
         if (button == GLFW_MOUSE_BUTTON_LEFT) {
             if (action == GLFW_PRESS) {
-                app->m_leftMouseDown = true;
-                app->m_didDragThisPress = false;
-                glfwGetCursorPos(window, &app->m_lastDragX, &app->m_lastDragY);
+                // If Before/After mode is enabled and the UI doesn't want
+                // the mouse, begin an interactive slider drag instead of
+                // starting a camera drag/pick. This lets the user click
+                // and drag in the 3D viewport to adjust the wipe.
+                if (app->m_scenario.beforeAfterEnabled && !ImGui::GetIO().WantCaptureMouse) {
+                    app->m_draggingBeforeAfter = true;
+                    double x, y; glfwGetCursorPos(window, &x, &y);
+                    int fbW, fbH; glfwGetFramebufferSize(window, &fbW, &fbH);
+                    if (fbW > 0) app->m_scenario.beforeAfterSlider = static_cast<float>(std::clamp(x / static_cast<double>(fbW), 0.0, 1.0));
+                } else {
+                    app->m_leftMouseDown = true;
+                    app->m_didDragThisPress = false;
+                    glfwGetCursorPos(window, &app->m_lastDragX, &app->m_lastDragY);
+                }
             } else if (action == GLFW_RELEASE) {
-                app->m_leftMouseDown = false;
-                if (!app->m_didDragThisPress && !ImGui::GetIO().WantCaptureMouse) {
-                    app->HandleZonePick();
+                // Stop either a camera drag or a before/after slider drag.
+                if (app->m_draggingBeforeAfter) {
+                    app->m_draggingBeforeAfter = false;
+                } else {
+                    app->m_leftMouseDown = false;
+                    if (!app->m_didDragThisPress && !ImGui::GetIO().WantCaptureMouse) {
+                        app->HandleZonePick();
+                    }
                 }
             }
         } else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
@@ -558,26 +600,65 @@ namespace twin {
             m_groundGrid.Draw();
 
             if (m_hasCityData) {
-                // Phase 9: buildings and green areas are colored by
-                // m_activeLayer -- their vertex dataValue was baked in by
-                // RebuildCityMeshForActiveLayer() (see CityMeshBuilder /
-                // HeatLayers.h / basic.frag's DataRamp). uBaseColor's rgb is
-                // ignored in this mode; only its alpha is used, so it's set
-                // to opaque white here.
-                m_gridShader.SetInt("uUseDataColor", 1);
-                m_gridShader.SetVec4("uBaseColor", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
-                m_city.buildings.Draw();
-                m_city.greenAreas.Draw();
+                // Phase 21: Before / After comparative rendering. If the
+                // UI enabled before/after mode and a baseline mesh exists
+                // (built from saved baseline zone metrics), render either
+                // side-by-side or a slider-wipe overlay. Both modes draw the
+                // same scene twice (baseline and current), reusing the same
+                // shader state/transform uniforms; we only change the
+                // viewport / scissor rectangle to clip the secondary draw.
+                auto drawScene = [&](const CityMeshes& scene) {
+                    m_gridShader.SetInt("uUseDataColor", 1);
+                    m_gridShader.SetVec4("uBaseColor", glm::vec4(1.0f, 1.0f, 1.0f, 1.0f));
+                    scene.buildings.Draw();
+                    scene.greenAreas.Draw();
 
-                // Roads and facility markers keep their flat Phase 3
-                // category colors -- neither belongs to a single zone the
-                // way a building or green area does.
-                m_gridShader.SetInt("uUseDataColor", 0);
-                m_gridShader.SetVec4("uBaseColor", glm::vec4(0.20f, 0.20f, 0.22f, 1.0f));  // roads: asphalt
-                m_city.roads.Draw();
+                    m_gridShader.SetInt("uUseDataColor", 0);
+                    m_gridShader.SetVec4("uBaseColor", glm::vec4(0.20f, 0.20f, 0.22f, 1.0f));
+                    scene.roads.Draw();
 
-                m_gridShader.SetVec4("uBaseColor", glm::vec4(0.85f, 0.35f, 0.15f, 1.0f));  // facility markers
-                m_city.facilities.Draw();
+                    m_gridShader.SetVec4("uBaseColor", glm::vec4(0.85f, 0.35f, 0.15f, 1.0f));
+                    scene.facilities.Draw();
+                };
+
+                bool useBeforeAfter = m_scenario.beforeAfterEnabled && m_cityBaseline.buildingCount > 0;
+                if (!useBeforeAfter) {
+                    drawScene(m_city);
+                } else {
+                    // Save current viewport
+                    GLint vp[4]; glGetIntegerv(GL_VIEWPORT, vp);
+                    int fullW = fbWidth;
+                    int fullH = fbHeight;
+
+                    if (m_scenario.beforeAfterMode == 0) {
+                        // Side-by-side: left = baseline, right = current
+                        int halfW = fullW / 2;
+
+                        // Left: baseline
+                        glViewport(0, 0, halfW, fullH);
+                        drawScene(m_cityBaseline);
+
+                        // Right: current
+                        glViewport(halfW, 0, fullW - halfW, fullH);
+                        drawScene(m_city);
+
+                        // Restore full viewport
+                        glViewport(vp[0], vp[1], vp[2], vp[3]);
+                    } else {
+                        // Slider wipe: draw baseline fully, then overlay current
+                        drawScene(m_cityBaseline);
+
+                        // Overlay current in a scissor rectangle whose width is
+                        // slider * fullW (0 => show none, 1 => show full)
+                        int scissorW = static_cast<int>(std::clamp(m_scenario.beforeAfterSlider, 0.0f, 1.0f) * static_cast<float>(fullW));
+                        if (scissorW > 0) {
+                            glEnable(GL_SCISSOR_TEST);
+                            glScissor(0, 0, scissorW, fullH);
+                            drawScene(m_city);
+                            glDisable(GL_SCISSOR_TEST);
+                        }
+                    }
+                }
             }
 
             if (m_hasHighlightMesh) {
@@ -699,6 +780,20 @@ namespace twin {
             return;
         }
 
+        // If user is dragging the Before/After slider in the viewport,
+        // update the scenario slider position directly from cursor X.
+        if (app->m_draggingBeforeAfter) {
+            int fbW, fbH; glfwGetFramebufferSize(window, &fbW, &fbH);
+            if (fbW > 0) {
+                float newVal = static_cast<float>(std::clamp(xpos / static_cast<double>(fbW), 0.0, 1.0));
+                app->m_scenario.beforeAfterSlider = newVal;
+            }
+            // While dragging the wipe we don't want camera panning to occur.
+            app->m_lastDragX = xpos;
+            app->m_lastDragY = ypos;
+            return;
+        }
+
         double dx = xpos - app->m_lastDragX;
         double dy = ypos - app->m_lastDragY;
         app->m_lastDragX = xpos;
@@ -762,6 +857,17 @@ namespace twin {
         case GLFW_KEY_O: app->SetCameraMode(CameraMode::Orbit);     break;
         case GLFW_KEY_T: app->SetCameraMode(CameraMode::TopDown);   break;
         case GLFW_KEY_I: app->SetCameraMode(CameraMode::Isometric); break;
+
+        case GLFW_KEY_B: {
+            // Toggle Before/After comparative mode (Phase 21)
+            app->m_scenario.beforeAfterEnabled = !app->m_scenario.beforeAfterEnabled;
+            LogInfo(std::string("Before/After mode ") + (app->m_scenario.beforeAfterEnabled ? "ENABLED" : "DISABLED"));
+            if (app->m_scenario.beforeAfterEnabled && app->m_hasCityData) {
+                // Ensure baseline snapshot is built
+                app->RebuildCityMeshForActiveLayer();
+            }
+            break;
+        }
 
         case GLFW_KEY_TAB: {
             // Only meaningful in FreeFly (see ApplyCursorModeForCurrentCamera) --

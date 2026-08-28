@@ -18,7 +18,9 @@ namespace twin {
         Temperature,
         FloodRisk,
         SatelliteEnvironment,
-        GreenPriority        // Phase 19: WHERE to add greenery
+        GreenPriority,        // Phase 19: WHERE to add greenery
+        LightPollution,       // Phase 25: Night light pollution layer
+        BirdEcologicalImpact  // Phase 25: Avian & ecological disturbance layer
     };
 
     // Console-legend text for the active layer (there's no ImGui panel yet —

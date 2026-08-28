@@ -167,6 +167,8 @@ namespace twin {
 
         gis::GISDataset m_gisDataset;
         CityMeshes m_city;
+        // Phase 21: baseline city mesh for Before/After comparison
+        CityMeshes m_cityBaseline;
         DigitalTwin m_digitalTwin;
         bool m_hasCityData{ false };
 
@@ -176,6 +178,11 @@ namespace twin {
         ScenarioState m_scenario;     // Phase 15
 
         DataLayer m_activeLayer{ DataLayer::HeatRisk };  // Phase 9
+
+        // Phase 21: Before/After UI state stored in m_scenario; the app
+        // keeps a baseline city mesh (m_cityBaseline) built from the
+        // DigitalTwin's saved baseline metrics so the renderer can draw
+        // side-by-side or do a slider wipe.
 
         int m_selectedZoneId{ -1 };  // Phase 10: -1 means nothing selected
 
@@ -205,6 +212,8 @@ namespace twin {
         bool m_didDragThisPress{ false };
         double m_lastDragX{ 0.0 };
         double m_lastDragY{ 0.0 };
+        // Phase 21: dragging state for interactive before/after slider
+        bool m_draggingBeforeAfter{ false };
     };
 
 }  // namespace twin

@@ -15,7 +15,9 @@ namespace twin {
             case DataLayer::Temperature:     return DataLayer::FloodRisk;
             case DataLayer::FloodRisk:       return DataLayer::SatelliteEnvironment;
             case DataLayer::SatelliteEnvironment: return DataLayer::GreenPriority;
-            case DataLayer::GreenPriority:   return DataLayer::HeatRisk;
+            case DataLayer::GreenPriority:   return DataLayer::LightPollution;
+            case DataLayer::LightPollution:  return DataLayer::BirdEcologicalImpact;
+            case DataLayer::BirdEcologicalImpact: return DataLayer::HeatRisk;
         }
         return DataLayer::HeatRisk;
     }
@@ -46,6 +48,10 @@ namespace twin {
                 return { "Green Infrastructure Priority",
                          "WHERE to add greenery (0-100, prototype)",
                          "Low need", "Urgent need" };
+            case DataLayer::LightPollution:
+                return { "Light Pollution", "satellite night light index 0..1", "Dark / Low Light", "High Light Intensity" };
+            case DataLayer::BirdEcologicalImpact:
+                return { "Bird & Ecological Disturbance", "habitat disturbance score 0-100", "Low Disturbance", "Critical Impact" };
         }
         return { "Unknown", "", "", "" };
     }
@@ -60,10 +66,6 @@ namespace twin {
             case DataLayer::Population: {
                 if (zone.populationIsPlaceholder) return kNoDataSentinel;
                 float range = maxPopDensity - minPopDensity;
-                // Mirrors HeatRiskModel::Compute()'s useFlatExposure fallback:
-                // no usable spread across zones (all identical, or too few
-                // with real data) means min-max normalization is undefined,
-                // so fall back to a neutral middle value.
                 if (range <= 0.0f) return 0.5f;
                 return std::clamp((zone.populationDensity - minPopDensity) / range, 0.0f, 1.0f);
             }
@@ -73,11 +75,9 @@ namespace twin {
                 return std::clamp(zone.heatExposureScore, 0.0f, 1.0f);
 
             case DataLayer::GreenCoverage:
-                // Always geometry-derived (Phase 3), never a placeholder.
                 return std::clamp(zone.greenCoverage, 0.0f, 1.0f);
 
             case DataLayer::BuildingDensity:
-                // Always geometry-derived (Phase 3), never a placeholder.
                 return std::clamp(zone.buildingDensity, 0.0f, 1.0f);
 
             case DataLayer::Temperature:
@@ -92,16 +92,20 @@ namespace twin {
                 return std::clamp(zone.floodRisk / 100.0f, 0.0f, 1.0f);
 
             case DataLayer::SatelliteEnvironment:
-                if (zone.satelliteEnvironmentIsPlaceholder) return kNoDataSentinel;
+                if (zone.satelliteIsPlaceholder) return kNoDataSentinel;
                 return std::clamp(zone.vegetationIndex, 0.0f, 1.0f);
 
             case DataLayer::GreenPriority:
-                // Always available: greenCoverage is Phase 3 geometry, so
-                // greenDeficit is always computable. greenInfraIsPlaceholder
-                // is cleared by GreenInfrastructureModel::Compute() once it
-                // has run (called in Application::Init() after heat risk).
                 if (zone.greenInfraIsPlaceholder) return kNoDataSentinel;
                 return std::clamp(zone.greenPriority / 100.0f, 0.0f, 1.0f);
+
+            case DataLayer::LightPollution:
+                if (zone.ecologicalIsPlaceholder) return kNoDataSentinel;
+                return std::clamp(zone.lightPollutionIndex, 0.0f, 1.0f);
+
+            case DataLayer::BirdEcologicalImpact:
+                if (zone.ecologicalIsPlaceholder) return kNoDataSentinel;
+                return std::clamp(zone.birdEcologicalDisturbance / 100.0f, 0.0f, 1.0f);
         }
         return kNoDataSentinel;
     }

@@ -230,7 +230,7 @@ namespace twin {
             Zone* zone = FindZone(sample.zoneId); if (!zone) continue;
             zone->vegetationIndex = std::clamp(sample.vegetationIndex, 0.0f, 1.0f);
             zone->builtUpIndex = std::clamp(sample.builtUpIndex, 0.0f, 1.0f);
-            zone->satelliteEnvironmentIsPlaceholder = false; ++matched;
+            zone->satelliteIsPlaceholder = false; ++matched;
         }
         LogInfo("DigitalTwin::ApplySatelliteEnvironment: applied " + std::to_string(matched) + " zones [" + environment.dataSource + "]" + (environment.IsSatelliteProcessed() ? "" : " (OSM environmental proxy, not satellite)"));
     }
@@ -363,17 +363,34 @@ namespace twin {
             ++modifiedCount;
         }
 
-        // Recompute environmental layer, risk, population exposure, priority, and green infrastructure
+        // Recompute environmental layer, risk, population exposure, priority, green infrastructure, and ecological impact
         ComputeEnvironmentalLayer();
         ComputeHeatRisk();
         ComputePopulationExposure();
         ComputePriority();
         ComputeGreenInfrastructure();
+        ComputeEcologicalImpact();
 
         LogInfo("DigitalTwin::ApplyInterventionScenario: applied intervention (veg: +" +
             std::to_string(static_cast<int>(vegDeltaPct * 100.0f)) + "%, shade: +" +
             std::to_string(static_cast<int>(shadeDeltaPct * 100.0f)) + "%) to " +
             std::to_string(modifiedCount) + " zone(s) — MODELLED SCENARIO ESTIMATE");
+    }
+
+    void DigitalTwin::ComputeEcologicalImpact() {
+        for (auto& zone : m_zones) {
+            // Light pollution index (0..1): high building density and paved surface generate high night light intensity
+            zone.lightPollutionIndex = std::clamp(zone.buildingDensity * 0.70f + zone.builtUpIndex * 0.30f, 0.0f, 1.0f);
+
+            // Bird & Ecological Disturbance (0..100): light pollution + high building density impacting urban bird habitats
+            float habitatSensitivity = zone.greenCoverage > 0.05f ? 1.2f : 0.8f;
+            zone.birdEcologicalDisturbance = std::clamp(
+                (zone.lightPollutionIndex * 0.55f + zone.buildingDensity * 0.30f + (1.0f - zone.greenCoverage) * 0.15f) * habitatSensitivity * 100.0f,
+                0.0f, 100.0f);
+            zone.ecologicalIsPlaceholder = false;
+        }
+        LogInfo("DigitalTwin::ComputeEcologicalImpact: light pollution and bird ecological disturbance computed for " +
+            std::to_string(m_zones.size()) + " zones");
     }
 
     Zone* DigitalTwin::FindZone(int zoneId) {
