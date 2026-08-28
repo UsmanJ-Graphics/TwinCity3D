@@ -92,6 +92,10 @@ namespace twin {
         // changes so green priority re-ranks under the new risk conditions.
         void ComputeGreenInfrastructure();
 
+        // Phase 20: What-If Intervention Engine. Applies simulated vegetation
+        // increase (+5%..+20%) and/or shade (+5%..+20%) to digital twin.
+        void ApplyInterventionScenario();
+
         // Phase 11: called when the user clicks an entry in the Top
         // Priority Zones panel (Inspector::RenderTopPriorityPanel). Selects
         // the zone (so the Inspector shows it next frame) and snaps the

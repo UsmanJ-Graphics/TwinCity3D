@@ -1,6 +1,7 @@
 #include "Inspector.h"
 
 #include <algorithm>
+#include <cmath>
 #include <cstdio>
 #include <string>
 
@@ -77,6 +78,22 @@ namespace twin {
             if (!zone.populationExposureIsPlaceholder) {
                 ImGui::Text("Exposed population: %d", zone.heatExposedPopulation);
                 ImGui::TextDisabled("Risk-weighted modelled estimate");
+            }
+
+            // Phase 20: What-If Intervention Comparison
+            if (zone.baselineHeatRisk > 0.0f && std::fabs(zone.heatRisk - zone.baselineHeatRisk) >= 0.1f) {
+                float change = zone.heatRisk - zone.baselineHeatRisk;
+                ImGui::Spacing();
+                ImGui::Separator();
+                ImGui::TextColored(ImVec4(0.20f, 0.85f, 0.40f, 1.0f), "WHAT-IF INTERVENTION");
+                ImGui::Text("BEFORE: %.0f / 100", zone.baselineHeatRisk);
+                ImGui::Text("AFTER:  %.0f / 100", zone.heatRisk);
+                if (change < 0.0f) {
+                    ImGui::TextColored(ImVec4(0.30f, 0.85f, 0.30f, 1.0f), "CHANGE: %.0f points", change);
+                } else {
+                    ImGui::TextColored(ImVec4(0.90f, 0.30f, 0.30f, 1.0f), "CHANGE: +%.0f points", change);
+                }
+                ImGui::TextDisabled("MODELLED SCENARIO ESTIMATE");
             }
         }
 

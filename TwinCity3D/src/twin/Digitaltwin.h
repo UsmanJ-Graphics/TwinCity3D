@@ -111,6 +111,15 @@ namespace twin {
             const GreenPriorityWeights& weights = GreenPriorityWeights{},
             float targetGreenCoverage = GreenInfrastructureModel::kDefaultTargetGreenCoverage);
 
+        // Phase 20: What-If Intervention Engine.
+        // Saves current heatRisk, priority, and greenCoverage as baseline metrics.
+        void SaveBaselineMetrics();
+
+        // Applies simulated vegetation increase (+5%..+20%) and/or shade (+5%..+20%)
+        // interventions to targetZoneId (-1 for city-wide), then re-evaluates
+        // microclimate burden, heat risk, population exposure, and priority.
+        void ApplyInterventionScenario(float vegDeltaPct, float shadeDeltaPct, int targetZoneId = -1);
+
         const std::vector<Zone>& Zones() const { return m_zones; }
         std::vector<Zone>& Zones() { return m_zones; }
 

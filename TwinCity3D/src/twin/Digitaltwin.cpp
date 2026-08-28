@@ -325,6 +325,57 @@ namespace twin {
             "— PROTOTYPE GREEN INFRASTRUCTURE INDICATOR, see GreenInfrastructureModel");
     }
 
+    void DigitalTwin::SaveBaselineMetrics() {
+        for (auto& zone : m_zones) {
+            zone.baselineHeatRisk = zone.heatRisk;
+            zone.baselinePriority = zone.priority;
+            // Only capture baseline green coverage if not already recorded
+            if (zone.baselineGreenCoverage <= 0.0f) {
+                zone.baselineGreenCoverage = zone.greenCoverage;
+            }
+        }
+        LogInfo("DigitalTwin::SaveBaselineMetrics: baseline metrics saved for " +
+            std::to_string(m_zones.size()) + " zones");
+    }
+
+    void DigitalTwin::ApplyInterventionScenario(float vegDeltaPct, float shadeDeltaPct, int targetZoneId) {
+        if (m_zones.empty()) return;
+
+        // Apply vegetation increase & shade cooling effect
+        int modifiedCount = 0;
+        for (auto& zone : m_zones) {
+            if (targetZoneId >= 0 && zone.id != targetZoneId) continue;
+
+            // Restore baseline green coverage first, then apply vegetation delta
+            if (zone.baselineGreenCoverage > 0.0f) {
+                zone.greenCoverage = std::clamp(zone.baselineGreenCoverage + vegDeltaPct, 0.0f, 1.0f);
+            } else {
+                zone.baselineGreenCoverage = zone.greenCoverage;
+                zone.greenCoverage = std::clamp(zone.greenCoverage + vegDeltaPct, 0.0f, 1.0f);
+            }
+
+            // Shade cooling effect: shade reduces solar heat gain, effectively cooling local temperature
+            // ~1.5°C reduction per 10% shade coverage in modelled urban microclimate proxy
+            if (shadeDeltaPct > 0.0f && !zone.temperatureIsPlaceholder) {
+                float shadeCoolingC = shadeDeltaPct * 15.0f; // e.g. +10% shade -> -1.5°C cooling offset
+                zone.temperature = std::max(15.0f, zone.temperature - shadeCoolingC);
+            }
+            ++modifiedCount;
+        }
+
+        // Recompute environmental layer, risk, population exposure, priority, and green infrastructure
+        ComputeEnvironmentalLayer();
+        ComputeHeatRisk();
+        ComputePopulationExposure();
+        ComputePriority();
+        ComputeGreenInfrastructure();
+
+        LogInfo("DigitalTwin::ApplyInterventionScenario: applied intervention (veg: +" +
+            std::to_string(static_cast<int>(vegDeltaPct * 100.0f)) + "%, shade: +" +
+            std::to_string(static_cast<int>(shadeDeltaPct * 100.0f)) + "%) to " +
+            std::to_string(modifiedCount) + " zone(s) — MODELLED SCENARIO ESTIMATE");
+    }
+
     Zone* DigitalTwin::FindZone(int zoneId) {
         auto it = std::find_if(m_zones.begin(), m_zones.end(),
             [zoneId](const Zone& z) { return z.id == zoneId; });

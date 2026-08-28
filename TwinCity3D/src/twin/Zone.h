@@ -73,6 +73,11 @@ namespace twin {
                                            // its own flag below, since it can be computed/cleared on
                                            // a different schedule (built on top of heat risk)
 
+        // --- Baseline Tracking (Phase 20 What-If Intervention) ---
+        float baselineHeatRisk{ 0.0f };      // stores initial heatRisk before scenario / intervention
+        float baselinePriority{ 0.0f };      // stores initial priority before scenario / intervention
+        float baselineGreenCoverage{ 0.0f }; // stores geometry-derived green coverage baseline
+
         // --- Priority (Phase 11) ---
         bool priorityIsPlaceholder{ true };  // false once PriorityModel scores this zone; requires
                                               // riskIsPlaceholder == false first (priority is built

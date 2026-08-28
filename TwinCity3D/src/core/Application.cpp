@@ -78,6 +78,7 @@ namespace twin {
         ComputeHeatRisk();
         ComputePriority();           // Phase 11: builds on ComputeHeatRisk(), must run after it
         ComputeGreenInfrastructure(); // Phase 19: WHERE-to-add-greenery layer, builds on heat risk
+        m_digitalTwin.SaveBaselineMetrics(); // Phase 20: save baseline heatRisk & greenCoverage before interventions
 
         // Phase 9: everything the color needs (heat risk, population,
         // green coverage, building density, temperature) is on the zones
@@ -284,6 +285,17 @@ namespace twin {
         m_digitalTwin.ComputeGreenInfrastructure();
     }
 
+    void Application::ApplyInterventionScenario() {
+        // Phase 20: What-If Intervention Engine
+        if (!m_scenario.interventionEnabled) return;
+        int targetZone = m_scenario.applyToSelectedZoneOnly ? m_selectedZoneId : -1;
+        m_digitalTwin.ApplyInterventionScenario(
+            m_scenario.vegetationDeltaPct,
+            m_scenario.shadeDeltaPct,
+            targetZone);
+        RebuildCityMeshForActiveLayer();
+    }
+
     void Application::ApplyHeatwaveScenario() {
         // ApplyWeather() recreates the current-condition, environmental-burden
         // temperature spread first, preventing slider adjustments from
@@ -300,7 +312,12 @@ namespace twin {
         ComputeHeatRisk();
         ComputePriority();
         ComputeGreenInfrastructure(); // Phase 19: re-rank green need under new scenario
-        RebuildCityMeshForActiveLayer();
+
+        if (m_scenario.interventionEnabled) {
+            ApplyInterventionScenario(); // Phase 20: apply what-if interventions on top of base state
+        } else {
+            RebuildCityMeshForActiveLayer();
+        }
     }
 
     void Application::LogPhase11PrioritySummary() {
@@ -604,11 +621,12 @@ namespace twin {
             // screen.
             HeatLegend::Render(m_activeLayer);
 
-            // Phase 15: changes propagate through temperature, risk,
-            // population exposure and priority before the next frame.
+            // Phase 15 & Phase 20: changes propagate through temperature, risk,
+            // population exposure, priority and interventions before the next frame.
             if (ScenarioPanel::Render(m_scenario, m_digitalTwin.Zones(),
                 m_weather.valid ? m_weather.currentTemperature : 0.0f,
-                m_weather.valid ? m_weather.precipitation : 0.0f)) {
+                m_weather.valid ? m_weather.precipitation : 0.0f,
+                m_selectedZoneId)) {
                 ApplyHeatwaveScenario();
             }
 
