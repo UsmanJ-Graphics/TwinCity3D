@@ -4,18 +4,18 @@
   "zones": [
     {
       "zone_id": 0,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 3256,
+      "population_density_per_km2": 19306.9
     },
     {
       "zone_id": 1,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 2149,
+      "population_density_per_km2": 12742.8
     },
     {
       "zone_id": 2,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 593,
+      "population_density_per_km2": 3516.3
     },
     {
       "zone_id": 3,
@@ -24,18 +24,18 @@
     },
     {
       "zone_id": 4,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 1567,
+      "population_density_per_km2": 9291.7
     },
     {
       "zone_id": 5,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 1403,
+      "population_density_per_km2": 8319.3
     },
     {
       "zone_id": 6,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 153,
+      "population_density_per_km2": 907.2
     },
     {
       "zone_id": 7,
@@ -44,23 +44,23 @@
     },
     {
       "zone_id": 8,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 1152,
+      "population_density_per_km2": 6830.9
     },
     {
       "zone_id": 9,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 3336,
+      "population_density_per_km2": 19781.3
     },
     {
       "zone_id": 10,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 762,
+      "population_density_per_km2": 4518.4
     },
     {
       "zone_id": 11,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 13,
+      "population_density_per_km2": 77.1
     },
     {
       "zone_id": 12,
@@ -69,23 +69,23 @@
     },
     {
       "zone_id": 13,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 594,
+      "population_density_per_km2": 3522.2
     },
     {
       "zone_id": 14,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 453,
+      "population_density_per_km2": 2686.1
     },
     {
       "zone_id": 15,
-      "population": 0,
-      "population_density_per_km2": 0.0
+      "population": 167,
+      "population_density_per_km2": 990.2
     }
   ],
   "_meta": {
-    "generated_at_utc": "2026-08-28T14:49:30Z",
-    "total_population": 0,
+    "generated_at_utc": "2026-08-28T15:58:35Z",
+    "total_population": 15598,
     "unassigned_buildings": 0,
     "notes": "Population is a MODELLED ESTIMATE derived from building footprint area, estimated floor count (height / 3m), and per-building-type occupancy assumptions -- NOT a census or a direct WorldPop pixel read. When a live WorldPop total is available, only the study-area TOTAL is real; the split across zones is still estimated. See docs/data_sources.md."
   }
