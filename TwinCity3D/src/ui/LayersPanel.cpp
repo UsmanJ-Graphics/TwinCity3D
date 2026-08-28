@@ -21,6 +21,7 @@ namespace twin {
             { DataLayer::GreenCoverage,   "Green Coverage" },
             { DataLayer::BuildingDensity, "Building Density" },
             { DataLayer::Temperature,     "Temperature" },
+            { DataLayer::FloodRisk,       "Flood Risk" },
         };
     }  // namespace
 
@@ -58,7 +59,7 @@ namespace twin {
         }
 
         ImGui::Spacing();
-        ImGui::TextDisabled("Keys [1-5] or [L] also switch layers.");
+        ImGui::TextDisabled("Keys [1-6] or [L] also switch layers.");
 
         ImGui::End();
         return clicked;

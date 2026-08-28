@@ -14,7 +14,8 @@ namespace twin {
         Population,
         GreenCoverage,
         BuildingDensity,
-        Temperature
+        Temperature,
+        FloodRisk
     };
 
     // Console-legend text for the active layer (there's no ImGui panel yet —

@@ -175,6 +175,25 @@ namespace twin {
             " zones — MODELLED SCENARIO, not an observed temperature");
     }
 
+    void DigitalTwin::ComputeFloodRisk(float rainfallMm) {
+        // A 5 mm event is negligible; 80 mm is the requested heavy-rainfall
+        // prototype reference. Spatial variation uses only OSM surface
+        // proxies, not asserted terrain, drainage, or water data.
+        const float stormIntensity = std::clamp((rainfallMm - 5.0f) / 75.0f, 0.0f, 1.0f);
+        for (auto& zone : m_zones) {
+            const float imperviousProxy = std::clamp(
+                zone.buildingDensity + 0.6f * zone.exposedSurfaceRatio, 0.0f, 1.0f);
+            const float surfaceSusceptibility = std::clamp(
+                0.55f * imperviousProxy + 0.45f * (1.0f - zone.greenCoverage), 0.0f, 1.0f);
+            zone.floodRisk = 100.0f * stormIntensity * (0.45f + 0.55f * surfaceSusceptibility);
+            zone.floodRiskClass = zone.floodRisk < 25.0f ? "Low" :
+                (zone.floodRisk < 50.0f ? "Moderate" : (zone.floodRisk < 75.0f ? "High" : "Critical"));
+            zone.floodRiskIsPlaceholder = false;
+        }
+        LogInfo("DigitalTwin::ComputeFloodRisk: rainfall=" + std::to_string(rainfallMm) +
+            " mm; OSM surface-susceptibility proxy — PROTOTYPE SCENARIO ESTIMATE, not a forecast");
+    }
+
     void DigitalTwin::ApplyPopulation(const PopulationData& population) {
         if (!population.valid) {
             LogWarn("DigitalTwin::ApplyPopulation: population data is not valid — "

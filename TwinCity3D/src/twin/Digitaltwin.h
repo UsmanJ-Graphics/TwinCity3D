@@ -50,6 +50,10 @@ namespace twin {
         // the in-memory scenario state used by the renderer and score models.
         void ApplyTemperatureOffset(float deltaC);
 
+        // Phase 16: lightweight rainfall/surface-susceptibility flood-risk
+        // visualization; intentionally not hydrological/elevation modelling.
+        void ComputeFloodRisk(float rainfallMm);
+
         // Phase 7: applies estimated/WorldPop-derived population to every
         // zone that has a matching entry in `population`. Matches by zone
         // id via FindZone() rather than assuming index alignment, since

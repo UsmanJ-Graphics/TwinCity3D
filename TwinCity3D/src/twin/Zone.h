@@ -79,6 +79,12 @@ namespace twin {
                                               // on top of heat risk, never fabricated independently)
         int priorityRank{ -1 };               // 1 = highest priority among scored zones; -1 = unranked
 
+        // Phase 16: geometry/rainfall-derived prototype visualization only;
+        // never a hydrological model or a flood forecast.
+        float floodRisk{ 0.0f };              // 0..100
+        std::string floodRiskClass;           // Low | Moderate | High | Critical
+        bool floodRiskIsPlaceholder{ true };
+
         float Width() const { return maxX - minX; }
         float Depth() const { return maxZ - minZ; }
         float Area() const { return Width() * Depth(); }

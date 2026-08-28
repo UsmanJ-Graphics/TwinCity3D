@@ -10,6 +10,7 @@ namespace twin {
             int criticalZones{ 0 };
             int highRiskPopulation{ 0 };
             int extremeRiskPopulation{ 0 };
+            int floodAffectedPopulation{ 0 };
         };
 
         ScenarioMetrics Measure(const std::vector<Zone>& zones) {
@@ -21,13 +22,15 @@ namespace twin {
                     result.highRiskPopulation += zone.population;
                 }
                 if (zone.heatRisk >= 90.0f) result.extremeRiskPopulation += zone.population;
+                if (!zone.floodRiskIsPlaceholder && zone.floodRisk >= 50.0f)
+                    result.floodAffectedPopulation += zone.population;
             }
             return result;
         }
     }
 
     bool ScenarioPanel::Render(ScenarioState& state, const std::vector<Zone>& zones,
-        float baselineTemperatureC) {
+        float baselineTemperatureC, float baselineRainfallMm) {
         bool changed = false;
         ImGui::SetNextWindowSize(ImVec2(560.0f, 0.0f), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowPos(ImVec2(300.0f, 510.0f), ImGuiCond_FirstUseEver);
@@ -41,13 +44,22 @@ namespace twin {
         ImGui::SameLine();
         if (ImGui::RadioButton("Current Conditions", !state.heatwaveEnabled)) {
             state.heatwaveEnabled = false;
+            state.floodEnabled = false;
             state.temperatureIncreaseC = 0.0f;
             changed = true;
         }
         ImGui::SameLine();
         if (ImGui::RadioButton("Heatwave", state.heatwaveEnabled)) {
             state.heatwaveEnabled = true;
+            state.floodEnabled = false;
             if (state.temperatureIncreaseC <= 0.0f) state.temperatureIncreaseC = 1.0f;
+            changed = true;
+        }
+        ImGui::SameLine();
+        if (ImGui::RadioButton("Flood", state.floodEnabled)) {
+            state.floodEnabled = true;
+            state.heatwaveEnabled = false;
+            state.rainfallScenarioMm = 80.0f;
             changed = true;
         }
 
@@ -67,6 +79,17 @@ namespace twin {
             ImGui::SliderFloat("Custom increase", &state.temperatureIncreaseC, 0.0f, 10.0f, "+%.1f C");
             if (previous != state.temperatureIncreaseC) changed = true;
         }
+        if (state.floodEnabled) {
+            ImGui::Separator();
+            ImGui::Text("Rainfall scenario");
+            if (ImGui::Button("Simulate Heavy Rainfall (80 mm)")) {
+                state.rainfallScenarioMm = 80.0f;
+                changed = true;
+            }
+            float previous = state.rainfallScenarioMm;
+            ImGui::SliderFloat("Rainfall", &state.rainfallScenarioMm, 0.0f, 150.0f, "%.0f mm");
+            if (previous != state.rainfallScenarioMm) changed = true;
+        }
 
         const float scenarioTemperature = baselineTemperatureC +
             (state.heatwaveEnabled ? state.temperatureIncreaseC : 0.0f);
@@ -81,6 +104,11 @@ namespace twin {
         ImGui::SameLine();
         ImGui::Text("Extreme: %d", metrics.extremeRiskPopulation);
         ImGui::TextDisabled("Scores update immediately. Prototype modelled scenario estimate.");
+        if (state.floodEnabled) {
+            ImGui::Text("Rainfall: %.0f mm (current %.1f mm)", state.rainfallScenarioMm, baselineRainfallMm);
+            ImGui::Text("Potentially affected population: %d", metrics.floodAffectedPopulation);
+            ImGui::TextDisabled("Flood risk uses rainfall plus OSM surface proxies; no hydrological model.");
+        }
 
         ImGui::End();
         return changed;

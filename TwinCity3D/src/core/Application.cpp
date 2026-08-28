@@ -72,6 +72,7 @@ namespace twin {
         LoadCityData();
         LoadWeather();
         LoadPopulation();
+        m_digitalTwin.ComputeFloodRisk(m_weather.valid ? m_weather.precipitation : 0.0f);
         ComputeHeatRisk();
         ComputePriority();  // Phase 11: builds on ComputeHeatRisk(), must run after it
 
@@ -270,6 +271,10 @@ namespace twin {
             m_digitalTwin.ApplyTemperatureOffset(m_scenario.temperatureIncreaseC);
         }
 
+        m_digitalTwin.ComputeFloodRisk(m_scenario.floodEnabled
+            ? m_scenario.rainfallScenarioMm
+            : (m_weather.valid ? m_weather.precipitation : 0.0f));
+
         ComputeHeatRisk();
         ComputePriority();
         RebuildCityMeshForActiveLayer();
@@ -360,7 +365,7 @@ namespace twin {
             " (blue -> green -> yellow -> orange -> red)");
         LogInfo("  Gray buildings/green areas = no real data for that zone yet (placeholder)");
         LogInfo("  Keys: [1] Heat Risk  [2] Population  [3] Green Coverage  "
-            "[4] Building Density  [5] Temperature  [L] cycle");
+            "[4] Building Density  [5] Temperature  [6] Flood Risk  [L] cycle");
         LogInfo("-------------------------------------------------");
     }
 
@@ -578,7 +583,8 @@ namespace twin {
             // Phase 15: changes propagate through temperature, risk,
             // population exposure and priority before the next frame.
             if (ScenarioPanel::Render(m_scenario, m_digitalTwin.Zones(),
-                m_weather.valid ? m_weather.currentTemperature : 0.0f)) {
+                m_weather.valid ? m_weather.currentTemperature : 0.0f,
+                m_weather.valid ? m_weather.precipitation : 0.0f)) {
                 ApplyHeatwaveScenario();
             }
 
@@ -708,6 +714,7 @@ namespace twin {
         case GLFW_KEY_3: app->SetActiveLayer(DataLayer::GreenCoverage); break;
         case GLFW_KEY_4: app->SetActiveLayer(DataLayer::BuildingDensity); break;
         case GLFW_KEY_5: app->SetActiveLayer(DataLayer::Temperature); break;
+        case GLFW_KEY_6: app->SetActiveLayer(DataLayer::FloodRisk); break;
         case GLFW_KEY_L: app->SetActiveLayer(NextDataLayer(app->m_activeLayer)); break;
 
         // Phase 12: camera-mode hotkeys. All four route through

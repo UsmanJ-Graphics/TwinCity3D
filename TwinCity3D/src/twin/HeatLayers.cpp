@@ -11,7 +11,8 @@ namespace twin {
             case DataLayer::Population:      return DataLayer::GreenCoverage;
             case DataLayer::GreenCoverage:   return DataLayer::BuildingDensity;
             case DataLayer::BuildingDensity: return DataLayer::Temperature;
-            case DataLayer::Temperature:     return DataLayer::HeatRisk;
+            case DataLayer::Temperature:     return DataLayer::FloodRisk;
+            case DataLayer::FloodRisk:       return DataLayer::HeatRisk;
         }
         return DataLayer::HeatRisk;
     }
@@ -32,6 +33,8 @@ namespace twin {
                          std::to_string(static_cast<int>(HeatRiskModel::kTempScoreMinC)) + "-" +
                          std::to_string(static_cast<int>(HeatRiskModel::kTempScoreMaxC)) + "C scale",
                          "Cooler", "Hotter" };
+            case DataLayer::FloodRisk:
+                return { "Flood Risk", "prototype score 0-100", "Low", "Critical" };
         }
         return { "Unknown", "", "", "" };
     }
@@ -68,6 +71,10 @@ namespace twin {
                     (zone.temperature - HeatRiskModel::kTempScoreMinC) /
                     (HeatRiskModel::kTempScoreMaxC - HeatRiskModel::kTempScoreMinC),
                     0.0f, 1.0f);
+
+            case DataLayer::FloodRisk:
+                if (zone.floodRiskIsPlaceholder) return kNoDataSentinel;
+                return std::clamp(zone.floodRisk / 100.0f, 0.0f, 1.0f);
         }
         return kNoDataSentinel;
     }
