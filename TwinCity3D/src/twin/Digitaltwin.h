@@ -5,6 +5,7 @@
 #include "SatelliteEnvironmentData.h"
 #include "HeatRiskModel.h"
 #include "PriorityModel.h"
+#include "GreenInfrastructureModel.h"
 #include "../gis/GISTypes.h"
 #include <vector>
 
@@ -96,6 +97,19 @@ namespace twin {
         // call again after a later scenario (Phase 12+) recomputes heat
         // risk under new conditions, to re-rank zones accordingly.
         void ComputePriority(const PriorityWeights& weights = PriorityWeights{});
+
+        // Phase 19: computes green infrastructure indicators (greenDeficit,
+        // greenPriority, greenPriorityRank, greenBenefitScore) on every zone.
+        // Works best after ComputeHeatRisk() has run (so it can factor heat
+        // risk and population exposure into the WHERE-to-add-greenery score),
+        // but degrades gracefully to a greenDeficit-only score if heat risk
+        // is still placeholder — greenCoverage is always available from Phase
+        // 3 geometry, so this never silently returns zero scores. Safe to
+        // call again after a scenario changes zone temperatures/risk scores
+        // to re-rank green infrastructure priorities under the new scenario.
+        void ComputeGreenInfrastructure(
+            const GreenPriorityWeights& weights = GreenPriorityWeights{},
+            float targetGreenCoverage = GreenInfrastructureModel::kDefaultTargetGreenCoverage);
 
         const std::vector<Zone>& Zones() const { return m_zones; }
         std::vector<Zone>& Zones() { return m_zones; }

@@ -9,8 +9,8 @@
 #include <iamgui/imgui_impl_glfw.h>
 #include <iamgui/imgui_impl_opengl3.h>
 #include <glm/gtc/matrix_transform.hpp>
-#include <cmath>  // std::fabs, used by Phase 12's drag-vs-click threshold
-#include <optional>  // Phase 13: LayersPanel::Render()'s return type
+#include <cmath>    // std::fabs, used by Phase 12's drag-vs-click threshold
+#include <optional> // Phase 13: LayersPanel::Render()'s return type
 
 namespace twin {
 
@@ -76,7 +76,8 @@ namespace twin {
         LoadSatelliteEnvironment();
         m_digitalTwin.ComputeFloodRisk(m_weather.valid ? m_weather.precipitation : 0.0f);
         ComputeHeatRisk();
-        ComputePriority();  // Phase 11: builds on ComputeHeatRisk(), must run after it
+        ComputePriority();           // Phase 11: builds on ComputeHeatRisk(), must run after it
+        ComputeGreenInfrastructure(); // Phase 19: WHERE-to-add-greenery layer, builds on heat risk
 
         // Phase 9: everything the color needs (heat risk, population,
         // green coverage, building density, temperature) is on the zones
@@ -85,8 +86,8 @@ namespace twin {
         // placeholder gray.
         RebuildCityMeshForActiveLayer();
 
-        LogInfo("Phase 0-11 initialization complete: window + camera + 3D city model + weather + "
-            "population + heat risk + priority ranking + data-driven layer visualization ready");
+        LogInfo("Phase 0-19 initialization complete: window + camera + 3D city model + weather + "
+            "population + heat risk + priority ranking + green infrastructure + data-driven layer visualization ready");
         LogInfo("Phase 12 camera controls: [F] Free-fly  [O] Orbit  [T] Top-down  [I] Isometric  "
             "-- Orbit: left-drag rotate, right-drag pan, scroll dolly. TopDown/Isometric: drag to pan. "
             "[R] hard reset to Free-fly.");
@@ -95,7 +96,7 @@ namespace twin {
 
     void Application::LoadCityData() {
         // Relative to the working directory the binary is run from (see
-        // README run instructions) — matches CMake's default runtime dir.
+        // README run instructions) -- matches CMake's default runtime dir.
         const std::string dataDir = "data/processed";
 
         if (!gis::GISLoader::Load(dataDir, m_gisDataset)) {
@@ -158,7 +159,7 @@ namespace twin {
 
     void Application::LogPhase5WeatherSummary() {
         // Console-only diagnostic for Phase 5, same role LogPhase4ZoneSummary()
-        // plays for Phase 4 — superseded once the dashboard (Phase 15) shows
+        // plays for Phase 4 -- superseded once the dashboard (Phase 15) shows
         // current temperature on screen.
         if (!m_weather.valid) {
             LogWarn("Phase 5 summary: no weather data loaded.");
@@ -193,7 +194,7 @@ namespace twin {
         }
 
         // Same pattern as LoadWeather(): always call ApplyPopulation(), even
-        // on failure — it checks m_population.valid itself and is a no-op
+        // on failure -- it checks m_population.valid itself and is a no-op
         // when false, keeping the "clear placeholders when data is good"
         // logic in DigitalTwin rather than duplicating the check here too.
         m_digitalTwin.ApplyPopulation(m_population);
@@ -211,7 +212,7 @@ namespace twin {
 
     void Application::LogPhase7PopulationSummary() {
         // Console-only diagnostic for Phase 7, same role LogPhase5WeatherSummary()
-        // plays for Phase 5 — superseded once the dashboard (Phase 15) shows
+        // plays for Phase 5 -- superseded once the dashboard (Phase 15) shows
         // high-risk population exposure on screen.
         if (!m_population.valid) {
             LogWarn("Phase 7 summary: no population data loaded.");
@@ -219,7 +220,7 @@ namespace twin {
         }
 
         LogInfo("Phase 7 summary: source=" + m_population.dataSource +
-            (m_population.IsLive() ? "" : " (estimated — not a measured/census figure)") +
+            (m_population.IsLive() ? "" : " (estimated -- not a measured/census figure)") +
             ", method=" + m_population.method +
             ", study-area total population=" + std::to_string(m_population.totalPopulation));
 
@@ -233,7 +234,7 @@ namespace twin {
     }
 
     void Application::ComputeHeatRisk() {
-        // Phase 8: no file to load — this recombines fields already present
+        // Phase 8: no file to load -- this recombines fields already present
         // on each zone (temperature from Phase 5/6, buildingDensity/
         // greenCoverage from Phase 3, populationDensity from Phase 7) into an
         // explainable heat-risk score. Uses HeatRiskWeights{} defaults (0.35
@@ -248,7 +249,7 @@ namespace twin {
 
     void Application::LogPhase8HeatRiskSummary() {
         // Console-only diagnostic for Phase 8, same role LogPhase7PopulationSummary()
-        // plays for Phase 7 — superseded once the dashboard (Phase 15) and the
+        // plays for Phase 7 -- superseded once the dashboard (Phase 15) and the
         // Zone Inspector (Phase 10) show heat risk on screen.
         LogInfo("---- Phase 8 heat risk ----");
         int cleared = 0;
@@ -261,17 +262,26 @@ namespace twin {
         }
         LogInfo("Phase 8 summary: heat risk computed on " + std::to_string(cleared) + "/" +
             std::to_string(m_digitalTwin.Zones().size()) +
-            " zones — PROTOTYPE DECISION-SUPPORT SCORE, not a validated medical/scientific model");
+            " zones -- PROTOTYPE DECISION-SUPPORT SCORE, not a validated medical/scientific model");
         LogInfo("----------------------------");
     }
 
     void Application::ComputePriority() {
-        // Phase 11: no new external data — recombines heatRisk (Phase 8),
+        // Phase 11: no new external data -- recombines heatRisk (Phase 8),
         // environmentalHeatBurden (Phase 6), and population (Phase 7)
         // already present on each zone into an explainable priority score +
         // rank. See DigitalTwin::ComputePriority()/PriorityModel.
         m_digitalTwin.ComputePriority();
         LogPhase11PrioritySummary();
+    }
+
+    void Application::ComputeGreenInfrastructure() {
+        // Phase 19: delegates entirely to DigitalTwin::ComputeGreenInfrastructure
+        // which calls GreenInfrastructureModel::Compute. greenCoverage is always
+        // real (Phase 3 geometry), so this never silently returns zero scores.
+        // Re-run after ComputePriority() so heat risk is available for the
+        // WHERE-to-add-greenery score's heatRisk sub-component.
+        m_digitalTwin.ComputeGreenInfrastructure();
     }
 
     void Application::ApplyHeatwaveScenario() {
@@ -289,12 +299,13 @@ namespace twin {
 
         ComputeHeatRisk();
         ComputePriority();
+        ComputeGreenInfrastructure(); // Phase 19: re-rank green need under new scenario
         RebuildCityMeshForActiveLayer();
     }
 
     void Application::LogPhase11PrioritySummary() {
         // Console-only diagnostic for Phase 11, same role LogPhase8HeatRiskSummary()
-        // plays for Phase 8 — superseded on-screen by Inspector's PRIORITY
+        // plays for Phase 8 -- superseded on-screen by Inspector's PRIORITY
         // section and the Top Priority Zones panel, both added this phase.
         LogInfo("---- Phase 11 priority ranking ----");
         for (const auto& zone : m_digitalTwin.Zones()) {
@@ -313,7 +324,7 @@ namespace twin {
         const Zone* zone = m_digitalTwin.FindZone(zoneId);
         if (!zone) {
             LogWarn("Application::FocusCameraOnZone: zone id=" + std::to_string(zoneId) +
-                " not found — ignoring");
+                " not found -- ignoring");
             return;
         }
 
@@ -368,7 +379,7 @@ namespace twin {
     }
 
     void Application::LogActiveLayerLegend() {
-        // Console-only "legend" for Phase 9 — same temporary-diagnostic role
+        // Console-only "legend" for Phase 9 -- same temporary-diagnostic role
         // as LogPhase4/5/7/8*Summary(), superseded by a real on-screen
         // legend once the dashboard/layer-toggle UI exists (Phase 15/16).
         LayerInfo info = DescribeLayer(m_activeLayer);
@@ -377,7 +388,8 @@ namespace twin {
             " (blue -> green -> yellow -> orange -> red)");
         LogInfo("  Gray buildings/green areas = no real data for that zone yet (placeholder)");
         LogInfo("  Keys: [1] Heat Risk  [2] Population  [3] Population Exposure  "
-            "[4] Green Coverage  [5] Building Density  [6] Temperature  [7] Flood Risk  [8] Environment  [L] cycle");
+            "[4] Green Coverage  [5] Building Density  [6] Temperature  [7] Flood Risk  "
+            "[8] Environment  [9] Green Priority  [L] cycle");
         LogInfo("-------------------------------------------------");
     }
 
@@ -407,7 +419,7 @@ namespace twin {
         double pickX, pickY;
         bool cursorCaptured = (m_camera.GetMode() == CameraMode::FreeFly) && m_mouseLookEnabled;
         if (cursorCaptured) {
-            // Cursor is captured/hidden for FPS-style look — there's no
+            // Cursor is captured/hidden for FPS-style look -- there's no
             // meaningful click position, so pick whatever the camera is
             // actually aimed at (screen-center crosshair).
             pickX = fbWidth / 2.0;
@@ -415,7 +427,7 @@ namespace twin {
         }
         else {
             // Cursor is free (TAB toggled it off, or we're in Orbit/
-            // TopDown/Isometric where the cursor is always free) — pick
+            // TopDown/Isometric where the cursor is always free) -- pick
             // whatever's actually under the visible pointer, like a normal
             // UI click.
             glfwGetCursorPos(m_window, &pickX, &pickY);
@@ -432,7 +444,7 @@ namespace twin {
         auto* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
         if (!app) return;
 
-        // FreeFly picks on left press, same as Phase 10 always did — the
+        // FreeFly picks on left press, same as Phase 10 always did -- the
         // cursor is captured there, so there's no drag gesture to confuse
         // it with (CursorPosCallback bails out of the Orbit/TopDown/
         // Isometric drag path entirely while in FreeFly).
@@ -507,7 +519,7 @@ namespace twin {
                 : nullptr;
 
             // Phase 14: rebuild the highlight-frame mesh only when the
-            // selection actually changed since last frame — see the
+            // selection actually changed since last frame -- see the
             // m_highlightMeshZoneId doc comment in Application.h.
             if (m_selectedZoneId != m_highlightMeshZoneId) {
                 m_highlightMeshZoneId = m_selectedZoneId;
@@ -530,7 +542,7 @@ namespace twin {
 
             if (m_hasCityData) {
                 // Phase 9: buildings and green areas are colored by
-                // m_activeLayer — their vertex dataValue was baked in by
+                // m_activeLayer -- their vertex dataValue was baked in by
                 // RebuildCityMeshForActiveLayer() (see CityMeshBuilder /
                 // HeatLayers.h / basic.frag's DataRamp). uBaseColor's rgb is
                 // ignored in this mode; only its alpha is used, so it's set
@@ -541,7 +553,7 @@ namespace twin {
                 m_city.greenAreas.Draw();
 
                 // Roads and facility markers keep their flat Phase 3
-                // category colors — neither belongs to a single zone the
+                // category colors -- neither belongs to a single zone the
                 // way a building or green area does.
                 m_gridShader.SetInt("uUseDataColor", 0);
                 m_gridShader.SetVec4("uBaseColor", glm::vec4(0.20f, 0.20f, 0.22f, 1.0f));  // roads: asphalt
@@ -555,7 +567,7 @@ namespace twin {
                 // Phase 14: gentle pulse between two brightness levels so
                 // the selected zone reads clearly against the data-layer
                 // colors on the buildings inside it, without the animation
-                // itself becoming the focal point — master spec: "do not
+                // itself becoming the focal point -- master spec: "do not
                 // make the animation distracting."
                 float pulse = 0.75f + 0.25f * std::sin(currentFrameTime * 2.0f);
                 m_gridShader.SetInt("uUseDataColor", 0);
@@ -568,7 +580,7 @@ namespace twin {
             Inspector::Render(selectedZone);
 
             // Phase 11: Top Priority Zones panel. Clicking an entry selects
-            // that zone and snaps the camera to it — the Inspector above
+            // that zone and snaps the camera to it -- the Inspector above
             // will show it starting next frame since m_selectedZoneId is
             // already updated by the time this frame finishes.
             int clickedPriorityZoneId = Inspector::RenderTopPriorityPanel(m_digitalTwin.Zones());
@@ -576,7 +588,7 @@ namespace twin {
                 FocusCameraOnZone(clickedPriorityZoneId);
             }
 
-            // Phase 13: City Layers panel — same underlying switch as the
+            // Phase 13: City Layers panel -- same underlying switch as the
             // Phase 9 hotkeys (1-5, L), just clickable. A click here goes
             // through the same SetActiveLayer() as the keyboard path, so
             // the mesh rebuild and console legend log stay identical
@@ -587,7 +599,7 @@ namespace twin {
             }
 
             // Phase 14: legend for whichever layer LayersPanel/the hotkeys
-            // just selected — always reflects m_activeLayer, so it can
+            // just selected -- always reflects m_activeLayer, so it can
             // never show a stale gradient for a layer that's no longer on
             // screen.
             HeatLegend::Render(m_activeLayer);
@@ -598,6 +610,14 @@ namespace twin {
                 m_weather.valid ? m_weather.currentTemperature : 0.0f,
                 m_weather.valid ? m_weather.precipitation : 0.0f)) {
                 ApplyHeatwaveScenario();
+            }
+
+            // Phase 19: Green Infrastructure panel.
+            // Clicking an entry selects the zone + focuses the camera, same
+            // contract as Inspector::RenderTopPriorityPanel.
+            int clickedGreenZoneId = GreenInfrastructurePanel::Render(m_digitalTwin.Zones());
+            if (clickedGreenZoneId >= 0) {
+                FocusCameraOnZone(clickedGreenZoneId);
             }
 
             ImGui::Render();
@@ -666,7 +686,7 @@ namespace twin {
         }
 
         // Phase 12: Orbit/TopDown/Isometric drive off a normal, visible
-        // cursor instead — the delta below is a real on-screen pixel
+        // cursor instead -- the delta below is a real on-screen pixel
         // delta since the last frame, not an unbounded FPS-look delta.
         // Skipped while an ImGui panel wants the mouse, so dragging over
         // e.g. the Top Priority Zones list doesn't also spin the camera.
@@ -684,14 +704,14 @@ namespace twin {
         if (!app->m_leftMouseDown && !app->m_rightMouseDown) return;
 
         // A few pixels of movement while a button is held counts as a real
-        // drag, not a click — used by MouseButtonCallback to decide whether
+        // drag, not a click -- used by MouseButtonCallback to decide whether
         // releasing the left button should also fire a zone pick.
         if (std::fabs(dx) + std::fabs(dy) > 3.0) {
             app->m_didDragThisPress = true;
         }
 
         if (mode == CameraMode::Orbit) {
-            // Left-drag rotates, right-drag pans — see Camera.h's
+            // Left-drag rotates, right-drag pans -- see Camera.h's
             // OrbitDrag()/PanDrag() doc comments.
             if (app->m_leftMouseDown) {
                 app->m_camera.OrbitDrag(static_cast<float>(dx), static_cast<float>(dy));
@@ -712,7 +732,7 @@ namespace twin {
     }
 
     void Application::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-        // Phase 9: layer toggles. These are discrete (non-held) key events —
+        // Phase 9: layer toggles. These are discrete (non-held) key events --
         // continuous movement stays in ProcessInput()'s per-frame polling,
         // same split this function's original comment already called for.
         if (action != GLFW_PRESS) return;
@@ -729,6 +749,7 @@ namespace twin {
         case GLFW_KEY_6: app->SetActiveLayer(DataLayer::Temperature); break;
         case GLFW_KEY_7: app->SetActiveLayer(DataLayer::FloodRisk); break;
         case GLFW_KEY_8: app->SetActiveLayer(DataLayer::SatelliteEnvironment); break;
+        case GLFW_KEY_9: app->SetActiveLayer(DataLayer::GreenPriority); break;  // Phase 19
         case GLFW_KEY_L: app->SetActiveLayer(NextDataLayer(app->m_activeLayer)); break;
 
         // Phase 12: camera-mode hotkeys. All four route through
@@ -740,7 +761,7 @@ namespace twin {
         case GLFW_KEY_I: app->SetCameraMode(CameraMode::Isometric); break;
 
         case GLFW_KEY_TAB: {
-            // Only meaningful in FreeFly (see ApplyCursorModeForCurrentCamera) —
+            // Only meaningful in FreeFly (see ApplyCursorModeForCurrentCamera) --
             // every other mode already runs with a free cursor. Still safe
             // to toggle the flag regardless of current mode: it simply takes
             // effect next time the camera is FreeFly.

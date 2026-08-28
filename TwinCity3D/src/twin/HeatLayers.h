@@ -17,7 +17,8 @@ namespace twin {
         BuildingDensity,
         Temperature,
         FloodRisk,
-        SatelliteEnvironment
+        SatelliteEnvironment,
+        GreenPriority        // Phase 19: WHERE to add greenery
     };
 
     // Console-legend text for the active layer (there's no ImGui panel yet —

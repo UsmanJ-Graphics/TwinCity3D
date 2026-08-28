@@ -100,6 +100,32 @@ namespace twin {
         std::string floodRiskClass;           // Low | Moderate | High | Critical
         bool floodRiskIsPlaceholder{ true };
 
+        // Phase 19: green infrastructure analysis — WHERE to add greenery.
+        //
+        // greenDeficit: how far below the study-area mean green coverage this
+        //   zone is, normalized 0..1 (0 = at or above the mean; 1 = maximum
+        //   deficit). Never an absolute hectare target — only meaningful
+        //   relative to other zones in this study area.
+        // greenPriority: composite 0..100 score that answers WHERE additional
+        //   vegetation would provide the greatest benefit. Combines green
+        //   deficit, heat risk, and population exposure so a cool, low-
+        //   population zone with little greenery doesn't outrank a hot,
+        //   densely populated one. See GreenInfrastructureModel.
+        // greenPriorityRank: 1 = greatest green-infrastructure need; -1 = not
+        //   yet ranked.
+        // greenBenefitScore: 0..1 prototype estimate of heat-risk reduction
+        //   potential if vegetation coverage were brought to the study-area
+        //   target. Purely modelled — see GreenInfrastructureModel for the
+        //   derivation and its explicit "MODELLED SCENARIO ESTIMATE" caveat.
+        //
+        // All Phase 19 fields are prototype decision-support indicators.
+        // Never present greenPriority as a validated ecological score.
+        float greenDeficit{ 0.0f };
+        float greenPriority{ 0.0f };          // 0..100
+        int   greenPriorityRank{ -1 };        // 1 = highest green need
+        float greenBenefitScore{ 0.0f };      // 0..1 prototype heat-reduction potential
+        bool  greenInfraIsPlaceholder{ true };
+
         float Width() const { return maxX - minX; }
         float Depth() const { return maxZ - minZ; }
         float Area() const { return Width() * Depth(); }

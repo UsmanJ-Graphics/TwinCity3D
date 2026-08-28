@@ -20,6 +20,7 @@
 #include "../ui/LayersPanel.h"
 #include "../ui/HeatLegend.h"
 #include "../ui/ScenarioPanel.h"
+#include "../ui/GreenInfrastructurePanel.h"
 #include "../twin/SelectionHighlight.h"
 
 namespace twin {
@@ -85,6 +86,11 @@ namespace twin {
         // Phase 15: restore the weather baseline, apply the selected
         // heatwave offset, and refresh all dependent decision layers.
         void ApplyHeatwaveScenario();
+
+        // Phase 19: computes green infrastructure indicators on all zones
+        // after heat risk is ready. Also re-runs whenever the scenario
+        // changes so green priority re-ranks under the new risk conditions.
+        void ComputeGreenInfrastructure();
 
         // Phase 11: called when the user clicks an entry in the Top
         // Priority Zones panel (Inspector::RenderTopPriorityPanel). Selects

@@ -24,6 +24,7 @@ namespace twin {
             { DataLayer::Temperature,     "Temperature" },
             { DataLayer::FloodRisk,       "Flood Risk" },
             { DataLayer::SatelliteEnvironment, "Environment (proxy)" },
+            { DataLayer::GreenPriority,   "Green Infra Priority" },  // Phase 19
         };
     }  // namespace
 
@@ -61,7 +62,7 @@ namespace twin {
         }
 
         ImGui::Spacing();
-        ImGui::TextDisabled("Keys [1-8] or [L] also switch layers.");
+        ImGui::TextDisabled("Keys [1-9] or [L] also switch layers.");
 
         ImGui::End();
         return clicked;

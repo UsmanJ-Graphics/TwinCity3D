@@ -303,6 +303,28 @@ namespace twin {
             "— PROTOTYPE DECISION-SUPPORT PRIORITY, see PriorityModel");
     }
 
+    void DigitalTwin::ComputeGreenInfrastructure(
+        const GreenPriorityWeights& weights,
+        float targetGreenCoverage) {
+
+        if (m_zones.empty()) {
+            LogWarn("DigitalTwin::ComputeGreenInfrastructure: no zones to analyse");
+            return;
+        }
+
+        GreenInfrastructureModel::Compute(m_zones, weights, targetGreenCoverage);
+
+        int scored = 0;
+        for (const auto& z : m_zones) {
+            if (!z.greenInfraIsPlaceholder) ++scored;
+        }
+
+        LogInfo("DigitalTwin::ComputeGreenInfrastructure: green infrastructure "
+            "analysed on " + std::to_string(scored) + "/" +
+            std::to_string(m_zones.size()) + " zones "
+            "— PROTOTYPE GREEN INFRASTRUCTURE INDICATOR, see GreenInfrastructureModel");
+    }
+
     Zone* DigitalTwin::FindZone(int zoneId) {
         auto it = std::find_if(m_zones.begin(), m_zones.end(),
             [zoneId](const Zone& z) { return z.id == zoneId; });
