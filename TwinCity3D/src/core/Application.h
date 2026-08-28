@@ -16,6 +16,7 @@
 #include "../twin/PopulationData.h"
 #include "../twin/HeatLayers.h"
 #include "../ui/Inspector.h"
+#include "../ui/LayersPanel.h"
 
 namespace twin {
 
@@ -32,8 +33,15 @@ namespace twin {
     // ImGui-based Inspector panel every frame. Phase 11 adds priority
     // ranking (ComputePriority(), delegated to DigitalTwin/PriorityModel)
     // and the Top Priority Zones panel: clicking a ranked entry selects that
-    // zone and snaps the camera to it (FocusCameraOnZone()). Scenario/
-    // decision-dashboard panels attach in later phases.
+    // zone and snaps the camera to it (FocusCameraOnZone()). Phase 12 wires
+    // Camera's FreeFly/Orbit/TopDown/Isometric modes into real input
+    // (hotkeys F/O/T/I, drag-to-orbit/pan) and calls Camera::Tick() every
+    // frame so its smooth transitions actually run. Phase 13 adds an
+    // on-screen "CITY LAYERS" panel (ui/LayersPanel) as an alternative to
+    // the Phase 9 keyboard shortcuts for the same m_activeLayer switch —
+    // no new data source, purely a second way to trigger
+    // SetActiveLayer(). Scenario/decision-dashboard panels attach in later
+    // phases.
     class Application {
     public:
         Application(int width, int height, const std::string& title)

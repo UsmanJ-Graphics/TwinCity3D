@@ -170,6 +170,7 @@
     <ClCompile Include="src\twin\PriorityModel.cpp" />
     <ClCompile Include="src\twin\WeatherLoader.cpp" />
     <ClCompile Include="src\ui\Inspector.cpp" />
+    <ClCompile Include="src\ui\LayersPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\iamgui\imconfig.h" />
@@ -203,6 +204,7 @@
     <ClInclude Include="src\twin\WeatherLoader.h" />
     <ClInclude Include="src\twin\Zone.h" />
     <ClInclude Include="src\ui\Inspector.h" />
+    <ClInclude Include="src\ui\LayersPanel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

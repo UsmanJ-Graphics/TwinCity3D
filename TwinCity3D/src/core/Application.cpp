@@ -9,6 +9,7 @@
 #include <iamgui/imgui_impl_opengl3.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include <cmath>  // std::fabs, used by Phase 12's drag-vs-click threshold
+#include <optional>  // Phase 13: LayersPanel::Render()'s return type
 
 namespace twin {
 
@@ -422,20 +423,17 @@ namespace twin {
                 app->m_leftMouseDown = true;
                 app->m_didDragThisPress = false;
                 glfwGetCursorPos(window, &app->m_lastDragX, &app->m_lastDragY);
-            }
-            else if (action == GLFW_RELEASE) {
+            } else if (action == GLFW_RELEASE) {
                 app->m_leftMouseDown = false;
                 if (!app->m_didDragThisPress && !ImGui::GetIO().WantCaptureMouse) {
                     app->HandleZonePick();
                 }
             }
-        }
-        else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+        } else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
             if (action == GLFW_PRESS) {
                 app->m_rightMouseDown = true;
                 glfwGetCursorPos(window, &app->m_lastDragX, &app->m_lastDragY);
-            }
-            else if (action == GLFW_RELEASE) {
+            } else if (action == GLFW_RELEASE) {
                 app->m_rightMouseDown = false;
             }
         }
@@ -516,6 +514,16 @@ namespace twin {
             int clickedPriorityZoneId = Inspector::RenderTopPriorityPanel(m_digitalTwin.Zones());
             if (clickedPriorityZoneId >= 0) {
                 FocusCameraOnZone(clickedPriorityZoneId);
+            }
+
+            // Phase 13: City Layers panel — same underlying switch as the
+            // Phase 9 hotkeys (1-5, L), just clickable. A click here goes
+            // through the same SetActiveLayer() as the keyboard path, so
+            // the mesh rebuild and console legend log stay identical
+            // regardless of which input triggered it.
+            std::optional<DataLayer> clickedLayer = LayersPanel::Render(m_activeLayer);
+            if (clickedLayer.has_value()) {
+                SetActiveLayer(*clickedLayer);
             }
 
             ImGui::Render();
@@ -613,12 +621,10 @@ namespace twin {
             // OrbitDrag()/PanDrag() doc comments.
             if (app->m_leftMouseDown) {
                 app->m_camera.OrbitDrag(static_cast<float>(dx), static_cast<float>(dy));
-            }
-            else if (app->m_rightMouseDown) {
+            } else if (app->m_rightMouseDown) {
                 app->m_camera.PanDrag(static_cast<float>(dx), static_cast<float>(dy));
             }
-        }
-        else {
+        } else {
             // TopDown/Isometric hold a fixed viewing angle by design
             // (Camera.h), so either button just pans.
             app->m_camera.PanDrag(static_cast<float>(dx), static_cast<float>(dy));
@@ -648,9 +654,9 @@ namespace twin {
         case GLFW_KEY_5: app->SetActiveLayer(DataLayer::Temperature); break;
         case GLFW_KEY_L: app->SetActiveLayer(NextDataLayer(app->m_activeLayer)); break;
 
-            // Phase 12: camera-mode hotkeys. All four route through
-            // SetCameraMode() so the cursor capture state stays correct and
-            // the switch always animates (Camera::SetMode()).
+        // Phase 12: camera-mode hotkeys. All four route through
+        // SetCameraMode() so the cursor capture state stays correct and
+        // the switch always animates (Camera::SetMode()).
         case GLFW_KEY_F: app->SetCameraMode(CameraMode::FreeFly);   break;
         case GLFW_KEY_O: app->SetCameraMode(CameraMode::Orbit);     break;
         case GLFW_KEY_T: app->SetCameraMode(CameraMode::TopDown);   break;
