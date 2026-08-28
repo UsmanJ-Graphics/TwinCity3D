@@ -17,6 +17,8 @@
 #include "../twin/HeatLayers.h"
 #include "../ui/Inspector.h"
 #include "../ui/LayersPanel.h"
+#include "../ui/HeatLegend.h"
+#include "../twin/SelectionHighlight.h"
 
 namespace twin {
 
@@ -41,7 +43,11 @@ namespace twin {
     // the Phase 9 keyboard shortcuts for the same m_activeLayer switch —
     // no new data source, purely a second way to trigger
     // SetActiveLayer(). Scenario/decision-dashboard panels attach in later
-    // phases.
+    // phases. Phase 14 adds the on-screen Legend panel (ui/HeatLegend,
+    // hardcoded to match basic.frag's DataRamp) and in-3D selected-zone
+    // highlighting (twin/SelectionHighlight): before this, a selection was
+    // only visible as text in the Inspector, with nothing in the 3D view
+    // itself showing WHERE the selected zone is.
     class Application {
     public:
         Application(int width, int height, const std::string& title)
@@ -152,6 +158,16 @@ namespace twin {
         DataLayer m_activeLayer{ DataLayer::HeatRisk };  // Phase 9
 
         int m_selectedZoneId{ -1 };  // Phase 10: -1 means nothing selected
+
+        // Phase 14: cached highlight-frame mesh for the selected zone.
+        // Rebuilt lazily in Run() only when m_selectedZoneId actually
+        // changes (see SelectionHighlight::Build) rather than every frame —
+        // matches the Phase 19 "don't recreate meshes every frame" rule,
+        // same reasoning RebuildCityMeshForActiveLayer() already follows
+        // for the much bigger city meshes.
+        Mesh m_selectionHighlightMesh;
+        int m_highlightMeshZoneId{ -2 };  // deliberately != initial m_selectedZoneId(-1) so the first frame always builds
+        bool m_hasHighlightMesh{ false };
 
         bool m_firstMouse{ true };
         float m_lastMouseX{ 0.0f };

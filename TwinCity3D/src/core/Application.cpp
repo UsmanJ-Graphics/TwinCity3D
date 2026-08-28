@@ -468,6 +468,26 @@ namespace twin {
             glm::mat4 projection = m_camera.GetProjectionMatrix(aspect);
             glm::mat4 model = glm::mat4(1.0f);
 
+            // Phase 14: looked up once here (moved up from where the
+            // Inspector used to compute it) so both the 3D highlight below
+            // and the Inspector panel further down use the same lookup.
+            const Zone* selectedZone = m_selectedZoneId >= 0
+                ? m_digitalTwin.FindZone(m_selectedZoneId)
+                : nullptr;
+
+            // Phase 14: rebuild the highlight-frame mesh only when the
+            // selection actually changed since last frame — see the
+            // m_highlightMeshZoneId doc comment in Application.h.
+            if (m_selectedZoneId != m_highlightMeshZoneId) {
+                m_highlightMeshZoneId = m_selectedZoneId;
+                if (selectedZone) {
+                    m_selectionHighlightMesh = SelectionHighlight::Build(*selectedZone);
+                    m_hasHighlightMesh = true;
+                } else {
+                    m_hasHighlightMesh = false;
+                }
+            }
+
             m_gridShader.Use();
             m_gridShader.SetMat4("uModel", model);
             m_gridShader.SetMat4("uView", view);
@@ -500,11 +520,20 @@ namespace twin {
                 m_city.facilities.Draw();
             }
 
+            if (m_hasHighlightMesh) {
+                // Phase 14: gentle pulse between two brightness levels so
+                // the selected zone reads clearly against the data-layer
+                // colors on the buildings inside it, without the animation
+                // itself becoming the focal point — master spec: "do not
+                // make the animation distracting."
+                float pulse = 0.75f + 0.25f * std::sin(currentFrameTime * 2.0f);
+                m_gridShader.SetInt("uUseDataColor", 0);
+                m_gridShader.SetVec4("uBaseColor", glm::vec4(pulse, pulse, pulse, 1.0f));
+                m_selectionHighlightMesh.Draw();
+            }
+
             // Phase 10: Zone Inspector panel, drawn over the 3D scene each
             // frame from whichever zone the crosshair last selected.
-            const Zone* selectedZone = m_selectedZoneId >= 0
-                ? m_digitalTwin.FindZone(m_selectedZoneId)
-                : nullptr;
             Inspector::Render(selectedZone);
 
             // Phase 11: Top Priority Zones panel. Clicking an entry selects
@@ -525,6 +554,12 @@ namespace twin {
             if (clickedLayer.has_value()) {
                 SetActiveLayer(*clickedLayer);
             }
+
+            // Phase 14: legend for whichever layer LayersPanel/the hotkeys
+            // just selected — always reflects m_activeLayer, so it can
+            // never show a stale gradient for a layer that's no longer on
+            // screen.
+            HeatLegend::Render(m_activeLayer);
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

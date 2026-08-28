@@ -168,7 +168,9 @@
     <ClCompile Include="src\twin\HeatRiskModel.cpp" />
     <ClCompile Include="src\twin\PopulationLoader.cpp" />
     <ClCompile Include="src\twin\PriorityModel.cpp" />
+    <ClCompile Include="src\twin\SelectionHighlight.cpp" />
     <ClCompile Include="src\twin\WeatherLoader.cpp" />
+    <ClCompile Include="src\ui\HeatLegend.cpp" />
     <ClCompile Include="src\ui\Inspector.cpp" />
     <ClCompile Include="src\ui\LayersPanel.cpp" />
   </ItemGroup>
@@ -203,6 +205,7 @@
     <ClInclude Include="src\twin\WeatherData.h" />
     <ClInclude Include="src\twin\WeatherLoader.h" />
     <ClInclude Include="src\twin\Zone.h" />
+    <ClInclude Include="src\ui\HeatLegend.h" />
     <ClInclude Include="src\ui\Inspector.h" />
     <ClInclude Include="src\ui\LayersPanel.h" />
   </ItemGroup>
