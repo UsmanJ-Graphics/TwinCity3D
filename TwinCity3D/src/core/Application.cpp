@@ -8,6 +8,7 @@
 #include <iamgui/imgui_impl_glfw.h>
 #include <iamgui/imgui_impl_opengl3.h>
 #include <glm/gtc/matrix_transform.hpp>
+#include <cmath>  // std::fabs, used by Phase 12's drag-vs-click threshold
 
 namespace twin {
 
@@ -82,6 +83,9 @@ namespace twin {
 
         LogInfo("Phase 0-11 initialization complete: window + camera + 3D city model + weather + "
             "population + heat risk + priority ranking + data-driven layer visualization ready");
+        LogInfo("Phase 12 camera controls: [F] Free-fly  [O] Orbit  [T] Top-down  [I] Isometric  "
+            "-- Orbit: left-drag rotate, right-drag pan, scroll dolly. TopDown/Isometric: drag to pan. "
+            "[R] hard reset to Free-fly.");
         return true;
     }
 
@@ -292,8 +296,31 @@ namespace twin {
             (zone->minZ + zone->maxZ) * 0.5f);
 
         m_camera.FocusOn(center);
+        ApplyCursorModeForCurrentCamera();
 
         LogInfo("Application::FocusCameraOnZone: focused on zone " + std::to_string(zoneId));
+    }
+
+    void Application::SetCameraMode(CameraMode mode) {
+        m_camera.SetMode(mode);
+        ApplyCursorModeForCurrentCamera();
+
+        static const char* kModeNames[] = { "FreeFly", "Orbit", "TopDown", "Isometric" };
+        LogInfo(std::string("Application::SetCameraMode: ") + kModeNames[static_cast<int>(mode)]);
+    }
+
+    void Application::ApplyCursorModeForCurrentCamera() {
+        // FreeFly with mouse-look on: FPS-style capture (Phase 0 behavior,
+        // toggleable with TAB). Every other case (FreeFly with look
+        // toggled off, or any of the Orbit/TopDown/Isometric modes): a
+        // normal, visible cursor, since those modes are driven by
+        // click-and-drag rather than raw unbounded mouse delta, and a
+        // visible cursor is also what lets the ImGui panels stay usable.
+        bool wantsCapture = (m_camera.GetMode() == CameraMode::FreeFly) && m_mouseLookEnabled;
+        glfwSetInputMode(m_window, GLFW_CURSOR, wantsCapture ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+        // Avoids a big cursor-delta snap the next time FreeFly capture
+        // re-enables (same reasoning as the existing TAB handler below).
+        m_firstMouse = true;
     }
 
     void Application::RebuildCityMeshForActiveLayer() {
@@ -346,7 +373,8 @@ namespace twin {
         if (fbWidth <= 0 || fbHeight <= 0) return;
 
         double pickX, pickY;
-        if (m_mouseLookEnabled) {
+        bool cursorCaptured = (m_camera.GetMode() == CameraMode::FreeFly) && m_mouseLookEnabled;
+        if (cursorCaptured) {
             // Cursor is captured/hidden for FPS-style look — there's no
             // meaningful click position, so pick whatever the camera is
             // actually aimed at (screen-center crosshair).
@@ -354,8 +382,10 @@ namespace twin {
             pickY = fbHeight / 2.0;
         }
         else {
-            // Cursor is free (TAB toggled it off) — pick whatever's actually
-            // under the visible pointer, like a normal UI click.
+            // Cursor is free (TAB toggled it off, or we're in Orbit/
+            // TopDown/Isometric where the cursor is always free) — pick
+            // whatever's actually under the visible pointer, like a normal
+            // UI click.
             glfwGetCursorPos(m_window, &pickX, &pickY);
         }
 
@@ -367,12 +397,48 @@ namespace twin {
     }
 
     void Application::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-        if (button != GLFW_MOUSE_BUTTON_LEFT || action != GLFW_PRESS) return;
-
         auto* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
         if (!app) return;
 
-        app->HandleZonePick();
+        // FreeFly picks on left press, same as Phase 10 always did — the
+        // cursor is captured there, so there's no drag gesture to confuse
+        // it with (CursorPosCallback bails out of the Orbit/TopDown/
+        // Isometric drag path entirely while in FreeFly).
+        if (app->m_camera.GetMode() == CameraMode::FreeFly) {
+            if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+                app->HandleZonePick();
+            }
+            return;
+        }
+
+        // Phase 12: Orbit/TopDown/Isometric use the same left button for
+        // both "orbit/pan the camera" and "pick a zone," disambiguated by
+        // whether the button moved more than a few pixels before release
+        // (see CursorPosCallback's m_didDragThisPress). A right-button
+        // press just needs its down/up state tracked for panning; it never
+        // picks.
+        if (button == GLFW_MOUSE_BUTTON_LEFT) {
+            if (action == GLFW_PRESS) {
+                app->m_leftMouseDown = true;
+                app->m_didDragThisPress = false;
+                glfwGetCursorPos(window, &app->m_lastDragX, &app->m_lastDragY);
+            }
+            else if (action == GLFW_RELEASE) {
+                app->m_leftMouseDown = false;
+                if (!app->m_didDragThisPress && !ImGui::GetIO().WantCaptureMouse) {
+                    app->HandleZonePick();
+                }
+            }
+        }
+        else if (button == GLFW_MOUSE_BUTTON_RIGHT) {
+            if (action == GLFW_PRESS) {
+                app->m_rightMouseDown = true;
+                glfwGetCursorPos(window, &app->m_lastDragX, &app->m_lastDragY);
+            }
+            else if (action == GLFW_RELEASE) {
+                app->m_rightMouseDown = false;
+            }
+        }
     }
 
     void Application::Run() {
@@ -385,6 +451,11 @@ namespace twin {
 
             glfwPollEvents();
             ProcessInput(dt);
+            // Phase 12: advances any in-flight smooth camera transition and
+            // keeps m_position synced to orbit state in Orbit/TopDown/
+            // Isometric. Camera.h's whole transition/orbit system is inert
+            // without this call.
+            m_camera.Tick(dt);
 
             int fbWidth, fbHeight;
             glfwGetFramebufferSize(m_window, &fbWidth, &fbHeight);
@@ -459,7 +530,8 @@ namespace twin {
             glfwSetWindowShouldClose(m_window, true);
         }
         if (glfwGetKey(m_window, GLFW_KEY_R) == GLFW_PRESS) {
-            m_camera.Reset();
+            m_camera.Reset();  // Reset() always lands in FreeFly (see its doc comment)
+            ApplyCursorModeForCurrentCamera();
         }
 
         bool forward = glfwGetKey(m_window, GLFW_KEY_W) == GLFW_PRESS;
@@ -487,20 +559,70 @@ namespace twin {
 
     void Application::CursorPosCallback(GLFWwindow* window, double xpos, double ypos) {
         auto* app = static_cast<Application*>(glfwGetWindowUserPointer(window));
-        if (!app || !app->m_mouseLookEnabled) return;
+        if (!app) return;
 
-        if (app->m_firstMouse) {
+        CameraMode mode = app->m_camera.GetMode();
+
+        if (mode == CameraMode::FreeFly) {
+            // Unchanged Phase 0 behavior: raw unbounded delta while the
+            // cursor is captured for FPS-style look.
+            if (!app->m_mouseLookEnabled) return;
+
+            if (app->m_firstMouse) {
+                app->m_lastMouseX = static_cast<float>(xpos);
+                app->m_lastMouseY = static_cast<float>(ypos);
+                app->m_firstMouse = false;
+            }
+
+            float xOffset = static_cast<float>(xpos) - app->m_lastMouseX;
+            float yOffset = app->m_lastMouseY - static_cast<float>(ypos);  // inverted y
             app->m_lastMouseX = static_cast<float>(xpos);
             app->m_lastMouseY = static_cast<float>(ypos);
-            app->m_firstMouse = false;
+
+            app->m_camera.ProcessMouseMovement(xOffset, yOffset);
+            return;
         }
 
-        float xOffset = static_cast<float>(xpos) - app->m_lastMouseX;
-        float yOffset = app->m_lastMouseY - static_cast<float>(ypos);  // inverted y
-        app->m_lastMouseX = static_cast<float>(xpos);
-        app->m_lastMouseY = static_cast<float>(ypos);
+        // Phase 12: Orbit/TopDown/Isometric drive off a normal, visible
+        // cursor instead — the delta below is a real on-screen pixel
+        // delta since the last frame, not an unbounded FPS-look delta.
+        // Skipped while an ImGui panel wants the mouse, so dragging over
+        // e.g. the Top Priority Zones list doesn't also spin the camera.
+        if (ImGui::GetIO().WantCaptureMouse) {
+            app->m_lastDragX = xpos;
+            app->m_lastDragY = ypos;
+            return;
+        }
 
-        app->m_camera.ProcessMouseMovement(xOffset, yOffset);
+        double dx = xpos - app->m_lastDragX;
+        double dy = ypos - app->m_lastDragY;
+        app->m_lastDragX = xpos;
+        app->m_lastDragY = ypos;
+
+        if (!app->m_leftMouseDown && !app->m_rightMouseDown) return;
+
+        // A few pixels of movement while a button is held counts as a real
+        // drag, not a click — used by MouseButtonCallback to decide whether
+        // releasing the left button should also fire a zone pick.
+        if (std::fabs(dx) + std::fabs(dy) > 3.0) {
+            app->m_didDragThisPress = true;
+        }
+
+        if (mode == CameraMode::Orbit) {
+            // Left-drag rotates, right-drag pans — see Camera.h's
+            // OrbitDrag()/PanDrag() doc comments.
+            if (app->m_leftMouseDown) {
+                app->m_camera.OrbitDrag(static_cast<float>(dx), static_cast<float>(dy));
+            }
+            else if (app->m_rightMouseDown) {
+                app->m_camera.PanDrag(static_cast<float>(dx), static_cast<float>(dy));
+            }
+        }
+        else {
+            // TopDown/Isometric hold a fixed viewing angle by design
+            // (Camera.h), so either button just pans.
+            app->m_camera.PanDrag(static_cast<float>(dx), static_cast<float>(dy));
+        }
     }
 
     void Application::ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) {
@@ -525,14 +647,22 @@ namespace twin {
         case GLFW_KEY_4: app->SetActiveLayer(DataLayer::BuildingDensity); break;
         case GLFW_KEY_5: app->SetActiveLayer(DataLayer::Temperature); break;
         case GLFW_KEY_L: app->SetActiveLayer(NextDataLayer(app->m_activeLayer)); break;
+
+            // Phase 12: camera-mode hotkeys. All four route through
+            // SetCameraMode() so the cursor capture state stays correct and
+            // the switch always animates (Camera::SetMode()).
+        case GLFW_KEY_F: app->SetCameraMode(CameraMode::FreeFly);   break;
+        case GLFW_KEY_O: app->SetCameraMode(CameraMode::Orbit);     break;
+        case GLFW_KEY_T: app->SetCameraMode(CameraMode::TopDown);   break;
+        case GLFW_KEY_I: app->SetCameraMode(CameraMode::Isometric); break;
+
         case GLFW_KEY_TAB: {
+            // Only meaningful in FreeFly (see ApplyCursorModeForCurrentCamera) —
+            // every other mode already runs with a free cursor. Still safe
+            // to toggle the flag regardless of current mode: it simply takes
+            // effect next time the camera is FreeFly.
             app->m_mouseLookEnabled = !app->m_mouseLookEnabled;
-            glfwSetInputMode(window, GLFW_CURSOR,
-                app->m_mouseLookEnabled ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
-            // Avoids a big camera snap the next time capture re-enables — otherwise
-            // ProcessMouseMovement uses the stale m_lastMouseX/Y from before the
-            // cursor was freed and jumped around the screen.
-            app->m_firstMouse = true;
+            app->ApplyCursorModeForCurrentCamera();
             LogInfo(std::string("Mouse capture ") +
                 (app->m_mouseLookEnabled ? "ON (camera look)" : "OFF (cursor free for UI)"));
             break;

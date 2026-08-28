@@ -68,10 +68,22 @@ namespace twin {
         // Phase 11: called when the user clicks an entry in the Top
         // Priority Zones panel (Inspector::RenderTopPriorityPanel). Selects
         // the zone (so the Inspector shows it next frame) and snaps the
-        // camera to look at it (Camera::FocusOn — a hard cut for now;
-        // Phase 12 owns smooth camera transitions). No-op if zoneId doesn't
-        // resolve to a real zone.
+        // camera to look at it. As of Phase 12, Camera::FocusOn() itself
+        // animates smoothly and may switch the camera into Orbit mode (see
+        // its doc comment), so this also re-syncs cursor capture via
+        // ApplyCursorModeForCurrentCamera(). No-op if zoneId doesn't resolve
+        // to a real zone.
         void FocusCameraOnZone(int zoneId);
+
+        // Phase 12: switches the active CameraMode (FreeFly/Orbit/TopDown/
+        // Isometric — see Camera.h) and keeps GLFW's cursor mode in sync:
+        // FreeFly with mouse-look on wants the cursor captured/hidden for
+        // FPS-style look; every other mode wants a normal, visible cursor
+        // so drag-to-orbit/drag-to-pan and ImGui panels both work normally.
+        // All camera-mode switches (hotkeys, Reset()) should go through
+        // this rather than calling m_camera.SetMode()/Reset() directly.
+        void SetCameraMode(CameraMode mode);
+        void ApplyCursorModeForCurrentCamera();
 
         // Phase 9: rebuilds m_city with m_activeLayer's data baked into
         // buildings'/green areas' vertex colors, and logs the console
@@ -137,6 +149,18 @@ namespace twin {
         float m_lastMouseX{ 0.0f };
         float m_lastMouseY{ 0.0f };
         bool m_mouseLookEnabled{ true };
+
+        // Phase 12: drag-based control for Orbit/TopDown/Isometric. The
+        // FreeFly path above (m_firstMouse/m_lastMouseX/Y) stays untouched;
+        // these track the separate free-cursor drag gesture used by every
+        // other camera mode, and double as click-vs-drag detection so a
+        // plain left click still picks a zone (Phase 10) instead of always
+        // being swallowed as a zero-length drag.
+        bool m_leftMouseDown{ false };
+        bool m_rightMouseDown{ false };
+        bool m_didDragThisPress{ false };
+        double m_lastDragX{ 0.0 };
+        double m_lastDragY{ 0.0 };
     };
 
 }  // namespace twin

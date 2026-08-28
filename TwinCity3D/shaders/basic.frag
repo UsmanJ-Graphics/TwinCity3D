@@ -2,6 +2,7 @@
 in vec3 vWorldNormal;
 in vec3 vWorldPos;
 in float vDataValue;
+in float vMaterialVariation;  // Phase 12: [0,1] per-building pseudo-random value, 0 for meshes that don't set it (roads/green areas/facilities)
 
 uniform vec4 uBaseColor;
 uniform int uUseDataColor;  // Phase 9: 1 = color from vDataValue via DataRamp, 0 = flat uBaseColor
@@ -55,6 +56,14 @@ void main() {
         baseColor = uBaseColor.rgb;
     }
 
-    vec3 color = baseColor * lighting;
+    // Phase 12: a small per-building brightness jitter so a field of
+    // buildings sharing one data-layer color doesn't read as a single flat
+    // block — matches the master spec's "subtle material variation" note
+    // for the professional digital-twin look. Deliberately small (+/-6%)
+    // and applied to lighting, not hue, so it never fights the data ramp's
+    // meaning (a hot building must still look hot).
+    float variation = 1.0 + (vMaterialVariation - 0.5) * 0.12;
+
+    vec3 color = baseColor * lighting * variation;
     FragColor = vec4(color, uBaseColor.a);
 }
