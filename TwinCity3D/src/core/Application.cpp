@@ -4,6 +4,7 @@
 #include "../gis/GISLoader.h"
 #include "../twin/WeatherLoader.h"
 #include "../twin/PopulationLoader.h"
+#include "../twin/SatelliteEnvironmentLoader.h"
 #include <iamgui/imgui.h>
 #include <iamgui/imgui_impl_glfw.h>
 #include <iamgui/imgui_impl_opengl3.h>
@@ -72,6 +73,7 @@ namespace twin {
         LoadCityData();
         LoadWeather();
         LoadPopulation();
+        LoadSatelliteEnvironment();
         m_digitalTwin.ComputeFloodRisk(m_weather.valid ? m_weather.precipitation : 0.0f);
         ComputeHeatRisk();
         ComputePriority();  // Phase 11: builds on ComputeHeatRisk(), must run after it
@@ -196,6 +198,15 @@ namespace twin {
         // logic in DigitalTwin rather than duplicating the check here too.
         m_digitalTwin.ApplyPopulation(m_population);
         LogPhase7PopulationSummary();
+    }
+
+    void Application::LoadSatelliteEnvironment() {
+        const std::string path = "data/processed/satellite_environment.json";
+        if (!SatelliteEnvironmentLoader::Load(path, m_satelliteEnvironment)) {
+            LogWarn("No processed environmental layer at '" + path + "'. Run python/build_environmental_layer.py.");
+            return;
+        }
+        m_digitalTwin.ApplySatelliteEnvironment(m_satelliteEnvironment);
     }
 
     void Application::LogPhase7PopulationSummary() {
@@ -366,7 +377,7 @@ namespace twin {
             " (blue -> green -> yellow -> orange -> red)");
         LogInfo("  Gray buildings/green areas = no real data for that zone yet (placeholder)");
         LogInfo("  Keys: [1] Heat Risk  [2] Population  [3] Population Exposure  "
-            "[4] Green Coverage  [5] Building Density  [6] Temperature  [7] Flood Risk  [L] cycle");
+            "[4] Green Coverage  [5] Building Density  [6] Temperature  [7] Flood Risk  [8] Environment  [L] cycle");
         LogInfo("-------------------------------------------------");
     }
 
@@ -717,6 +728,7 @@ namespace twin {
         case GLFW_KEY_5: app->SetActiveLayer(DataLayer::BuildingDensity); break;
         case GLFW_KEY_6: app->SetActiveLayer(DataLayer::Temperature); break;
         case GLFW_KEY_7: app->SetActiveLayer(DataLayer::FloodRisk); break;
+        case GLFW_KEY_8: app->SetActiveLayer(DataLayer::SatelliteEnvironment); break;
         case GLFW_KEY_L: app->SetActiveLayer(NextDataLayer(app->m_activeLayer)); break;
 
         // Phase 12: camera-mode hotkeys. All four route through

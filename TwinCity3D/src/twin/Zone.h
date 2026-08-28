@@ -88,6 +88,12 @@ namespace twin {
         float heatExposureScore{ 0.0f };       // relative 0..1 within study area
         bool populationExposureIsPlaceholder{ true };
 
+        // Phase 18: either raster-preprocessed environmental data or an
+        // explicitly labelled offline OSM land-cover proxy.
+        float vegetationIndex{ 0.0f };
+        float builtUpIndex{ 0.0f };
+        bool satelliteEnvironmentIsPlaceholder{ true };
+
         // Phase 16: geometry/rainfall-derived prototype visualization only;
         // never a hydrological model or a flood forecast.
         float floodRisk{ 0.0f };              // 0..100

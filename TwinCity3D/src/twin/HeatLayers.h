@@ -16,7 +16,8 @@ namespace twin {
         GreenCoverage,
         BuildingDensity,
         Temperature,
-        FloodRisk
+        FloodRisk,
+        SatelliteEnvironment
     };
 
     // Console-legend text for the active layer (there's no ImGui panel yet —

@@ -1,0 +1,87 @@
+{
+  "data_source": "osm_landcover_proxy",
+  "method": "zone_coverage_from_live_osm_geometry",
+  "zones": [
+    {
+      "zone_id": 0,
+      "vegetation_index": 0.0819,
+      "built_up_index": 0.2255
+    },
+    {
+      "zone_id": 1,
+      "vegetation_index": 0.0499,
+      "built_up_index": 0.2976
+    },
+    {
+      "zone_id": 2,
+      "vegetation_index": 0.0548,
+      "built_up_index": 0.1571
+    },
+    {
+      "zone_id": 3,
+      "vegetation_index": 0.1063,
+      "built_up_index": 0.0
+    },
+    {
+      "zone_id": 4,
+      "vegetation_index": 0.0,
+      "built_up_index": 0.2553
+    },
+    {
+      "zone_id": 5,
+      "vegetation_index": 0.0414,
+      "built_up_index": 0.2106
+    },
+    {
+      "zone_id": 6,
+      "vegetation_index": 0.0,
+      "built_up_index": 0.1993
+    },
+    {
+      "zone_id": 7,
+      "vegetation_index": 0.0,
+      "built_up_index": 0.0
+    },
+    {
+      "zone_id": 8,
+      "vegetation_index": 0.0,
+      "built_up_index": 0.0292
+    },
+    {
+      "zone_id": 9,
+      "vegetation_index": 0.0,
+      "built_up_index": 0.2517
+    },
+    {
+      "zone_id": 10,
+      "vegetation_index": 0.1635,
+      "built_up_index": 0.1711
+    },
+    {
+      "zone_id": 11,
+      "vegetation_index": 0.1292,
+      "built_up_index": 0.0004
+    },
+    {
+      "zone_id": 12,
+      "vegetation_index": 0.0056,
+      "built_up_index": 0.0
+    },
+    {
+      "zone_id": 13,
+      "vegetation_index": 0.094,
+      "built_up_index": 0.1301
+    },
+    {
+      "zone_id": 14,
+      "vegetation_index": 0.0,
+      "built_up_index": 0.0507
+    },
+    {
+      "zone_id": 15,
+      "vegetation_index": 0.0,
+      "built_up_index": 0.0203
+    }
+  ],
+  "notes": "Offline environmental proxy only; not satellite imagery, NDVI, or LST."
+}

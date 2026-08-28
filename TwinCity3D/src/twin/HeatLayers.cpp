@@ -13,7 +13,8 @@ namespace twin {
             case DataLayer::GreenCoverage:   return DataLayer::BuildingDensity;
             case DataLayer::BuildingDensity: return DataLayer::Temperature;
             case DataLayer::Temperature:     return DataLayer::FloodRisk;
-            case DataLayer::FloodRisk:       return DataLayer::HeatRisk;
+            case DataLayer::FloodRisk:       return DataLayer::SatelliteEnvironment;
+            case DataLayer::SatelliteEnvironment: return DataLayer::HeatRisk;
         }
         return DataLayer::HeatRisk;
     }
@@ -38,6 +39,8 @@ namespace twin {
                          "Cooler", "Hotter" };
             case DataLayer::FloodRisk:
                 return { "Flood Risk", "prototype score 0-100", "Low", "Critical" };
+            case DataLayer::SatelliteEnvironment:
+                return { "Environment", "vegetation proxy (OSM, not satellite)", "Low vegetation", "High vegetation" };
         }
         return { "Unknown", "", "", "" };
     }
@@ -82,6 +85,10 @@ namespace twin {
             case DataLayer::FloodRisk:
                 if (zone.floodRiskIsPlaceholder) return kNoDataSentinel;
                 return std::clamp(zone.floodRisk / 100.0f, 0.0f, 1.0f);
+
+            case DataLayer::SatelliteEnvironment:
+                if (zone.satelliteEnvironmentIsPlaceholder) return kNoDataSentinel;
+                return std::clamp(zone.vegetationIndex, 0.0f, 1.0f);
         }
         return kNoDataSentinel;
     }

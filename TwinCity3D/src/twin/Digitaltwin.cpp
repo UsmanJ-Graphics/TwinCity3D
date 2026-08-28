@@ -223,6 +223,18 @@ namespace twin {
             ", study-area total=" + std::to_string(population.totalPopulation));
     }
 
+    void DigitalTwin::ApplySatelliteEnvironment(const SatelliteEnvironmentData& environment) {
+        if (!environment.valid) { LogWarn("DigitalTwin::ApplySatelliteEnvironment: no usable environmental layer"); return; }
+        int matched = 0;
+        for (const auto& sample : environment.zones) {
+            Zone* zone = FindZone(sample.zoneId); if (!zone) continue;
+            zone->vegetationIndex = std::clamp(sample.vegetationIndex, 0.0f, 1.0f);
+            zone->builtUpIndex = std::clamp(sample.builtUpIndex, 0.0f, 1.0f);
+            zone->satelliteEnvironmentIsPlaceholder = false; ++matched;
+        }
+        LogInfo("DigitalTwin::ApplySatelliteEnvironment: applied " + std::to_string(matched) + " zones [" + environment.dataSource + "]" + (environment.IsSatelliteProcessed() ? "" : " (OSM environmental proxy, not satellite)"));
+    }
+
     void DigitalTwin::ComputeHeatRisk(const HeatRiskWeights& weights) {
         if (m_zones.empty()) {
             LogWarn("DigitalTwin::ComputeHeatRisk: no zones to score");

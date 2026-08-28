@@ -169,6 +169,7 @@
     <ClCompile Include="src\twin\PopulationLoader.cpp" />
     <ClCompile Include="src\twin\PriorityModel.cpp" />
     <ClCompile Include="src\twin\SelectionHighlight.cpp" />
+    <ClCompile Include="src\twin\SatelliteEnvironmentLoader.cpp" />
     <ClCompile Include="src\twin\WeatherLoader.cpp" />
     <ClCompile Include="src\ui\HeatLegend.cpp" />
     <ClCompile Include="src\ui\Inspector.cpp" />
@@ -203,6 +204,8 @@
     <ClInclude Include="src\twin\PopulationData.h" />
     <ClInclude Include="src\twin\PopulationLoader.h" />
     <ClInclude Include="src\twin\PriorityModel.h" />
+    <ClInclude Include="src\twin\SatelliteEnvironmentData.h" />
+    <ClInclude Include="src\twin\SatelliteEnvironmentLoader.h" />
     <ClInclude Include="src\twin\WeatherData.h" />
     <ClInclude Include="src\twin\WeatherLoader.h" />
     <ClInclude Include="src\twin\Zone.h" />

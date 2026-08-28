@@ -2,6 +2,7 @@
 #include "Zone.h"
 #include "WeatherData.h"
 #include "PopulationData.h"
+#include "SatelliteEnvironmentData.h"
 #include "HeatRiskModel.h"
 #include "PriorityModel.h"
 #include "../gis/GISTypes.h"
@@ -63,6 +64,7 @@ namespace twin {
         // population.valid is false, mirroring ApplyWeather()'s contract —
         // a missing/broken population.json can never masquerade as real data.
         void ApplyPopulation(const PopulationData& population);
+        void ApplySatelliteEnvironment(const SatelliteEnvironmentData& environment);
 
         // Phase 8: computes heatRisk/exposure/riskClass on every zone from
         // fields already present on it (temperature from Phase 5/6,
