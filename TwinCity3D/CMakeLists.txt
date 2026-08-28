@@ -28,7 +28,9 @@ add_executable(LahoreDigitalTwin
     # twin
     src/twin/CityMeshBuilder.cpp
     src/twin/DigitalTwin.cpp
-    src/twin/WeatherLoader.cpp   # Phase 5, Step 2 (new)
+    src/twin/WeatherLoader.cpp   # Phase 5, Step 2
+    src/twin/PopulationLoader.cpp   # Phase 7 (was missing — Application.cpp already used it)
+    src/twin/HeatRiskModel.cpp   # Phase 8 (new)
 )
 
 target_include_directories(LahoreDigitalTwin PRIVATE

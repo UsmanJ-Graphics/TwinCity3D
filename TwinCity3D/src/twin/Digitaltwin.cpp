@@ -189,6 +189,25 @@ namespace twin {
             ", study-area total=" + std::to_string(population.totalPopulation));
     }
 
+    void DigitalTwin::ComputeHeatRisk(const HeatRiskWeights& weights) {
+        if (m_zones.empty()) {
+            LogWarn("DigitalTwin::ComputeHeatRisk: no zones to score");
+            return;
+        }
+
+        HeatRiskModel::Compute(m_zones, weights);
+
+        int scored = 0;
+        for (const auto& z : m_zones) {
+            if (!z.riskIsPlaceholder) ++scored;
+        }
+
+        LogInfo("DigitalTwin::ComputeHeatRisk: heat risk computed on " +
+            std::to_string(scored) + "/" + std::to_string(m_zones.size()) +
+            " zones (remainder still have placeholder temperature and/or population) "
+            "— PROTOTYPE DECISION-SUPPORT SCORE, see HeatRiskModel");
+    }
+
     Zone* DigitalTwin::FindZone(int zoneId) {
         auto it = std::find_if(m_zones.begin(), m_zones.end(),
             [zoneId](const Zone& z) { return z.id == zoneId; });

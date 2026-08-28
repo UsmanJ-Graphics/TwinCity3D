@@ -62,8 +62,10 @@ namespace twin {
         LoadCityData();
         LoadWeather();
         LoadPopulation();
+        ComputeHeatRisk();
 
-        LogInfo("Phase 0-7 initialization complete: window + camera + 3D city model + weather + population ready");
+        LogInfo("Phase 0-8 initialization complete: window + camera + 3D city model + weather + "
+            "population + heat risk ready");
         return true;
     }
 
@@ -195,6 +197,38 @@ namespace twin {
         LogInfo("Phase 7 summary: population placeholder cleared on " +
             std::to_string(cleared) + "/" +
             std::to_string(m_digitalTwin.Zones().size()) + " zones");
+    }
+
+    void Application::ComputeHeatRisk() {
+        // Phase 8: no file to load — this recombines fields already present
+        // on each zone (temperature from Phase 5/6, buildingDensity/
+        // greenCoverage from Phase 3, populationDensity from Phase 7) into an
+        // explainable heat-risk score. Uses HeatRiskWeights{} defaults (0.35
+        // temperature / 0.20 green deficit / 0.20 building density / 0.25
+        // population exposure), matching the master spec's Phase 8 example
+        // model. Safe to call again later (e.g. after Phase 12's heatwave
+        // scenario adjusts zone.temperature) to rescore under a new scenario.
+        m_digitalTwin.ComputeHeatRisk();
+        LogPhase8HeatRiskSummary();
+    }
+
+    void Application::LogPhase8HeatRiskSummary() {
+        // Console-only diagnostic for Phase 8, same role LogPhase7PopulationSummary()
+        // plays for Phase 7 — superseded once the dashboard (Phase 15) and the
+        // Zone Inspector (Phase 10) show heat risk on screen.
+        LogInfo("---- Phase 8 heat risk ----");
+        int cleared = 0;
+        for (const auto& zone : m_digitalTwin.Zones()) {
+            if (zone.riskIsPlaceholder) continue;
+            ++cleared;
+            LogInfo("Zone " + std::to_string(zone.id) + ": heatRisk=" +
+                std::to_string(zone.heatRisk) + " (" + zone.riskClass + ") exposure=" +
+                std::to_string(zone.exposure));
+        }
+        LogInfo("Phase 8 summary: heat risk computed on " + std::to_string(cleared) + "/" +
+            std::to_string(m_digitalTwin.Zones().size()) +
+            " zones — PROTOTYPE DECISION-SUPPORT SCORE, not a validated medical/scientific model");
+        LogInfo("----------------------------");
     }
 
     void Application::Run() {

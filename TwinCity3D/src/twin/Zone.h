@@ -18,10 +18,13 @@ namespace twin {
     // Field provenance (updated as later phases land):
     //   buildingDensity, greenCoverage           -> computed now, from Phase 3 geometry
     //   exposedSurfaceRatio, environmentalHeatBurden -> computed now, Phase 6 (derived, not placeholders)
-    //   temperature                              -> placeholder until Phase 5/6
+    //   temperature                              -> computed now, Phase 5/6 (modelled spread of one weather reading)
     //   population, populationDensity            -> computed now, Phase 7 (estimated model or
     //                                                WorldPop-total-rescaled; see population.json)
-    //   heatRisk, exposure, priority              -> placeholder until Phase 8/11
+    //   heatRisk, exposure, riskClass             -> computed now, Phase 8 (explainable prototype score;
+    //                                                see HeatRiskModel — requires real temperature AND
+    //                                                real population on the zone, else stays placeholder)
+    //   priority                                  -> placeholder until Phase 11
     struct Zone {
         int id{ -1 };
 
@@ -59,10 +62,15 @@ namespace twin {
         bool temperatureIsPlaceholder{ true };
 
         // --- Derived risk (Phase 8/11) ---
-        float heatRisk{ 0.0f };           // 0..100
-        float exposure{ 0.0f };           // 0..1
-        float priority{ 0.0f };           // 0..100
-        bool riskIsPlaceholder{ true };
+        float heatRisk{ 0.0f };           // 0..100, explainable prototype score — see HeatRiskModel
+        float exposure{ 0.0f };           // 0..1, Phase 8's PopulationExposureScore (relative to this
+                                           // study area's own population-density spread, not an absolute scale)
+        std::string riskClass;            // Phase 8 classification: "Low" | "Moderate" | "High" |
+                                           // "Very High" | "Extreme" (see HeatRiskModel::Classify).
+                                           // Empty until riskIsPlaceholder is cleared.
+        float priority{ 0.0f };           // 0..100; still a placeholder until Phase 11
+        bool riskIsPlaceholder{ true };   // covers heatRisk/exposure/riskClass; priority has its own
+                                           // Phase 11 rollout and stays 0 regardless of this flag
 
         float Width() const { return maxX - minX; }
         float Depth() const { return maxZ - minZ; }

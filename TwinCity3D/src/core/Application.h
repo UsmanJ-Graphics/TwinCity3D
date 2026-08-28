@@ -45,7 +45,8 @@ namespace twin {
 
         void LoadPopulation();            // Phase 7: loads population.json, applies it to the digital twin
         void LogPhase7PopulationSummary(); // temporary Phase 7 diagnostic; superseded by the dashboard's population-exposure display (Phase 15)
-
+        void ComputeHeatRisk();
+        void LogPhase8HeatRiskSummary();
         static void FramebufferSizeCallback(GLFWwindow* window, int width, int height);
         static void CursorPosCallback(GLFWwindow* window, double xpos, double ypos);
         static void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset);

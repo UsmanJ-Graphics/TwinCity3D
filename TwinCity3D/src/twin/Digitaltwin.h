@@ -2,6 +2,7 @@
 #include "Zone.h"
 #include "WeatherData.h"
 #include "PopulationData.h"
+#include "HeatRiskModel.h"
 #include "../gis/GISTypes.h"
 #include <vector>
 
@@ -16,9 +17,10 @@ namespace twin {
     // single area-wide weather reading across zones instead of giving every
     // zone an identical value. Phase 7 adds ApplyPopulation(), which clears
     // the population placeholder from a modelled/WorldPop-derived estimate.
-    // Later phases (8, 11) call further Update*() methods on this same class
-    // to fill in heatRisk, exposure, and priority — the zone list itself
-    // doesn't change shape again.
+    // Phase 8 adds ComputeHeatRisk(), which combines all of the above into
+    // an explainable heat-risk score per zone. Phase 11 calls a further
+    // Update*() method on this same class to fill in priority — the zone
+    // list itself doesn't change shape again.
     class DigitalTwin {
     public:
         // Builds one Zone per gis::ZoneBounds entry, computes the
@@ -49,6 +51,19 @@ namespace twin {
         // population.valid is false, mirroring ApplyWeather()'s contract —
         // a missing/broken population.json can never masquerade as real data.
         void ApplyPopulation(const PopulationData& population);
+
+        // Phase 8: computes heatRisk/exposure/riskClass on every zone from
+        // fields already present on it (temperature from Phase 5/6,
+        // buildingDensity/greenCoverage from Phase 3, populationDensity from
+        // Phase 7) — no new external data source, purely a combination step.
+        // Delegates the actual scoring to HeatRiskModel so the algorithm
+        // stays unit-testable and its weights stay configurable independent
+        // of this class. A zone whose temperature or population is still a
+        // placeholder is left with riskIsPlaceholder == true — this can
+        // never fabricate a score from incomplete inputs. Safe to call again
+        // (e.g. after Phase 12's heatwave scenario changes zone.temperature)
+        // to recompute risk under a new scenario.
+        void ComputeHeatRisk(const HeatRiskWeights& weights = HeatRiskWeights{});
 
         const std::vector<Zone>& Zones() const { return m_zones; }
         std::vector<Zone>& Zones() { return m_zones; }
