@@ -21,6 +21,7 @@
 #include "../ui/HeatLegend.h"
 #include "../ui/ScenarioPanel.h"
 #include "../ui/GreenInfrastructurePanel.h"
+#include "../ui/CommandCenterUI.h"
 #include "../twin/SelectionHighlight.h"
 
 namespace twin {

@@ -413,7 +413,7 @@ namespace twin {
     bool Application::InitImGui() {
         IMGUI_CHECKVERSION();
         ImGui::CreateContext();
-        ImGui::StyleColorsDark();
+        CommandCenterUI::InitStyle();
 
         if (!ImGui_ImplGlfw_InitForOpenGL(m_window, true)) return false;
         if (!ImGui_ImplOpenGL3_Init("#version 330")) return false;
@@ -592,50 +592,35 @@ namespace twin {
                 m_selectionHighlightMesh.Draw();
             }
 
-            // Phase 10: Zone Inspector panel, drawn over the 3D scene each
-            // frame from whichever zone the crosshair last selected.
-            Inspector::Render(selectedZone);
+            // Phase 22 & 23: Unified City Command Center Dashboard Layout
+            // Replaces individual floating windows with a docked, professional mission-control interface
+            UICommandResult uiResult = CommandCenterUI::Render(
+                m_activeLayer,
+                m_camera.GetMode(),
+                selectedZone,
+                m_digitalTwin.Zones(),
+                m_scenario,
+                m_weather,
+                m_population,
+                fbWidth,
+                fbHeight
+            );
 
-            // Phase 11: Top Priority Zones panel. Clicking an entry selects
-            // that zone and snaps the camera to it -- the Inspector above
-            // will show it starting next frame since m_selectedZoneId is
-            // already updated by the time this frame finishes.
-            int clickedPriorityZoneId = Inspector::RenderTopPriorityPanel(m_digitalTwin.Zones());
-            if (clickedPriorityZoneId >= 0) {
-                FocusCameraOnZone(clickedPriorityZoneId);
+            if (uiResult.newActiveLayer.has_value()) {
+                SetActiveLayer(*uiResult.newActiveLayer);
             }
-
-            // Phase 13: City Layers panel -- same underlying switch as the
-            // Phase 9 hotkeys (1-5, L), just clickable. A click here goes
-            // through the same SetActiveLayer() as the keyboard path, so
-            // the mesh rebuild and console legend log stay identical
-            // regardless of which input triggered it.
-            std::optional<DataLayer> clickedLayer = LayersPanel::Render(m_activeLayer);
-            if (clickedLayer.has_value()) {
-                SetActiveLayer(*clickedLayer);
+            if (uiResult.newCameraMode.has_value()) {
+                SetCameraMode(*uiResult.newCameraMode);
             }
-
-            // Phase 14: legend for whichever layer LayersPanel/the hotkeys
-            // just selected -- always reflects m_activeLayer, so it can
-            // never show a stale gradient for a layer that's no longer on
-            // screen.
-            HeatLegend::Render(m_activeLayer);
-
-            // Phase 15 & Phase 20: changes propagate through temperature, risk,
-            // population exposure, priority and interventions before the next frame.
-            if (ScenarioPanel::Render(m_scenario, m_digitalTwin.Zones(),
-                m_weather.valid ? m_weather.currentTemperature : 0.0f,
-                m_weather.valid ? m_weather.precipitation : 0.0f,
-                m_selectedZoneId)) {
+            if (uiResult.focusedZoneId >= 0) {
+                FocusCameraOnZone(uiResult.focusedZoneId);
+            }
+            if (uiResult.scenarioStateChanged) {
                 ApplyHeatwaveScenario();
             }
-
-            // Phase 19: Green Infrastructure panel.
-            // Clicking an entry selects the zone + focuses the camera, same
-            // contract as Inspector::RenderTopPriorityPanel.
-            int clickedGreenZoneId = GreenInfrastructurePanel::Render(m_digitalTwin.Zones());
-            if (clickedGreenZoneId >= 0) {
-                FocusCameraOnZone(clickedGreenZoneId);
+            if (uiResult.resetCameraRequested) {
+                m_camera.Reset();
+                ApplyCursorModeForCurrentCamera();
             }
 
             ImGui::Render();

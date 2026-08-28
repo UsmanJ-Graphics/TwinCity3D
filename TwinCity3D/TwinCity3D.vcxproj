@@ -177,6 +177,7 @@
     <ClCompile Include="src\ui\Inspector.cpp" />
     <ClCompile Include="src\ui\LayersPanel.cpp" />
     <ClCompile Include="src\ui\ScenarioPanel.cpp" />
+    <ClCompile Include="src\ui\CommandCenterUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\iamgui\imconfig.h" />
@@ -217,6 +218,7 @@
     <ClInclude Include="src\ui\Inspector.h" />
     <ClInclude Include="src\ui\LayersPanel.h" />
     <ClInclude Include="src\ui\ScenarioPanel.h" />
+    <ClInclude Include="src\ui\CommandCenterUI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
