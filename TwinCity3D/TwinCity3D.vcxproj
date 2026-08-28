@@ -173,6 +173,7 @@
     <ClCompile Include="src\ui\HeatLegend.cpp" />
     <ClCompile Include="src\ui\Inspector.cpp" />
     <ClCompile Include="src\ui\LayersPanel.cpp" />
+    <ClCompile Include="src\ui\ScenarioPanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\iamgui\imconfig.h" />
@@ -208,6 +209,7 @@
     <ClInclude Include="src\ui\HeatLegend.h" />
     <ClInclude Include="src\ui\Inspector.h" />
     <ClInclude Include="src\ui\LayersPanel.h" />
+    <ClInclude Include="src\ui\ScenarioPanel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -44,6 +44,12 @@ namespace twin {
         // can never masquerade as a real reading.
         void ApplyWeather(const WeatherData& weather);
 
+        // Phase 15: applies a uniform, explicitly modelled heatwave offset
+        // after ApplyWeather() has restored the current-condition baseline.
+        // This never changes the cached weather observation; it only changes
+        // the in-memory scenario state used by the renderer and score models.
+        void ApplyTemperatureOffset(float deltaC);
+
         // Phase 7: applies estimated/WorldPop-derived population to every
         // zone that has a matching entry in `population`. Matches by zone
         // id via FindZone() rather than assuming index alignment, since

@@ -160,6 +160,21 @@ namespace twin {
             " — MODELLED SPREAD, not per-zone sensor data");
     }
 
+    void DigitalTwin::ApplyTemperatureOffset(float deltaC) {
+        if (m_zones.empty() || std::fabs(deltaC) < 1e-6f) return;
+
+        int changed = 0;
+        for (auto& zone : m_zones) {
+            if (zone.temperatureIsPlaceholder) continue;
+            zone.temperature += deltaC;
+            ++changed;
+        }
+
+        LogInfo("DigitalTwin::ApplyTemperatureOffset: applied +" + std::to_string(deltaC) +
+            "C HEATWAVE SCENARIO offset to " + std::to_string(changed) +
+            " zones — MODELLED SCENARIO, not an observed temperature");
+    }
+
     void DigitalTwin::ApplyPopulation(const PopulationData& population) {
         if (!population.valid) {
             LogWarn("DigitalTwin::ApplyPopulation: population data is not valid — "

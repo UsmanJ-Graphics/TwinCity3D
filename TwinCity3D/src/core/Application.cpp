@@ -261,6 +261,20 @@ namespace twin {
         LogPhase11PrioritySummary();
     }
 
+    void Application::ApplyHeatwaveScenario() {
+        // ApplyWeather() recreates the current-condition, environmental-burden
+        // temperature spread first, preventing slider adjustments from
+        // stacking heatwave values onto the previous scenario state.
+        m_digitalTwin.ApplyWeather(m_weather);
+        if (m_scenario.heatwaveEnabled && m_scenario.temperatureIncreaseC > 0.0f) {
+            m_digitalTwin.ApplyTemperatureOffset(m_scenario.temperatureIncreaseC);
+        }
+
+        ComputeHeatRisk();
+        ComputePriority();
+        RebuildCityMeshForActiveLayer();
+    }
+
     void Application::LogPhase11PrioritySummary() {
         // Console-only diagnostic for Phase 11, same role LogPhase8HeatRiskSummary()
         // plays for Phase 8 — superseded on-screen by Inspector's PRIORITY
@@ -560,6 +574,13 @@ namespace twin {
             // never show a stale gradient for a layer that's no longer on
             // screen.
             HeatLegend::Render(m_activeLayer);
+
+            // Phase 15: changes propagate through temperature, risk,
+            // population exposure and priority before the next frame.
+            if (ScenarioPanel::Render(m_scenario, m_digitalTwin.Zones(),
+                m_weather.valid ? m_weather.currentTemperature : 0.0f)) {
+                ApplyHeatwaveScenario();
+            }
 
             ImGui::Render();
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

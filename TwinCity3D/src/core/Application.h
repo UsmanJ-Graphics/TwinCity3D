@@ -18,6 +18,7 @@
 #include "../ui/Inspector.h"
 #include "../ui/LayersPanel.h"
 #include "../ui/HeatLegend.h"
+#include "../ui/ScenarioPanel.h"
 #include "../twin/SelectionHighlight.h"
 
 namespace twin {
@@ -78,6 +79,10 @@ namespace twin {
         // ComputeHeatRisk() — see DigitalTwin::ComputePriority()/PriorityModel.
         void ComputePriority();
         void LogPhase11PrioritySummary();
+
+        // Phase 15: restore the weather baseline, apply the selected
+        // heatwave offset, and refresh all dependent decision layers.
+        void ApplyHeatwaveScenario();
 
         // Phase 11: called when the user clicks an entry in the Top
         // Priority Zones panel (Inspector::RenderTopPriorityPanel). Selects
@@ -154,6 +159,7 @@ namespace twin {
 
         WeatherData m_weather;  // Phase 5, Step 3
         PopulationData m_population;  // Phase 7
+        ScenarioState m_scenario;     // Phase 15
 
         DataLayer m_activeLayer{ DataLayer::HeatRisk };  // Phase 9
 
