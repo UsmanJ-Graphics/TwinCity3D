@@ -1,0 +1,44 @@
+{
+  "reports": [
+    {
+      "category": 0,
+      "description": "Heat distress reported near market.",
+      "id": 0,
+      "local_x": 0.0,
+      "local_z": 0.0,
+      "status": 3,
+      "timestamp": "2026-08-29T10:53:25.267541Z",
+      "zone_id": 2
+    },
+    {
+      "category": 5,
+      "description": "Illegal dumping observed.",
+      "id": 1,
+      "local_x": 0.0,
+      "local_z": 0.0,
+      "status": 3,
+      "timestamp": "2026-08-29T10:53:25.268516Z",
+      "zone_id": 7
+    },
+    {
+      "category": 3,
+      "description": "Collapsed road surface reported.",
+      "id": 2,
+      "local_x": 0.0,
+      "local_z": 0.0,
+      "status": 3,
+      "timestamp": "2026-08-29T10:53:25.268673Z",
+      "zone_id": 11
+    },
+    {
+      "category": 4,
+      "description": "severage leak",
+      "id": 3,
+      "local_x": 568.7459716796875,
+      "local_z": 222.3898468017578,
+      "status": 3,
+      "timestamp": "2026-08-29T11:28:45Z",
+      "zone_id": 11
+    }
+  ]
+}

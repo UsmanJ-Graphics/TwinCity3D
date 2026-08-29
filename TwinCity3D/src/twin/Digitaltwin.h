@@ -6,6 +6,7 @@
 #include "HeatRiskModel.h"
 #include "PriorityModel.h"
 #include "GreenInfrastructureModel.h"
+#include "CitizenReport.h"
 #include "AirQualityData.h"
 #include "../gis/GISTypes.h"
 #include <vector>
@@ -130,6 +131,12 @@ namespace twin {
         // Phase 26: apply per-zone air quality data (PM2.5 / AQI samples)
         void ApplyAirQuality(const AirQualityData& air);
 
+        // Phase 27: citizen reports prototype
+        void LoadReports(const std::string& path);
+        void SaveReports(const std::string& path) const;
+        void AddReport(const CitizenReport& r);
+        bool UpdateReportStatus(int reportId, ReportStatus newStatus);
+
         // Phase 26: computes a CONCEPTUAL "Combined Environmental Burden"
         // (0..100) for every zone that has BOTH a real heat-risk score AND
         // real air-quality data. This is deliberately kept SEPARATE from the
@@ -144,6 +151,9 @@ namespace twin {
         const std::vector<Zone>& Zones() const { return m_zones; }
         std::vector<Zone>& Zones() { return m_zones; }
 
+        // Reports
+        const std::vector<CitizenReport>& Reports() const { return m_reports; }
+
         // Returns nullptr if no zone with that id exists.
         Zone* FindZone(int zoneId);
         const Zone* FindZone(int zoneId) const;
@@ -157,6 +167,7 @@ namespace twin {
         void ComputeEnvironmentalLayer();
 
         std::vector<Zone> m_zones;
+        std::vector<CitizenReport> m_reports; // Phase 27: stored citizen reports
     };
 
 }  // namespace twin

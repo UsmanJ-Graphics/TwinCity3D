@@ -3,6 +3,7 @@
 #include "../gis/GISTypes.h"
 #include "Zone.h"
 #include "HeatLayers.h"
+#include "CitizenReport.h"
 
 namespace twin {
 
@@ -15,11 +16,13 @@ struct CityMeshes {
     Mesh roads;
     Mesh greenAreas;
     Mesh facilities;
+    Mesh reports; // Phase 27: citizen report markers
 
     int buildingCount{0};
     int roadCount{0};
     int greenAreaCount{0};
     int facilityCount{0};
+    int reportCount{0};
     int skippedBuildingCount{0};  // footprints that failed to triangulate
 
     // Phase 9: which layer buildings/greenAreas are currently colored by.
@@ -55,7 +58,8 @@ public:
     // — never per frame (Phase 19).
     static CityMeshes Build(const gis::GISDataset& dataset,
                              const std::vector<Zone>& zones,
-                             DataLayer layer);
+                             DataLayer layer,
+                             const std::vector<CitizenReport>& reports = {});
 };
 
 }  // namespace twin

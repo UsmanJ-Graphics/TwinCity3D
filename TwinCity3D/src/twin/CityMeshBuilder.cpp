@@ -200,7 +200,8 @@ namespace twin {
 
     CityMeshes CityMeshBuilder::Build(const gis::GISDataset& dataset,
         const std::vector<Zone>& zones,
-        DataLayer layer) {
+        DataLayer layer,
+        const std::vector<CitizenReport>& reports) {
         CityMeshes result;
         result.activeLayer = layer;
 
@@ -246,15 +247,40 @@ namespace twin {
             AppendFacilityMarker(f, facilityVerts, facilityIdx);
         }
 
+        // Citizen reports markers (Phase 27): small vertical pyramids placed
+        // at the reported zone centroid or explicit localX/localZ if provided.
+        std::vector<Vertex> reportVerts;
+        std::vector<unsigned int> reportIdx;
+        int reportCount = 0;
+        auto AppendReportMarker = [&](float cx, float cz, float size = 10.0f) {
+            const float baseY = 0.0f;
+            const float topY = size * 2.0f;
+            glm::vec3 apex(cx, topY, cz);
+            glm::vec3 b0(cx - size, baseY, cz - size);
+            glm::vec3 b1(cx + size, baseY, cz - size);
+            glm::vec3 b2(cx + size, baseY, cz + size);
+            glm::vec3 b3(cx - size, baseY, cz + size);
+            unsigned int base = static_cast<unsigned int>(reportVerts.size());
+            reportVerts.push_back({ apex, glm::vec3(0.0f,1.0f,0.0f), 0.0f });
+            reportVerts.push_back({ b0, glm::vec3(0.0f,1.0f,0.0f), 0.0f });
+            reportVerts.push_back({ b1, glm::vec3(0.0f,1.0f,0.0f), 0.0f });
+            reportVerts.push_back({ b2, glm::vec3(0.0f,1.0f,0.0f), 0.0f });
+            reportVerts.push_back({ b3, glm::vec3(0.0f,1.0f,0.0f), 0.0f });
+            unsigned int apexIdx = base, i0 = base + 1, i1 = base + 2, i2 = base + 3, i3 = base + 4;
+            reportIdx.insert(reportIdx.end(), { apexIdx, i0, i1, apexIdx, i1, i2, apexIdx, i2, i3, apexIdx, i3, i0 });
+        };
+
         if (!buildingVerts.empty()) result.buildings.Upload(buildingVerts, buildingIdx);
         if (!roadVerts.empty()) result.roads.Upload(roadVerts, roadIdx);
         if (!greenVerts.empty()) result.greenAreas.Upload(greenVerts, greenIdx);
         if (!facilityVerts.empty()) result.facilities.Upload(facilityVerts, facilityIdx);
+        if (!reportVerts.empty()) result.reports.Upload(reportVerts, reportIdx);
 
         result.buildingCount = static_cast<int>(dataset.buildings.size()) - skippedBuildings;
         result.roadCount = static_cast<int>(dataset.roads.size());
         result.greenAreaCount = static_cast<int>(dataset.greenAreas.size()) - skippedGreen;
         result.facilityCount = static_cast<int>(dataset.facilities.size());
+        result.reportCount = reportCount;
         result.skippedBuildingCount = skippedBuildings + skippedGreen;
 
         LogInfo("CityMeshBuilder: " + std::to_string(result.buildingCount) + " buildings, " +

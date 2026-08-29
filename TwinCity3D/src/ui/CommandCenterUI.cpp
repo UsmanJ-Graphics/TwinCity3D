@@ -98,6 +98,8 @@ namespace twin {
         CameraMode cameraMode,
         const Zone* selectedZone,
         const std::vector<Zone>& zones,
+        const std::vector<CitizenReport>& reports,
+        int selectedReportId,
         ScenarioState& scenarioState,
         const WeatherData& weather,
         const PopulationData& population,
@@ -153,6 +155,71 @@ namespace twin {
                 result.scenarioStateChanged = true; // inform Application to refresh view
             }
 
+            // --- CITIZEN REPORTS (Phase 27 prototype) ---
+            ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::TextColored(kTextMuted, "CITIZEN REPORTS");
+            int shownR = 0;
+            for (const auto& r : reports) {
+                if (shownR >= 6) break;
+                ++shownR;
+                char label[128];
+                const char* cat = "Other";
+                switch (r.category) {
+                    case ReportCategory::Heat: cat = "Heat"; break;
+                    case ReportCategory::Flood: cat = "Flood"; break;
+                    case ReportCategory::Waste: cat = "Waste"; break;
+                    case ReportCategory::BrokenRoad: cat = "Broken road"; break;
+                    case ReportCategory::Drainage: cat = "Drainage"; break;
+                    case ReportCategory::Pollution: cat = "Pollution"; break;
+                    case ReportCategory::Other: default: cat = "Other"; break;
+                }
+                const char* st = "NEW";
+                switch (r.status) { case ReportStatus::New: st = "NEW"; break; case ReportStatus::Verified: st = "VERIFIED"; break; case ReportStatus::InProgress: st = "IN PROGRESS"; break; case ReportStatus::Resolved: st = "RESOLVED"; break; }
+                std::snprintf(label, sizeof(label), "#%d %s (%s)", r.id, cat, st);
+                if (ImGui::Selectable(label)) {
+                    if (r.zoneId >= 0) result.focusedZoneId = r.zoneId;
+                    result.requestedSelectedReportId = r.id;
+                }
+            }
+
+            if (ImGui::Button("Add Report")) {
+                ImGui::OpenPopup("AddReportPopup");
+            }
+
+            if (ImGui::BeginPopupModal("AddReportPopup", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+                static int selectedCategory = 0;
+                static char desc[256] = "";
+                static bool applyToSelectedZone = true;
+                ImGui::Text("Create a new citizen report (prototype)");
+                ImGui::Separator();
+                const char* items[] = { "Heat", "Flood", "Waste", "Broken road", "Drainage", "Pollution", "Other" };
+                ImGui::Combo("Category", &selectedCategory, items, IM_ARRAYSIZE(items));
+                ImGui::InputTextMultiline("Description", desc, IM_ARRAYSIZE(desc), ImVec2(300,80));
+                if (selectedZone) {
+                    ImGui::Checkbox("Apply to selected zone", &applyToSelectedZone);
+                } else {
+                    ImGui::TextDisabled("Select a zone to attach location, or leave unchecked to place generically.");
+                    applyToSelectedZone = false;
+                }
+                if (ImGui::Button("Submit")) {
+                    CitizenReport rep;
+                    rep.id = -1; // assigned by DigitalTwin
+                    rep.zoneId = applyToSelectedZone && selectedZone ? selectedZone->id : -1;
+                    rep.category = static_cast<ReportCategory>(selectedCategory);
+                    rep.status = ReportStatus::New;
+                    rep.description = std::string(desc);
+                    // timestamp done by Application when adding
+                    result.newCitizenReport = rep;
+                    // clear form
+                    desc[0] = '\0';
+                    ImGui::CloseCurrentPopup();
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Cancel")) { ImGui::CloseCurrentPopup(); }
+                ImGui::EndPopup();
+            }
+
             // Right Camera Controls
             float camX = std::max(550.0f, static_cast<float>(displayWidth) - 300.0f);
             ImGui::SameLine(camX);
@@ -193,6 +260,7 @@ namespace twin {
                 { DataLayer::SatelliteEnvironment,"Satellite Env" },
                 { DataLayer::GreenPriority,       "Green Priority" },
                 { DataLayer::AirQuality,          "Air Quality" },
+                { DataLayer::Reports,             "Reports" },
                 { DataLayer::LightPollution,      "Light Pollution" },
                 { DataLayer::BirdEcologicalImpact,"Bird & Ecology" },
             };
@@ -627,6 +695,26 @@ namespace twin {
                 ImGui::PlotLines("##greenSpark", greenData, std::min(gIdx, 16), 0, nullptr, 0.0f, 40.0f, ImVec2(130, 24));
                 DrawProgressBar(meanCov / 0.20f, 130.0f, 6.0f, kAccentGreen);
                 ImGui::TextDisabled("Target: 20.0%% (Deficit: %.1f%%)", std::max(0.0f, 20.0f - meanCov * 100.0f));
+                // If Air Quality layer active, show PM2.5 min/max used for normalization
+                if (activeLayer == DataLayer::AirQuality) {
+                    float minPm = 1e9f, maxPm = -1e9f;
+                    int countPm = 0;
+                    for (const auto& z : zones) {
+                        if (!z.airQualityIsPlaceholder) {
+                            ++countPm;
+                            minPm = std::min(minPm, z.pm25);
+                            maxPm = std::max(maxPm, z.pm25);
+                        }
+                    }
+                    if (countPm > 0) {
+                        ImGui::Spacing();
+                        ImGui::TextColored(kTextMuted, "PM2.5 range (used for color normalization):");
+                        ImGui::Text("Min: %.1f µg/m3   Max: %.1f µg/m3  (n=%d)", minPm, maxPm, countPm);
+                    } else {
+                        ImGui::Spacing();
+                        ImGui::TextDisabled("No air quality samples matched any zones");
+                    }
+                }
                 ImGui::Columns(1);
             }
         }

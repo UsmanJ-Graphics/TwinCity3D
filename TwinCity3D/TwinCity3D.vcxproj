@@ -202,6 +202,7 @@
     <ClInclude Include="src\gis\GISTypes.h" />
     <ClInclude Include="src\gis\Triangulate.h" />
     <ClInclude Include="src\twin\AirQualityData.h" />
+    <ClInclude Include="src\twin\CitizenReport.h" />
     <ClInclude Include="src\twin\CityMeshBuilder.h" />
     <ClInclude Include="src\twin\Digitaltwin.h" />
     <ClInclude Include="src\twin\GreenInfrastructureModel.h" />
@@ -221,6 +222,11 @@
     <ClInclude Include="src\ui\LayersPanel.h" />
     <ClInclude Include="src\ui\ScenarioPanel.h" />
     <ClInclude Include="src\ui\CommandCenterUI.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\processed\air_quality.json" />
+    <None Include="python\fetch_air_quality.py" />
+    <None Include="python\generate_sample_reports.py" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

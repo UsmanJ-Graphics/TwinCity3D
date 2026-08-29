@@ -78,6 +78,8 @@ namespace twin {
         LoadWeather();
         LoadPopulation();
         LoadAirQuality();
+        // Load any pre-existing citizen reports (prototype)
+        m_digitalTwin.LoadReports("data/processed/citizen_reports.json");
         LoadSatelliteEnvironment();
         m_digitalTwin.ComputeFloodRisk(m_weather.valid ? m_weather.precipitation : 0.0f);
         ComputeHeatRisk();
@@ -418,7 +420,7 @@ namespace twin {
     void Application::RebuildCityMeshForActiveLayer() {
         if (!m_hasCityData) return;
 
-        m_city = CityMeshBuilder::Build(m_gisDataset, m_digitalTwin.Zones(), m_activeLayer);
+        m_city = CityMeshBuilder::Build(m_gisDataset, m_digitalTwin.Zones(), m_activeLayer, m_digitalTwin.Reports());
         LogActiveLayerLegend();
 
         // If a baseline snapshot exists (saved earlier via SaveBaselineMetrics),
@@ -436,7 +438,7 @@ namespace twin {
             if (z.baselineGreenCoverage > 0.0f) { z.greenCoverage = z.baselineGreenCoverage; }
         }
         if (haveBaseline) {
-            m_cityBaseline = CityMeshBuilder::Build(m_gisDataset, baselineZones, m_activeLayer);
+            m_cityBaseline = CityMeshBuilder::Build(m_gisDataset, baselineZones, m_activeLayer, m_digitalTwin.Reports());
         } else {
             // Clear baseline mesh to avoid accidentally rendering stale data
             m_cityBaseline = CityMeshes();
@@ -506,8 +508,48 @@ namespace twin {
         m_selectedZoneId = Picking::PickZoneId(
             pickX, pickY, fbWidth, fbHeight, m_camera, m_digitalTwin.Zones());
 
-        LogInfo("Application::HandleZonePick: selected zone id=" +
-            std::to_string(m_selectedZoneId));
+        // Also try report picking (screen-space test) — check reports nearest to click.
+        int pickedReport = -1;
+        float bestDist = 1e9f;
+        // Prepare matrices
+        float aspect = fbHeight > 0 ? static_cast<float>(fbWidth) / fbHeight : 1.0f;
+        glm::mat4 view = m_camera.GetViewMatrix();
+        glm::mat4 proj = m_camera.GetProjectionMatrix(aspect);
+
+        for (const auto& r : m_digitalTwin.Reports()) {
+            // world position at report local coords (y=0)
+            glm::vec4 world(r.localX, 0.0f, r.localZ, 1.0f);
+            glm::vec4 clip = proj * view * world;
+            if (clip.w == 0.0f) continue;
+            glm::vec3 ndc = glm::vec3(clip) / clip.w;
+            // If behind camera, skip
+            if (ndc.z < -1.0f || ndc.z > 1.0f) continue;
+            float sx = (ndc.x * 0.5f + 0.5f) * static_cast<float>(fbWidth);
+            float sy = (1.0f - (ndc.y * 0.5f + 0.5f)) * static_cast<float>(fbHeight);
+            float dx = static_cast<float>(pickX) - sx;
+            float dy = static_cast<float>(pickY) - sy;
+            float dist = std::sqrt(dx*dx + dy*dy);
+            const float pickThreshold = 28.0f; // pixels
+            if (dist < pickThreshold && dist < bestDist) {
+                bestDist = dist;
+                pickedReport = r.id;
+            }
+        }
+
+        if (pickedReport >= 0) {
+            m_selectedReportId = pickedReport;
+            // Also focus zone if report references one
+            for (const auto& rr : m_digitalTwin.Reports()) {
+                if (rr.id == pickedReport && rr.zoneId >= 0) {
+                    m_selectedZoneId = rr.zoneId;
+                    break;
+                }
+            }
+            LogInfo("Application::HandleZonePick: selected report id=" + std::to_string(m_selectedReportId));
+            return; // consumed as report click
+        }
+
+        LogInfo("Application::HandleZonePick: selected zone id=" + std::to_string(m_selectedZoneId));
     }
 
     void Application::MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
@@ -646,6 +688,15 @@ namespace twin {
 
                     m_gridShader.SetVec4("uBaseColor", glm::vec4(0.85f, 0.35f, 0.15f, 1.0f));
                     scene.facilities.Draw();
+
+                    // Phase 27: draw citizen report markers (always flat-colored)
+                    // Render on top by disabling depth test briefly so markers are
+                    // visible even when buildings overlap them.
+                    m_gridShader.SetInt("uUseDataColor", 0);
+                    m_gridShader.SetVec4("uBaseColor", glm::vec4(0.90f, 0.45f, 0.10f, 1.0f)); // orange
+                    glDisable(GL_DEPTH_TEST);
+                    scene.reports.Draw();
+                    glEnable(GL_DEPTH_TEST);
                 };
 
                 bool useBeforeAfter = m_scenario.beforeAfterEnabled && m_cityBaseline.buildingCount > 0;
@@ -707,6 +758,8 @@ namespace twin {
                 m_camera.GetMode(),
                 selectedZone,
                 m_digitalTwin.Zones(),
+                m_digitalTwin.Reports(),
+                m_selectedReportId,
                 m_scenario,
                 m_weather,
                 m_population,
@@ -727,9 +780,93 @@ namespace twin {
                 m_digitalTwin.SaveBaselineMetrics();
                 if (m_hasCityData) RebuildCityMeshForActiveLayer();
             }
+            if (uiResult.requestedSelectedReportId >= 0) {
+                m_selectedReportId = uiResult.requestedSelectedReportId;
+            }
+            if (uiResult.reportStatusUpdateId >= 0 && uiResult.reportStatusUpdateValue >= 0) {
+                m_digitalTwin.UpdateReportStatus(uiResult.reportStatusUpdateId, static_cast<ReportStatus>(uiResult.reportStatusUpdateValue));
+                m_digitalTwin.SaveReports("data/processed/citizen_reports.json");
+                if (m_hasCityData) RebuildCityMeshForActiveLayer();
+            }
+            if (uiResult.newCitizenReport.has_value()) {
+                CitizenReport rep = *uiResult.newCitizenReport;
+                // timestamp now
+                time_t t = time(nullptr);
+                char buf[64];
+#ifdef _WIN32
+                struct tm tm;
+                gmtime_s(&tm, &t);
+                std::strftime(buf, sizeof(buf), "%Y-%m-%dT%H:%M:%SZ", &tm);
+#else
+                struct tm tm;
+                gmtime_r(&t, &tm);
+                std::strftime(buf, sizeof(buf), "%Y-%m-%dT%H:%M:%SZ", &tm);
+#endif
+                rep.timestamp = std::string(buf);
+                m_digitalTwin.AddReport(rep);
+                m_digitalTwin.SaveReports("data/processed/citizen_reports.json");
+                if (m_hasCityData) RebuildCityMeshForActiveLayer();
+            }
             // live priority weight tuning removed
             if (uiResult.scenarioStateChanged) {
                 ApplyHeatwaveScenario();
+            }
+            // Render a small report popover when a report is selected
+            if (m_selectedReportId >= 0) {
+                const CitizenReport* rep = nullptr;
+                for (const auto& r : m_digitalTwin.Reports()) { if (r.id == m_selectedReportId) { rep = &r; break; } }
+                if (rep) {
+                    ImGuiWindowFlags popupFlags = ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
+                    ImGui::SetNextWindowPos(ImVec2(static_cast<float>(fbWidth) - 340.0f, 80.0f), ImGuiCond_Always);
+                    if (ImGui::Begin("Report Details", nullptr, popupFlags)) {
+                        const char* cat = "Other";
+                        switch (rep->category) {
+                            case ReportCategory::Heat: cat = "Heat"; break;
+                            case ReportCategory::Flood: cat = "Flood"; break;
+                            case ReportCategory::Waste: cat = "Waste"; break;
+                            case ReportCategory::BrokenRoad: cat = "Broken road"; break;
+                            case ReportCategory::Drainage: cat = "Drainage"; break;
+                            case ReportCategory::Pollution: cat = "Pollution"; break;
+                            case ReportCategory::Other: default: cat = "Other"; break;
+                        }
+                        const char* st = "NEW";
+                        switch (rep->status) { case ReportStatus::New: st = "NEW"; break; case ReportStatus::Verified: st = "VERIFIED"; break; case ReportStatus::InProgress: st = "IN PROGRESS"; break; case ReportStatus::Resolved: st = "RESOLVED"; break; }
+
+                        ImGui::TextColored(ImVec4(0.90f,0.45f,0.10f,1.0f), "Report #%d  %s", rep->id, cat);
+                        ImGui::TextDisabled("Status: %s", st);
+                        ImGui::Separator();
+                        ImGui::TextWrapped("%s", rep->description.c_str());
+                        ImGui::Separator();
+                        ImGui::TextDisabled("Zone: %d", rep->zoneId);
+                        ImGui::TextDisabled("When: %s", rep->timestamp.c_str());
+
+                        // Status buttons
+                        if (ImGui::Button("Mark Verified")) {
+                            if (m_digitalTwin.UpdateReportStatus(rep->id, ReportStatus::Verified)) {
+                                m_digitalTwin.SaveReports("data/processed/citizen_reports.json");
+                            }
+                        }
+                        ImGui::SameLine();
+                        if (ImGui::Button("In Progress")) {
+                            if (m_digitalTwin.UpdateReportStatus(rep->id, ReportStatus::InProgress)) {
+                                m_digitalTwin.SaveReports("data/processed/citizen_reports.json");
+                            }
+                        }
+                        ImGui::SameLine();
+                        if (ImGui::Button("Resolve")) {
+                            if (m_digitalTwin.UpdateReportStatus(rep->id, ReportStatus::Resolved)) {
+                                m_digitalTwin.SaveReports("data/processed/citizen_reports.json");
+                            }
+                        }
+
+                        if (ImGui::Button("Close")) {
+                            m_selectedReportId = -1;
+                        }
+                    }
+                    ImGui::End();
+                } else {
+                    m_selectedReportId = -1; // clear if not found
+                }
             }
             if (uiResult.resetCameraRequested) {
                 m_camera.Reset();

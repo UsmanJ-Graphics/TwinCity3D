@@ -7,6 +7,7 @@
 #include "../ui/ScenarioPanel.h"
 #include "../core/Camera.h"
 #include "../twin/PriorityModel.h"
+#include "../twin/CitizenReport.h"
 #include <vector>
 #include <optional>
 
@@ -21,6 +22,13 @@ namespace twin {
         bool scenarioStateChanged{ false };
         // Request that Application save baseline metrics (before applying interventions)
         bool saveBaselineRequested{ false };
+        // New citizen report created via UI
+        std::optional<CitizenReport> newCitizenReport;
+        // Request to select a report (id), returned when user clicks a report in list
+        int requestedSelectedReportId{ -1 };
+        // Request to update a report's status: id and new status value (static_cast<int>(ReportStatus))
+        int reportStatusUpdateId{ -1 };
+        int reportStatusUpdateValue{ -1 };
 
         bool resetCameraRequested{ false };
     };
@@ -41,6 +49,8 @@ namespace twin {
             CameraMode cameraMode,
             const Zone* selectedZone,
             const std::vector<Zone>& zones,
+            const std::vector<CitizenReport>& reports,
+            int selectedReportId,
             ScenarioState& scenarioState,
             const WeatherData& weather,
             const PopulationData& population,

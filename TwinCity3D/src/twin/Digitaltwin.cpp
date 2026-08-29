@@ -1,6 +1,10 @@
 #include "DigitalTwin.h"
 #include "../gis/Triangulate.h"
 #include "../core/Log.h"
+#include "CitizenReport.h"
+#include "../../external/json.hpp"
+#include <fstream>
+#include <ctime>
 
 #include <algorithm>
 #include <cmath>
@@ -32,6 +36,17 @@ namespace twin {
         // score; this overlay is display-only.
         constexpr float kWeightCombinedHeat = 0.6f;
         constexpr float kWeightCombinedAirQuality = 0.4f;
+    }
+
+    bool DigitalTwin::UpdateReportStatus(int reportId, ReportStatus newStatus) {
+        for (auto& r : m_reports) {
+            if (r.id == reportId) {
+                r.status = newStatus;
+                LogInfo("DigitalTwin::UpdateReportStatus: report " + std::to_string(reportId) + " -> " + std::to_string(static_cast<int>(newStatus)));
+                return true;
+            }
+        }
+        return false;
     }
 
     void DigitalTwin::ApplyAirQuality(const AirQualityData& air) {
@@ -477,6 +492,75 @@ namespace twin {
         auto it = std::find_if(m_zones.begin(), m_zones.end(),
             [zoneId](const Zone& z) { return z.id == zoneId; });
         return it != m_zones.end() ? &(*it) : nullptr;
+    }
+
+    void DigitalTwin::AddReport(const CitizenReport& r) {
+        CitizenReport rep = r;
+        // assign id
+        int maxId = -1;
+        for (const auto& ex : m_reports) maxId = std::max(maxId, ex.id);
+        rep.id = maxId + 1;
+
+        // if zoneId present, set local coords to zone centroid
+        if (rep.zoneId >= 0) {
+            Zone* z = FindZone(rep.zoneId);
+            if (z) {
+                rep.localX = (z->minX + z->maxX) * 0.5f;
+                rep.localZ = (z->minZ + z->maxZ) * 0.5f;
+            }
+        }
+
+        m_reports.push_back(rep);
+        LogInfo("DigitalTwin::AddReport: added report id=" + std::to_string(rep.id));
+    }
+
+    void DigitalTwin::SaveReports(const std::string& path) const {
+        try {
+            nlohmann::json root;
+            root["reports"] = nlohmann::json::array();
+            for (const auto& r : m_reports) {
+                nlohmann::json jr;
+                jr["id"] = r.id;
+                jr["zone_id"] = r.zoneId;
+                jr["local_x"] = r.localX;
+                jr["local_z"] = r.localZ;
+                jr["category"] = static_cast<int>(r.category);
+                jr["status"] = static_cast<int>(r.status);
+                jr["timestamp"] = r.timestamp;
+                jr["description"] = r.description;
+                root["reports"].push_back(jr);
+            }
+            std::ofstream out(path);
+            out << root.dump(2);
+            LogInfo("DigitalTwin::SaveReports: wrote " + path);
+        } catch (const std::exception& e) {
+            LogWarn(std::string("DigitalTwin::SaveReports: failed to write ") + path + ": " + e.what());
+        }
+    }
+
+    void DigitalTwin::LoadReports(const std::string& path) {
+        m_reports.clear();
+        std::ifstream file(path);
+        if (!file) { LogInfo("DigitalTwin::LoadReports: no file " + path + " found — starting with zero reports"); return; }
+        try {
+            nlohmann::json root; file >> root;
+            if (!root.contains("reports") || !root["reports"].is_array()) return;
+            for (const auto& jr : root["reports"]) {
+                CitizenReport r;
+                r.id = jr.value("id", -1);
+                r.zoneId = jr.value("zone_id", -1);
+                r.localX = jr.value("local_x", 0.0f);
+                r.localZ = jr.value("local_z", 0.0f);
+                r.category = static_cast<ReportCategory>(jr.value("category", static_cast<int>(ReportCategory::Other)));
+                r.status = static_cast<ReportStatus>(jr.value("status", static_cast<int>(ReportStatus::New)));
+                r.timestamp = jr.value("timestamp", std::string());
+                r.description = jr.value("description", std::string());
+                m_reports.push_back(r);
+            }
+            LogInfo("DigitalTwin::LoadReports: loaded " + std::to_string(m_reports.size()) + " reports from " + path);
+        } catch (const std::exception& e) {
+            LogWarn(std::string("DigitalTwin::LoadReports: failed to parse ") + path + ": " + e.what());
+        }
     }
 
     const Zone* DigitalTwin::FindZone(int zoneId) const {

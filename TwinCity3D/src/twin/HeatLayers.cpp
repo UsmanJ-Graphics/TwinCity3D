@@ -18,7 +18,8 @@ namespace twin {
             case DataLayer::GreenPriority:   return DataLayer::AirQuality;
             case DataLayer::AirQuality:      return DataLayer::LightPollution;
             case DataLayer::LightPollution:  return DataLayer::BirdEcologicalImpact;
-            case DataLayer::BirdEcologicalImpact: return DataLayer::HeatRisk;
+            case DataLayer::BirdEcologicalImpact: return DataLayer::Reports;
+            case DataLayer::Reports: return DataLayer::HeatRisk;
         }
         return DataLayer::HeatRisk;
     }
@@ -55,6 +56,8 @@ namespace twin {
                 return { "Light Pollution", "satellite night light index 0..1", "Dark / Low Light", "High Light Intensity" };
             case DataLayer::BirdEcologicalImpact:
                 return { "Bird & Ecological Disturbance", "habitat disturbance score 0-100", "Low Disturbance", "Critical Impact" };
+            case DataLayer::Reports:
+                return { "Reports", "citizen reports overlay", "Hidden", "Visible" };
         }
         return { "Unknown", "", "", "" };
     }

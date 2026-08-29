@@ -188,6 +188,7 @@ namespace twin {
         // side-by-side or do a slider wipe.
 
         int m_selectedZoneId{ -1 };  // Phase 10: -1 means nothing selected
+        int m_selectedReportId{ -1 }; // Phase 27: selected citizen report (-1 = none)
 
         // Phase 14: cached highlight-frame mesh for the selected zone.
         // Rebuilt lazily in Run() only when m_selectedZoneId actually

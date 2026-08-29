@@ -21,7 +21,8 @@ namespace twin {
         GreenPriority,        // Phase 19: WHERE to add greenery
         AirQuality,           // Phase 26: Air quality / PM2.5 / AQI layer
         LightPollution,       // Phase 25: Night light pollution layer
-        BirdEcologicalImpact  // Phase 25: Avian & ecological disturbance layer
+        BirdEcologicalImpact, // Phase 25: Avian & ecological disturbance layer
+        Reports               // Phase 27: Citizen report markers overlay (toggle visibility)
     };
 
     // Console-legend text for the active layer (there's no ImGui panel yet —
