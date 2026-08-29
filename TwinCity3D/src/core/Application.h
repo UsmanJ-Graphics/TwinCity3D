@@ -15,6 +15,7 @@
 #include "../twin/WeatherData.h"
 #include "../twin/PopulationData.h"
 #include "../twin/SatelliteEnvironmentData.h"
+#include "../twin/AirQualityData.h"
 #include "../twin/HeatLayers.h"
 #include "../ui/Inspector.h"
 #include "../ui/LayersPanel.h"
@@ -74,6 +75,7 @@ namespace twin {
 
         void LoadPopulation();            // Phase 7: loads population.json, applies it to the digital twin
         void LoadSatelliteEnvironment();  // Phase 18 processed environmental layer
+        void LoadAirQuality();            // Phase 26: loads air_quality.json and applies it to the digital twin
         void LogPhase7PopulationSummary(); // temporary Phase 7 diagnostic; superseded by the dashboard's population-exposure display (Phase 15)
         void ComputeHeatRisk();
         void LogPhase8HeatRiskSummary();
@@ -175,6 +177,7 @@ namespace twin {
         WeatherData m_weather;  // Phase 5, Step 3
         PopulationData m_population;  // Phase 7
         SatelliteEnvironmentData m_satelliteEnvironment; // Phase 18
+        AirQualityData m_airQuality; // Phase 26
         ScenarioState m_scenario;     // Phase 15
 
         DataLayer m_activeLayer{ DataLayer::HeatRisk };  // Phase 9

@@ -6,6 +6,7 @@
 #include "HeatRiskModel.h"
 #include "PriorityModel.h"
 #include "GreenInfrastructureModel.h"
+#include "AirQualityData.h"
 #include "../gis/GISTypes.h"
 #include <vector>
 
@@ -24,7 +25,10 @@ namespace twin {
     // an explainable heat-risk score per zone. Phase 11 adds
     // ComputePriority(), which ranks zones for government intervention on
     // top of that heat-risk score — the zone list itself doesn't change
-    // shape again.
+    // shape again. Phase 26 adds ApplyAirQuality() and
+    // ComputeCombinedEnvironmentalBurden(), a deliberately separate overlay
+    // that blends heat risk with air quality without feeding back into
+    // either HeatRiskModel or PriorityModel.
     class DigitalTwin {
     public:
         // Builds one Zone per gis::ZoneBounds entry, computes the
@@ -122,6 +126,20 @@ namespace twin {
 
         // Phase 25: Light Pollution & Bird/Ecological Impact model
         void ComputeEcologicalImpact();
+
+        // Phase 26: apply per-zone air quality data (PM2.5 / AQI samples)
+        void ApplyAirQuality(const AirQualityData& air);
+
+        // Phase 26: computes a CONCEPTUAL "Combined Environmental Burden"
+        // (0..100) for every zone that has BOTH a real heat-risk score AND
+        // real air-quality data. This is deliberately kept SEPARATE from the
+        // core heat-risk model — HeatRiskModel and PriorityModel never read
+        // this field, and this method never writes back into heatRisk or
+        // priority. Must run after both ComputeHeatRisk() and
+        // ApplyAirQuality() for a zone to be scored; a zone missing either
+        // input is left with combinedBurdenIsPlaceholder == true. Safe to
+        // call again after a scenario recomputes heat risk.
+        void ComputeCombinedEnvironmentalBurden();
 
         const std::vector<Zone>& Zones() const { return m_zones; }
         std::vector<Zone>& Zones() { return m_zones; }

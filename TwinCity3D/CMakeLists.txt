@@ -49,6 +49,9 @@ add_executable(LahoreDigitalTwin
     src/twin/HeatRiskModel.cpp   # Phase 8 (new)
     src/twin/PriorityModel.h     # Phase 11 (new)
     src/twin/PriorityModel.cpp   # Phase 11 (new)
+    src/twin/AirQualityData.h    # Phase 26 (new)
+    src/twin/AirQualityLoader.h  # Phase 26 (new)
+    src/twin/AirQualityLoader.cpp # Phase 26 (new)
 
     # Dear ImGui (Phase 10) — core + GLFW/OpenGL3 backends
     ${IMGUI_DIR}/imgui.cpp

@@ -6,6 +6,7 @@
 #include <string>
 
 #include <iamgui/imgui.h>
+#include "../twin/HeatLayers.h"
 
 namespace twin {
 
@@ -59,6 +60,17 @@ namespace twin {
             LabeledValue("Pop. Density", buf, false);
         }
 
+        // Air quality (Phase 26)
+        if (zone.airQualityIsPlaceholder) {
+            LabeledValue("PM2.5", std::string("--"), true);
+            LabeledValue("AQI", std::string("--"), true);
+        } else {
+            std::snprintf(buf, sizeof(buf), "%.1f µg/m3", zone.pm25);
+            LabeledValue("PM2.5", buf, false);
+            std::snprintf(buf, sizeof(buf), "%.0f", zone.aqi);
+            LabeledValue("AQI", buf, false);
+        }
+
         std::snprintf(buf, sizeof(buf), "%.1f%%", zone.greenCoverage * 100.0f);
         LabeledValue("Green Coverage", buf, false);  // real since Build(), Phase 3
 
@@ -96,6 +108,24 @@ namespace twin {
                 ImGui::TextDisabled("MODELLED SCENARIO ESTIMATE");
             }
         }
+
+        // Combined Environmental Burden (Phase 26) — a conceptual overlay
+        // blending heat risk with air quality. Rendered in its own block,
+        // visually separated from HEAT RISK above and PRIORITY below, and
+        // never phrased as though it were part of either score — this
+        // panel must keep it clearly distinguished from the core heat-risk
+        // model per the master spec.
+        ImGui::Spacing();
+        ImGui::Separator();
+        ImGui::TextColored(ImVec4(0.55f, 0.75f, 0.95f, 1.0f), "COMBINED ENVIRONMENTAL BURDEN");
+        if (zone.combinedBurdenIsPlaceholder) {
+            ImGui::TextColored(ImVec4(0.6f, 0.6f, 0.6f, 1.0f),
+                                "-- / 100  (needs heat risk + air quality)");
+        } else {
+            ImGui::Text("%.0f / 100", zone.combinedEnvironmentalBurden);
+        }
+        ImGui::TextDisabled("Conceptual overlay (heat + air quality).");
+        ImGui::TextDisabled("Not part of the core heat-risk or priority score.");
 
         ImGui::Spacing();
         ImGui::TextUnformatted("PRIORITY");

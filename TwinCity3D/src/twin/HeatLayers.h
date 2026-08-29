@@ -19,6 +19,7 @@ namespace twin {
         FloodRisk,
         SatelliteEnvironment,
         GreenPriority,        // Phase 19: WHERE to add greenery
+        AirQuality,           // Phase 26: Air quality / PM2.5 / AQI layer
         LightPollution,       // Phase 25: Night light pollution layer
         BirdEcologicalImpact  // Phase 25: Avian & ecological disturbance layer
     };
@@ -55,5 +56,9 @@ namespace twin {
     // this function re-deriving them per zone.
     float NormalizedLayerValue(const Zone& zone, DataLayer layer,
         float minPopDensity, float maxPopDensity);
+
+    // Phase 25 helpers: classifies ecological indicators for UI text.
+    const char* ClassifyLightPollution(float lightIndex01); // input 0..1 -> labels Low/Moderate/High/Critical
+    const char* ClassifyBirdImpact(float disturbance0to100); // input 0..100 -> labels Low/Moderate/High/Critical
 
 }  // namespace twin

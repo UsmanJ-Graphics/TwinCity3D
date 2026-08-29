@@ -98,6 +98,24 @@ namespace twin {
         float builtUpIndex{ 0.0f };            // 0..1 proxy (higher = more paved/built)
         bool satelliteIsPlaceholder{ true };
 
+        // Phase 26: Air quality / AQI / PM2.5 prototype indicators
+        float pm25{ 0.0f };                    // micrograms per cubic meter (µg/m3)
+        float aqi{ 0.0f };                     // Air Quality Index where available
+        float airQualityIndex{ 0.0f };         // normalized 0..1 (higher = worse)
+        bool airQualityIsPlaceholder{ true };
+
+        // Phase 26: "Combined Environmental Burden" — a deliberately
+        // SEPARATE conceptual overlay that blends heat risk with air
+        // quality. HeatRiskModel and PriorityModel never read this field
+        // and it never feeds back into either of them — see
+        // DigitalTwin::ComputeCombinedEnvironmentalBurden(). A zone missing
+        // either a real heat-risk score OR real air-quality data is left
+        // with combinedBurdenIsPlaceholder == true, same "no fabricated
+        // scores from incomplete inputs" discipline every other model in
+        // this codebase follows.
+        float combinedEnvironmentalBurden{ 0.0f };  // 0..100
+        bool combinedBurdenIsPlaceholder{ true };
+
         // --- Light Pollution & Bird/Ecological Impact (Phase 25) ---
         float lightPollutionIndex{ 0.0f };       // 0..1 night light intensity proxy
         float birdEcologicalDisturbance{ 0.0f }; // 0..100 composite ecological disturbance index

@@ -5,6 +5,9 @@
 #include "../twin/WeatherLoader.h"
 #include "../twin/PopulationLoader.h"
 #include "../twin/SatelliteEnvironmentLoader.h"
+#include "../twin/AirQualityLoader.h"   // Phase 26: was missing — LoadAirQuality() called this
+                                         // type below without ever including its declaration,
+                                         // which would fail to compile.
 #include <iamgui/imgui.h>
 #include <iamgui/imgui_impl_glfw.h>
 #include <iamgui/imgui_impl_opengl3.h>
@@ -74,6 +77,7 @@ namespace twin {
         LoadCityData();
         LoadWeather();
         LoadPopulation();
+        LoadAirQuality();
         LoadSatelliteEnvironment();
         m_digitalTwin.ComputeFloodRisk(m_weather.valid ? m_weather.precipitation : 0.0f);
         ComputeHeatRisk();
@@ -216,6 +220,22 @@ namespace twin {
         m_digitalTwin.ApplySatelliteEnvironment(m_satelliteEnvironment);
     }
 
+    void Application::LoadAirQuality() {
+        // Relative to the working directory, same convention as every other
+        // Load*() method. Falls back to data/processed/air_quality.json's
+        // "sample_fallback" data (see the shipped sample file) if no live
+        // OpenAQ/AQICN extract is present, so the app still runs offline.
+        const std::string path = "data/processed/air_quality.json";
+        if (!AirQualityLoader::Load(path, m_airQuality)) {
+            LogWarn("No air quality file at '" + path + "'. Run python/fetch_air_quality.py "
+                "(OpenAQ/AQICN), or drop in the sample file for an offline demo. "
+                "Zone air quality remains placeholders until this is fixed.");
+        }
+        // Same pattern as every other Load*(): always call Apply*(), even on
+        // failure — it checks air.valid itself and is a no-op when false.
+        m_digitalTwin.ApplyAirQuality(m_airQuality);
+    }
+
     void Application::LogPhase7PopulationSummary() {
         // Console-only diagnostic for Phase 7, same role LogPhase5WeatherSummary()
         // plays for Phase 5 -- superseded once the dashboard (Phase 15) shows
@@ -250,6 +270,13 @@ namespace twin {
         // scenario adjusts zone.temperature) to rescore under a new scenario.
         m_digitalTwin.ComputeHeatRisk();
         m_digitalTwin.ComputePopulationExposure();
+        // Phase 26: recomputed here (not in LoadAirQuality()) because it
+        // needs a real heat-risk score as an input, and ComputeHeatRisk()
+        // is the method that's guaranteed to re-run after every later
+        // scenario change (see ApplyHeatwaveScenario()) — so this stays
+        // correctly re-evaluated under "what if" conditions without a
+        // separate call site to keep in sync.
+        m_digitalTwin.ComputeCombinedEnvironmentalBurden();
         LogPhase8HeatRiskSummary();
     }
 
@@ -696,6 +723,11 @@ namespace twin {
             if (uiResult.focusedZoneId >= 0) {
                 FocusCameraOnZone(uiResult.focusedZoneId);
             }
+            if (uiResult.saveBaselineRequested) {
+                m_digitalTwin.SaveBaselineMetrics();
+                if (m_hasCityData) RebuildCityMeshForActiveLayer();
+            }
+            // live priority weight tuning removed
             if (uiResult.scenarioStateChanged) {
                 ApplyHeatwaveScenario();
             }

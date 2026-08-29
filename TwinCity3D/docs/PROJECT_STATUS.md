@@ -89,6 +89,32 @@ $$\text{DETECT} \longrightarrow \text{UNDERSTAND} \longrightarrow \text{PRIORITI
 - Ranks zones #1 to #N for government intervention.
 - Interactive `Top Priority Zones` UI panel; clicking any ranked zone snaps the camera to focus on it and opens the inspector.
 
+#### PHASE 11 STATUS REPORT
+
+PHASE STATUS: Completed
+
+FILES CREATED/MODIFIED:
+- src/twin/PriorityModel.h / PriorityModel.cpp — priority scoring and ranking implementation
+- src/twin/Zone.h — priority fields (priority, priorityIsPlaceholder, priorityRank)
+- src/twin/Digitaltwin.cpp — ComputePriority integration and DigitalTwin::ComputePriority call sites
+- src/ui/Inspector.cpp — Top Priority panel + WHY breakdown
+- src/ui/CommandCenterUI.cpp — Right inspector Top Priority list and scene integration
+- src/core/Application.cpp — FocusCameraOnZone and wiring of UI focusedZoneId
+
+IMPLEMENTED:
+- A normalized 0–100 priority score combining heat risk, population magnitude, environmental burden, and population exposure.
+- Ranking (1 = highest priority) and clickable Top Priority UI that focuses camera, highlights zone, and opens the inspector showing "WHY this zone".
+
+TEST RESULT:
+- Build successful (x64 Debug).
+- Manual verification steps: load app, ensure zones show non-placeholder priorities after population + temperature data are applied; open "Top Priority Zones" list, click an entry and confirm camera focuses, zone highlights, and Inspector shows priority breakdown.
+
+KNOWN LIMITATIONS:
+- Priority is a prototype decision-support indicator and is explicitly labelled as such in the UI. It is relative to the study area and depends on availability of temperature and population data per zone.
+- Weighting is configurable in PriorityWeights but no UI slider exists yet to retune weights live (Phase 31 / Phase 29 planned).
+
+NEXT PHASE: Phase 12 — Professional 3D Digital Twin Visualization (polish building materials, camera transitions, and facility markers).
+
 ### Phase 12 — Multi-Mode Professional Camera System
 - Four distinct camera modes (`CameraMode` in `Camera.h`):
   1. **FreeFly**: FPS-style WASD navigation with mouse-look.

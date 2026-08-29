@@ -6,6 +6,7 @@
 #include "../twin/PopulationData.h"
 #include "../ui/ScenarioPanel.h"
 #include "../core/Camera.h"
+#include "../twin/PriorityModel.h"
 #include <vector>
 #include <optional>
 
@@ -18,6 +19,9 @@ namespace twin {
         std::optional<CameraMode> newCameraMode;
         int focusedZoneId{ -1 };
         bool scenarioStateChanged{ false };
+        // Request that Application save baseline metrics (before applying interventions)
+        bool saveBaselineRequested{ false };
+
         bool resetCameraRequested{ false };
     };
 

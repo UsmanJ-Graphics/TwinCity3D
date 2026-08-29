@@ -12,15 +12,15 @@ namespace twin {
 
     namespace {
         // Color Palette matching the professional dark Command Center design
-        constexpr ImVec4 kBgColor       = ImVec4(0.06f, 0.09f, 0.13f, 0.94f);
-        constexpr ImVec4 kPanelBg       = ImVec4(0.09f, 0.14f, 0.20f, 0.92f);
-        constexpr ImVec4 kHeaderBg      = ImVec4(0.12f, 0.19f, 0.28f, 1.00f);
-        constexpr ImVec4 kAccentRed     = ImVec4(0.90f, 0.25f, 0.25f, 1.00f);
-        constexpr ImVec4 kAccentOrange  = ImVec4(0.95f, 0.55f, 0.15f, 1.00f);
-        constexpr ImVec4 kAccentYellow  = ImVec4(0.90f, 0.85f, 0.20f, 1.00f);
-        constexpr ImVec4 kAccentGreen   = ImVec4(0.20f, 0.75f, 0.40f, 1.00f);
-        constexpr ImVec4 kAccentCyan    = ImVec4(0.15f, 0.70f, 0.85f, 1.00f);
-        constexpr ImVec4 kTextMuted     = ImVec4(0.65f, 0.72f, 0.80f, 1.00f);
+        constexpr ImVec4 kBgColor = ImVec4(0.06f, 0.09f, 0.13f, 0.94f);
+        constexpr ImVec4 kPanelBg = ImVec4(0.09f, 0.14f, 0.20f, 0.92f);
+        constexpr ImVec4 kHeaderBg = ImVec4(0.12f, 0.19f, 0.28f, 1.00f);
+        constexpr ImVec4 kAccentRed = ImVec4(0.90f, 0.25f, 0.25f, 1.00f);
+        constexpr ImVec4 kAccentOrange = ImVec4(0.95f, 0.55f, 0.15f, 1.00f);
+        constexpr ImVec4 kAccentYellow = ImVec4(0.90f, 0.85f, 0.20f, 1.00f);
+        constexpr ImVec4 kAccentGreen = ImVec4(0.20f, 0.75f, 0.40f, 1.00f);
+        constexpr ImVec4 kAccentCyan = ImVec4(0.15f, 0.70f, 0.85f, 1.00f);
+        constexpr ImVec4 kTextMuted = ImVec4(0.65f, 0.72f, 0.80f, 1.00f);
 
         // Helper to draw a sleek horizontal colored bar
         void DrawProgressBar(float value01, float width, float height, ImVec4 color) {
@@ -64,33 +64,33 @@ namespace twin {
         style.ItemInnerSpacing = ImVec2(6.0f, 4.0f);
 
         ImVec4* colors = style.Colors;
-        colors[ImGuiCol_WindowBg]             = kBgColor;
-        colors[ImGuiCol_ChildBg]              = kPanelBg;
-        colors[ImGuiCol_PopupBg]              = kBgColor;
-        colors[ImGuiCol_Border]               = ImVec4(0.20f, 0.30f, 0.42f, 0.60f);
-        colors[ImGuiCol_BorderShadow]         = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
-        colors[ImGuiCol_FrameBg]              = ImVec4(0.12f, 0.18f, 0.26f, 0.80f);
-        colors[ImGuiCol_FrameBgHovered]       = ImVec4(0.18f, 0.26f, 0.36f, 0.90f);
-        colors[ImGuiCol_FrameBgActive]        = ImVec4(0.22f, 0.32f, 0.44f, 1.00f);
-        colors[ImGuiCol_TitleBg]              = kHeaderBg;
-        colors[ImGuiCol_TitleBgActive]        = kHeaderBg;
-        colors[ImGuiCol_TitleBgCollapsed]     = kHeaderBg;
-        colors[ImGuiCol_MenuBarBg]            = kHeaderBg;
-        colors[ImGuiCol_ScrollbarBg]          = ImVec4(0.08f, 0.12f, 0.18f, 0.60f);
-        colors[ImGuiCol_ScrollbarGrab]        = ImVec4(0.20f, 0.30f, 0.42f, 0.80f);
+        colors[ImGuiCol_WindowBg] = kBgColor;
+        colors[ImGuiCol_ChildBg] = kPanelBg;
+        colors[ImGuiCol_PopupBg] = kBgColor;
+        colors[ImGuiCol_Border] = ImVec4(0.20f, 0.30f, 0.42f, 0.60f);
+        colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
+        colors[ImGuiCol_FrameBg] = ImVec4(0.12f, 0.18f, 0.26f, 0.80f);
+        colors[ImGuiCol_FrameBgHovered] = ImVec4(0.18f, 0.26f, 0.36f, 0.90f);
+        colors[ImGuiCol_FrameBgActive] = ImVec4(0.22f, 0.32f, 0.44f, 1.00f);
+        colors[ImGuiCol_TitleBg] = kHeaderBg;
+        colors[ImGuiCol_TitleBgActive] = kHeaderBg;
+        colors[ImGuiCol_TitleBgCollapsed] = kHeaderBg;
+        colors[ImGuiCol_MenuBarBg] = kHeaderBg;
+        colors[ImGuiCol_ScrollbarBg] = ImVec4(0.08f, 0.12f, 0.18f, 0.60f);
+        colors[ImGuiCol_ScrollbarGrab] = ImVec4(0.20f, 0.30f, 0.42f, 0.80f);
         colors[ImGuiCol_ScrollbarGrabHovered] = ImVec4(0.30f, 0.42f, 0.56f, 1.00f);
-        colors[ImGuiCol_ScrollbarGrabActive]  = ImVec4(0.40f, 0.55f, 0.70f, 1.00f);
-        colors[ImGuiCol_CheckMark]            = kAccentCyan;
-        colors[ImGuiCol_SliderGrab]           = kAccentCyan;
-        colors[ImGuiCol_SliderGrabActive]     = kAccentGreen;
-        colors[ImGuiCol_Button]               = ImVec4(0.14f, 0.22f, 0.32f, 0.85f);
-        colors[ImGuiCol_ButtonHovered]        = ImVec4(0.22f, 0.34f, 0.48f, 1.00f);
-        colors[ImGuiCol_ButtonActive]         = ImVec4(0.18f, 0.45f, 0.65f, 1.00f);
-        colors[ImGuiCol_Header]               = ImVec4(0.15f, 0.24f, 0.35f, 0.80f);
-        colors[ImGuiCol_HeaderHovered]        = ImVec4(0.22f, 0.34f, 0.48f, 0.90f);
-        colors[ImGuiCol_HeaderActive]         = ImVec4(0.18f, 0.45f, 0.65f, 1.00f);
-        colors[ImGuiCol_Text]                 = ImVec4(0.92f, 0.95f, 0.98f, 1.00f);
-        colors[ImGuiCol_TextDisabled]         = kTextMuted;
+        colors[ImGuiCol_ScrollbarGrabActive] = ImVec4(0.40f, 0.55f, 0.70f, 1.00f);
+        colors[ImGuiCol_CheckMark] = kAccentCyan;
+        colors[ImGuiCol_SliderGrab] = kAccentCyan;
+        colors[ImGuiCol_SliderGrabActive] = kAccentGreen;
+        colors[ImGuiCol_Button] = ImVec4(0.14f, 0.22f, 0.32f, 0.85f);
+        colors[ImGuiCol_ButtonHovered] = ImVec4(0.22f, 0.34f, 0.48f, 1.00f);
+        colors[ImGuiCol_ButtonActive] = ImVec4(0.18f, 0.45f, 0.65f, 1.00f);
+        colors[ImGuiCol_Header] = ImVec4(0.15f, 0.24f, 0.35f, 0.80f);
+        colors[ImGuiCol_HeaderHovered] = ImVec4(0.22f, 0.34f, 0.48f, 0.90f);
+        colors[ImGuiCol_HeaderActive] = ImVec4(0.18f, 0.45f, 0.65f, 1.00f);
+        colors[ImGuiCol_Text] = ImVec4(0.92f, 0.95f, 0.98f, 1.00f);
+        colors[ImGuiCol_TextDisabled] = kTextMuted;
     }
 
     UICommandResult CommandCenterUI::Render(
@@ -144,6 +144,15 @@ namespace twin {
             ImGui::SameLine(0, 10.0f);
             ImGui::TextDisabled("29 Aug 2026");
 
+            // Before/After toggle for interactive comparative view (Phase 21)
+            bool prevBeforeAfter = scenarioState.beforeAfterEnabled;
+            ImGui::SameLine(0, 10.0f);
+            if (ImGui::Checkbox("Before/After", &scenarioState.beforeAfterEnabled)) {
+                // When enabling Before/After, request baseline snapshot build
+                if (scenarioState.beforeAfterEnabled) result.saveBaselineRequested = true;
+                result.scenarioStateChanged = true; // inform Application to refresh view
+            }
+
             // Right Camera Controls
             float camX = std::max(550.0f, static_cast<float>(displayWidth) - 300.0f);
             ImGui::SameLine(camX);
@@ -183,6 +192,7 @@ namespace twin {
                 { DataLayer::FloodRisk,           "Flood Risk" },
                 { DataLayer::SatelliteEnvironment,"Satellite Env" },
                 { DataLayer::GreenPriority,       "Green Priority" },
+                { DataLayer::AirQuality,          "Air Quality" },
                 { DataLayer::LightPollution,      "Light Pollution" },
                 { DataLayer::BirdEcologicalImpact,"Bird & Ecology" },
             };
@@ -242,7 +252,8 @@ namespace twin {
                 ImGui::TextUnformatted("HEAT RISK SCORE");
                 if (selectedZone->riskIsPlaceholder) {
                     ImGui::TextDisabled("-- / 100 (Incomplete Data)");
-                } else {
+                }
+                else {
                     ImGui::TextColored(RiskColor(selectedZone->heatRisk), "%.0f / 100", selectedZone->heatRisk);
                     ImGui::SameLine(130.0f);
                     ImGui::TextColored(RiskColor(selectedZone->heatRisk), "(%s)", selectedZone->riskClass.c_str());
@@ -276,6 +287,16 @@ namespace twin {
                 ImGui::SameLine(150.0f);
                 ImGui::Text("%.1f%%", selectedZone->buildingDensity * 100.0f);
 
+                ImGui::Text("PM2.5:");
+                ImGui::SameLine(150.0f);
+                if (selectedZone->airQualityIsPlaceholder) ImGui::TextDisabled("--");
+                else ImGui::Text("%.1f ug/m3", selectedZone->pm25);
+
+                ImGui::Text("AQI:");
+                ImGui::SameLine(150.0f);
+                if (selectedZone->airQualityIsPlaceholder) ImGui::TextDisabled("--");
+                else ImGui::Text("%.0f", selectedZone->aqi);
+
                 ImGui::Text("Light Pollution:");
                 ImGui::SameLine(150.0f);
                 if (selectedZone->ecologicalIsPlaceholder) ImGui::TextDisabled("--");
@@ -285,6 +306,33 @@ namespace twin {
                 ImGui::SameLine(150.0f);
                 if (selectedZone->ecologicalIsPlaceholder) ImGui::TextDisabled("--");
                 else ImGui::Text("%.0f / 100", selectedZone->birdEcologicalDisturbance);
+
+                if (!selectedZone->ecologicalIsPlaceholder) {
+                    const char* birdCls = twin::ClassifyBirdImpact(selectedZone->birdEcologicalDisturbance);
+                    ImGui::SameLine(0, 8.0f);
+                    ImGui::TextDisabled("(%s)", birdCls);
+                    ImGui::Spacing();
+                    ImGui::TextDisabled("Prototype ecological risk indicator");
+                }
+
+                // Combined Environmental Burden (Phase 26) — a conceptual
+                // overlay blending heat risk with air quality. Rendered in
+                // its own block, separated from HEAT RISK SCORE above and
+                // WHY THIS ZONE below, and never phrased as part of either
+                // — must stay clearly distinguished from the core heat-risk
+                // model.
+                ImGui::Spacing();
+                ImGui::Separator();
+                ImGui::TextColored(kAccentCyan, "COMBINED ENVIRONMENTAL BURDEN");
+                if (selectedZone->combinedBurdenIsPlaceholder) {
+                    ImGui::TextDisabled("-- / 100  (needs heat risk + air quality)");
+                }
+                else {
+                    ImGui::TextColored(RiskColor(selectedZone->combinedEnvironmentalBurden),
+                        "%.0f / 100", selectedZone->combinedEnvironmentalBurden);
+                }
+                ImGui::TextDisabled("Conceptual overlay (heat + air quality).");
+                ImGui::TextDisabled("Not part of the core heat-risk or priority score.");
 
                 // What-If Comparison if active
                 if (selectedZone->baselineHeatRisk > 0.0f && std::fabs(selectedZone->heatRisk - selectedZone->baselineHeatRisk) >= 0.1f) {
@@ -311,7 +359,8 @@ namespace twin {
                     ImGui::BulletText("Building density: %.1f%%", selectedZone->buildingDensity * 100.0f);
                     ImGui::BulletText("Population: %d residents", selectedZone->population);
                 }
-            } else {
+            }
+            else {
                 ImGui::TextColored(kAccentCyan, "ZONE INTELLIGENCE");
                 ImGui::Separator();
                 ImGui::TextWrapped("Click any zone in the 3D digital twin to inspect temperature, risk, and intervention metrics.");
@@ -344,6 +393,8 @@ namespace twin {
                 ImGui::SameLine(235.0f);
                 ImGui::Text("%.0f", z->priority);
             }
+
+            // (live weight tuning removed)
         }
         ImGui::End();
 
@@ -476,11 +527,18 @@ namespace twin {
                         if (ImGui::Checkbox("Apply to Selected Zone Only", &scenarioState.applyToSelectedZoneOnly)) {
                             result.scenarioStateChanged = true;
                         }
-                    } else {
+                    }
+                    else {
                         ImGui::TextDisabled("Apply Scope: City-Wide (Select a zone to target individually)");
                     }
+                    ImGui::Spacing();
+                    // Save baseline snapshot button (captures current heatRisk/priority/greenCoverage)
+                    if (ImGui::Button("Save Baseline Metrics")) {
+                        result.saveBaselineRequested = true;
+                    }
                 }
-            } else {
+            }
+            else {
                 // PHASE 24: EXECUTIVE CHARTS & DATA VISUALIZATION
                 ImGui::Columns(4, "bottomMetricsColumns", true);
 

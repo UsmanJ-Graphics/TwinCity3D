@@ -162,6 +162,7 @@
     <ClCompile Include="src\core\Shader.cpp" />
     <ClCompile Include="src\gis\GISLoader.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\twin\AirQualityLoader.cpp" />
     <ClCompile Include="src\twin\CityMeshBuilder.cpp" />
     <ClCompile Include="src\twin\Digitaltwin.cpp" />
     <ClCompile Include="src\twin\GreenInfrastructureModel.cpp" />
@@ -200,6 +201,7 @@
     <ClInclude Include="src\gis\GISLoader.h" />
     <ClInclude Include="src\gis\GISTypes.h" />
     <ClInclude Include="src\gis\Triangulate.h" />
+    <ClInclude Include="src\twin\AirQualityData.h" />
     <ClInclude Include="src\twin\CityMeshBuilder.h" />
     <ClInclude Include="src\twin\Digitaltwin.h" />
     <ClInclude Include="src\twin\GreenInfrastructureModel.h" />

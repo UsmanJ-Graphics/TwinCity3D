@@ -24,6 +24,85 @@ namespace twin {
         // study-area average, differ by up to this many degrees). Deliberately
         // small — this is a visualization aid, not a claimed measurement.
         constexpr float kHeatBurdenTemperatureSwingC = 3.0f;
+
+        // Phase 26. Weights for the CONCEPTUAL Combined Environmental Burden
+        // overlay (see ComputeCombinedEnvironmentalBurden() below).
+        // Deliberately kept separate from HeatRiskWeights/PriorityWeights —
+        // never retune these to influence the core heat-risk or priority
+        // score; this overlay is display-only.
+        constexpr float kWeightCombinedHeat = 0.6f;
+        constexpr float kWeightCombinedAirQuality = 0.4f;
+    }
+
+    void DigitalTwin::ApplyAirQuality(const AirQualityData& air) {
+        if (!air.valid) {
+            LogWarn("DigitalTwin::ApplyAirQuality: air quality data is not valid — leaving air quality placeholders");
+            return;
+        }
+
+        // Map samples to zones by zoneId. Compute min/max pm25 across matched zones to normalize.
+        float minPm = std::numeric_limits<float>::max();
+        float maxPm = std::numeric_limits<float>::lowest();
+        int matched = 0;
+
+        for (const auto& s : air.zones) {
+            Zone* z = FindZone(s.zoneId);
+            if (!z) continue;
+            z->pm25 = s.pm25;
+            z->aqi = s.aqi;
+            z->airQualityIsPlaceholder = false;
+            minPm = std::min(minPm, z->pm25);
+            maxPm = std::max(maxPm, z->pm25);
+            ++matched;
+        }
+
+        if (matched == 0) {
+            LogWarn("DigitalTwin::ApplyAirQuality: no samples matched any zone ids");
+            return;
+        }
+
+        float range = maxPm - minPm;
+        for (auto& z : m_zones) {
+            if (z.airQualityIsPlaceholder) continue;
+            if (range <= 0.0f) z.airQualityIndex = 0.5f;
+            else z.airQualityIndex = std::clamp((z.pm25 - minPm) / range, 0.0f, 1.0f);
+        }
+
+        LogInfo("DigitalTwin::ApplyAirQuality: applied air quality to " + std::to_string(matched) + " zones [" + air.dataSource + "]");
+    }
+
+    void DigitalTwin::ComputeCombinedEnvironmentalBurden() {
+        // Phase 26. Deliberately independent of HeatRiskModel/PriorityModel:
+        // this reads zone.heatRisk and zone.airQualityIndex but never writes
+        // back to either, and neither of those models ever reads this field.
+        // A zone missing either input (no real heat-risk score, or no real
+        // air-quality sample) is left with combinedBurdenIsPlaceholder ==
+        // true rather than fabricating a partial score — same "no placeholder
+        // masquerading as real data" discipline every other model in this
+        // class follows.
+        int scored = 0;
+        for (auto& zone : m_zones) {
+            if (zone.riskIsPlaceholder || zone.airQualityIsPlaceholder) {
+                zone.combinedBurdenIsPlaceholder = true;
+                continue;
+            }
+
+            float heatComponent = std::clamp(zone.heatRisk / 100.0f, 0.0f, 1.0f);
+            float airComponent = std::clamp(zone.airQualityIndex, 0.0f, 1.0f);
+
+            zone.combinedEnvironmentalBurden = std::clamp(
+                (kWeightCombinedHeat * heatComponent +
+                    kWeightCombinedAirQuality * airComponent) * 100.0f,
+                0.0f, 100.0f);
+            zone.combinedBurdenIsPlaceholder = false;
+            ++scored;
+        }
+
+        LogInfo("DigitalTwin::ComputeCombinedEnvironmentalBurden: computed on " +
+            std::to_string(scored) + "/" + std::to_string(m_zones.size()) +
+            " zones (requires both real heat risk AND real air quality data) — "
+            "CONCEPTUAL OVERLAY, deliberately separate from the core heat-risk "
+            "model, never fed back into HeatRiskModel/PriorityModel");
     }
 
     void DigitalTwin::Build(const gis::GISDataset& dataset) {
@@ -349,7 +428,8 @@ namespace twin {
             // Restore baseline green coverage first, then apply vegetation delta
             if (zone.baselineGreenCoverage > 0.0f) {
                 zone.greenCoverage = std::clamp(zone.baselineGreenCoverage + vegDeltaPct, 0.0f, 1.0f);
-            } else {
+            }
+            else {
                 zone.baselineGreenCoverage = zone.greenCoverage;
                 zone.greenCoverage = std::clamp(zone.greenCoverage + vegDeltaPct, 0.0f, 1.0f);
             }
